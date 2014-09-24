@@ -18,7 +18,7 @@ define( 'PLUGIN_OPTIONS', 1 );
 /**
  * Include options files
  */
-foreach ( array( 'pages' ) as $option_file_name ) {
+foreach ( array( 'pages', 'tabs' ) as $option_file_name ) {
 	include dirname( __FILE__ ) . '/../data/' . $option_file_name . '.php';
 }
 
