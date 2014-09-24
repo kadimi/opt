@@ -73,7 +73,7 @@ function paf_page_cb() {
 		$tab = key( $page_tabs );
 	}
 
-	echo '<h1>' . $page . '</h1>';
+	echo '<div class="wrap"><h2>' . $page . '</h2>';
 	echo '<pre>' . print_r( $paf_pages[ $page ], true ) . '</pre>';
 
 	// Print tabs links
@@ -95,4 +95,5 @@ function paf_page_cb() {
 	echo '<hr /><h1>Tabs</h1>';
 
 	echo '<pre>' . print_r( $page_tabs, true ) . '</pre>';
+	echo '</div>';
 }
