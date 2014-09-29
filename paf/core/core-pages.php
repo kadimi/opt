@@ -49,14 +49,29 @@ function paf_page_cb() {
 	
 	$paf_pages = paf_pages();
 	$paf_tabs = paf_tabs();
+	$paf_options = paf_options();
 	$page = $_GET[ 'page' ];
 	$tab = $_GET[ 'tab' ];
-	$page_tabs = array();
+	$page_tabs = $page_sections = $page_options = array();
 
 	// Get defined page tabs
 	foreach ( $paf_tabs as $slug => $page_tab ) {
 		if( $page === $paf_tabs[ $slug ][ 'page' ] ) {
 			$page_tabs[ $slug ] = $page_tab;
+		}
+	}
+
+	// Get defined page sections
+	foreach ( $paf_options as $id => $page_option ) {
+		if ( $page === $page_option[ 'page' ] && K::get_var( 'section', $page_option ) ) {
+			$page_sections[ $page_option[ 'section' ] ] = $page_option[ 'section_title' ];
+		}
+	}
+
+	// Get defined page options
+	foreach ( $paf_options as $id => $paf_option ) {
+		if( $page === $paf_option[ 'page' ] ) {
+			$page_options[ $id ] = $paf_option;
 		}
 	}
 
@@ -74,7 +89,6 @@ function paf_page_cb() {
 	}
 
 	echo '<div class="wrap"><h2>' . $page . '</h2>';
-	echo '<pre>' . print_r( $paf_pages[ $page ], true ) . '</pre>';
 
 	// Print tabs links
 	if( $page_tabs ) {
@@ -89,11 +103,26 @@ function paf_page_cb() {
 		}
 		echo '</h2>';
 		echo '<h2>' . $page_tabs [ $tab ][ 'title' ] . '</h2>';
-
 	}
 
-	echo '<hr /><h1>Tabs</h1>';
+	// Print the default section options ( i.e options without a section )
+	reset( $page_options );
+	foreach ( $page_options as $id => $page_option ) {
+		paf_print_option( $id );
+	}
 
-	echo '<pre>' . print_r( $page_tabs, true ) . '</pre>';
+	// Print debugging information
+	K::wrap(
+		__( 'Debugging information' )
+		, array( 'style' => 'margin-top: 5em;' )
+		, array( 'in' => 'h3' )
+	);
+
+	if( $page_tabs ) {
+		d( $paf_pages[ $page ], $page_tabs, $page_sections, $page_options );
+	} else {
+		d( $paf_pages[ $page ], $page_sections, $page_options );
+	}
+
 	echo '</div>';
 }
