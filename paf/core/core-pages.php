@@ -13,27 +13,27 @@ function paf_admin_add_pages() {
 
 	$paf_pages = paf_pages();
 
-	foreach ( $paf_pages as $slug => $page ) {
+	foreach ( $paf_pages as $slug => $paf_page ) {
 
 		// Add top level menu pages
-		if( ! $page[ 'parent' ] ) {
+		if( ! $paf_page[ 'parent' ] ) {
 			add_menu_page(
-				$page[ 'title' ]
-				, $page[ 'menu_title' ]
+				$paf_page[ 'title' ]
+				, $paf_page[ 'menu_title' ]
 				, 'manage_options'
 				, $slug
 				, 'paf_page_cb'
-				, $page[ 'icon_url' ]
-				, $page[ 'position' ]
+				, $paf_page[ 'icon_url' ]
+				, $paf_page[ 'position' ]
 			);
 		}
 
 		// Add sub menu pages
-		if( $page[ 'parent' ] ) {
+		if( $paf_page[ 'parent' ] ) {
 			add_submenu_page(
-				$page[ 'parent' ]
-				, $page[ 'title' ]
-				, $page[ 'menu_title' ]
+				$paf_page[ 'parent' ]
+				, $paf_page[ 'title' ]
+				, $paf_page[ 'menu_title' ]
 				, 'manage_options'
 				, $slug
 				, 'paf_page_cb'
@@ -46,32 +46,43 @@ function paf_admin_add_pages() {
  * Callback function for pages
  */
 function paf_page_cb() {
-	
-	$paf_pages = paf_pages();
-	$paf_tabs = paf_tabs();
-	$paf_options = paf_options();
-	$page = $_GET[ 'page' ];
-	$tab = $_GET[ 'tab' ];
-	$page_tabs = $page_sections = $page_options = array();
+
+	/**
+	 *	Fill $paf_options, $paf_pages, $paf_tabs in one shot
+	 */
+	global $paf_options, $paf_pages, $paf_tabs;
+	foreach ( array( 'options', 'pages', 'tabs' ) as $k ) {
+		$k = 'paf_' . $k;
+		if ( ! K::get_var( $k, $GLOBALS ) ) {
+			$GLOBALS[ $k ] = call_user_func( $k );
+		}
+	}
+
+	global $paf_page_tabs, $paf_page_sections, $paf_page_options;
+	$paf_page_tabs = $paf_page_sections = $paf_page_options = array();
+
+	global $paf_page, $paf_tab;
+	$paf_page = K::get_var( 'page', $_GET );
+	$paf_tab = K::get_var( 'tab', $_GET );
 
 	// Get defined page tabs
 	foreach ( $paf_tabs as $slug => $page_tab ) {
-		if( $page === $paf_tabs[ $slug ][ 'page' ] ) {
-			$page_tabs[ $slug ] = $page_tab;
+		if( $paf_page === $paf_tabs[ $slug ][ 'page' ] ) {
+			$paf_page_tabs[ $slug ] = $page_tab;
 		}
 	}
 
 	// Get defined page sections
 	foreach ( $paf_options as $id => $page_option ) {
-		if ( $page === $page_option[ 'page' ] && K::get_var( 'section', $page_option ) ) {
-			$page_sections[ $page_option[ 'section' ] ] = $page_option[ 'section_title' ];
+		if ( $paf_page === $page_option[ 'page' ] && K::get_var( 'section', $page_option ) ) {
+			$paf_page_sections[ $page_option[ 'section' ] ] = $page_option[ 'section_title' ];
 		}
 	}
 
 	// Get defined page options
 	foreach ( $paf_options as $id => $paf_option ) {
-		if( $page === $paf_option[ 'page' ] ) {
-			$page_options[ $id ] = $paf_option;
+		if( $paf_page === $paf_option[ 'page' ] ) {
+			$paf_page_options[ $id ] = $paf_option;
 		}
 	}
 
@@ -81,33 +92,33 @@ function paf_page_cb() {
 	 *   - or if the specified tab doesn't exist
 	 */
 	if(
-		( $page_tabs && ! $tab )
-		|| ( $page_tabs && $tab && ! $page_tabs[ $tab ] )
+		( $paf_page_tabs && ! $paf_tab )
+		|| ( $paf_page_tabs && $paf_tab && ! $paf_page_tabs[ $paf_tab ] )
 	) {
-		reset( $page_tabs );
-		$tab = key( $page_tabs );
+		reset( $paf_page_tabs );
+		$paf_tab = key( $paf_page_tabs );
 	}
 
-	echo '<div class="wrap"><h2>' . $page . '</h2>';
+	echo '<div class="wrap"><h2>' . $paf_page . '</h2>';
 
 	// Print tabs links
-	if( $page_tabs ) {
+	if( $paf_page_tabs ) {
 		echo '<h2 class="nav-tab-wrapper">';
-		foreach ( $page_tabs as $slug => $page_tab) {
+		foreach ( $paf_page_tabs as $slug => $page_tab) {
 			printf( '<a href="?page=%s&amp;tab=%s" class="nav-tab %s">%s</a>'
-				, $page
+				, $paf_page
 				, $slug
-				, ( $tab === $slug ) ? 'nav-tab-active' : ''
+				, ( $paf_tab === $slug ) ? 'nav-tab-active' : ''
 				, $page_tab[ 'menu_title' ]
 			);
 		}
 		echo '</h2>';
-		echo '<h2>' . $page_tabs [ $tab ][ 'title' ] . '</h2>';
+		echo '<h2>' . $paf_page_tabs [ $paf_tab ][ 'title' ] . '</h2>';
 	}
 
 	// Print the default section options ( i.e options without a section )
-	reset( $page_options );
-	foreach ( $page_options as $id => $page_option ) {
+	reset( $paf_page_options );
+	foreach ( $paf_page_options as $id => $page_option ) {
 		paf_print_option( $id );
 	}
 
@@ -118,10 +129,10 @@ function paf_page_cb() {
 		, array( 'in' => 'h3' )
 	);
 
-	if( $page_tabs ) {
-		d( $paf_pages[ $page ], $page_tabs, $page_sections, $page_options );
+	if( $paf_page_tabs ) {
+		d( $paf_pages[ $paf_page ], $paf_page_tabs, $paf_page_sections, $paf_page_options );
 	} else {
-		d( $paf_pages[ $page ], $page_sections, $page_options );
+		d( $paf_pages[ $paf_page ], $paf_page_sections, $paf_page_options );
 	}
 
 	echo '</div>';
