@@ -49,10 +49,7 @@ function paf_options() {
 
 	$options[ 'my_textarea' ] = array(
 		'type' => 'textarea',
-		'editor' => TRUE,
 		'page' => 'page_a',
-		'editor_height' => '120',
-		'teeny' => TRUE,
 	);
 
 	$options[ 'advanced' ] = array(
@@ -63,6 +60,9 @@ function paf_options() {
 		'tab'           => 'tab_1',
 		'section'       => 'advanced',
 		'section_title' => __( 'Advanced Stuff' ),
+		'editor' => TRUE,
+		'editor_height' => '120',
+		'teeny' => TRUE,
 		'value'         => 'Some value',
 	);
 
