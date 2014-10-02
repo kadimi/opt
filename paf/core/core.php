@@ -42,3 +42,13 @@ foreach ( array( 'pages', 'tabs', 'options' ) as $option_file_name ) {
 foreach ( array( 'pages', 'options' ) as $core_file_name ) {
 	include dirname( __FILE__ ) . '/core-' . $core_file_name . '.php';
 }
+
+function paf_url() {
+	return 'http'
+		. ( is_ssl() ? 's' : '' )
+		. '://'
+		. $_SERVER[ 'SERVER_NAME' ]
+		. ( 80 != $_SERVER[ 'SERVER_PORT' ] ? ":$_SERVER[SERVER_PORT]" : '' )
+		. $_SERVER[ 'REQUEST_URI' ]
+	;
+}

@@ -25,15 +25,26 @@ function paf_options() {
 		'page' => 'page_b',
 	);
 
+	$options[ 'm_colorpicker' ] = array(
+		'page' => 'page_a',
+		'colorpicker' => true,
+	);
+
+	$options[ 'my_dropdown' ] = array(
+		'page' => 'page_a',
+		'type' => 'select',
+		'options' => array(
+			'' => __( 'Choose an animal' ),
+			'bird' => __( 'Bird' ),
+			'cat' => __( 'Cat' ),
+		),
+		'selected' => 'bird',
+	);
+
 	$options[ 'my_textarea' ] = array(
 		'type' => 'textarea',
 		'editor' => 1,
 		'page' => 'page_a',
-	);
-
-	$options[ 'm_colorpicker' ] = array(
-		'page' => 'page_a',
-		'colorpicker' => true,
 	);
 
 	$options[ 'advanced' ] = array(

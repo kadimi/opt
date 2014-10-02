@@ -129,11 +129,13 @@ function paf_page_cb() {
 		echo '<h2>' . $paf_page_tabs [ $paf_tab ][ 'title' ] . '</h2>';
 	}
 
-	// Print the default section options ( i.e options without a section )
+	// Print the options
+	echo '<form action="' . paf_url() . '" method="post">';
 	reset( $paf_page_options );
 	foreach ( $paf_page_options as $id => $page_option ) {
 		paf_print_option( $id );
 	}
+	echo '</form>';
 
 	// Print debugging information
 	K::wrap(

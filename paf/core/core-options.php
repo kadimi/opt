@@ -11,16 +11,13 @@ function paf_print_option( $option_id ) {
 	$option = $paf_page_options[ $option_id ];
 	$option_type = K::get_var( 'type', $option, 'text' );
 
-	switch ( $option_type ) {
-		case 'text':
-		case 'textarea':
-			$callback = $option_type;
-			break;
-		default:
-			$callback = 'not_implemented';
+	// Determine the option callback function
+	$callback = 'paf_print_option_type_' . $option_type;
+	if( ! function_exists( $callback ) ) {
+		$callback = 'paf_print_option_type_not_implemented';
 	}
 
-	call_user_func( 'paf_print_option_type_' . $callback, array( $option_id => $option ) );
+	call_user_func( $callback, array( $option_id => $option ) );
 }
 
 function paf_option_return_title( $option_def ) {
@@ -84,3 +81,45 @@ function paf_print_option_type_textarea( $option_def ) {
 	);
 }
 
+function paf_print_option_type_select( $option_def ) {
+
+	$option_id = key( $option_def );
+	$option = $option_def[ $option_id ];
+
+	K::select( 'paf_' . $option_id
+		, array(
+		)
+		, array(
+			'options' => K::get_var( 'options', $option, array() ),
+			'selected' => K::get_var( 'selected', $option, '' ),
+			'format' => sprintf( 
+				'<table class="form-table"><tbody><tr><th scope="row">%s</th><td>:select<br />%s</td></tr></tbody></table>'
+				, paf_option_return_title( $option_def )
+				, ''//@d( $option )
+			)
+		)
+	);
+}
+
+function paf_print_option_type_not_implemented( $option_def ) {
+
+	$option_id = key( $option_def );
+	$option = $option_def[ $option_id ];
+
+	K::input( 'paf_' . $option_id
+		, array(
+			'value' => K::get_var( 'value', $option, '' ),
+		)
+		, array(
+			'format' => sprintf( 
+				'<table class="form-table"><tbody><tr><th scope="row">%s</th><td>:input<br />%s<br />%s</td></tr></tbody></table>'
+				, paf_option_return_title( $option_def )
+				, sprintf(
+					'<p class="description"><span class="dashicons dashicons-no"></span> ' . __( 'The option type <code>%s</code> is not yet implemented' ) . '</p>'
+					, $option[ 'type' ]
+				)
+				, ''//@d( $option )
+			)
+		)
+	);
+}
