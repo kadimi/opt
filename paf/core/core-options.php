@@ -112,26 +112,6 @@ function paf_print_option_type_upload( $option_def ) {
 
 	$option_html_name = 'paf_' . $option_id;
 
-	// Prepare the button specific Javascript code
-	ob_start(); 
-	?><script>
-		jQuery( document ).ready( function( $ ) {
-			
-			var $input = $( '[name="<?php echo $option_html_name ?>"]' );
-			var $button = $input.siblings( 'a' );
-
-			$input.add( $button ).click( function() {
-				
-				wp.media.editor.send.attachment = function( props, attachment ) {
-					$input.val( attachment.url ).change();
-				}
-				wp.media.editor.open( $ );
-				return false;
-			} );
-		} );
-	</script><?php
-	$js = ob_get_clean();
-
 	// Output
 	K::input( 'paf_' . $option_id
 		, array(
@@ -140,11 +120,10 @@ function paf_print_option_type_upload( $option_def ) {
 		)
 		, array(
 			'format' => sprintf( 
-				'<table class="form-table"><tbody><tr><th scope="row">%s</th><td>:input%s<br />%s</td></tr></tbody></table>%s'
+				'<table class="form-table"><tbody><tr><th scope="row">%s</th><td>:input%s<br />%s</td></tr></tbody></table>'
 				, paf_option_return_title( $option_def )
 				, '<a class="button">' . __( 'Select Media') . '</a>'
 				, ''//@d( $option )
-				, $js
 			)
 		)
 	);

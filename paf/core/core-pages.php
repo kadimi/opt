@@ -129,13 +129,15 @@ function paf_page_cb() {
 	}
 
 	// Print the options
-
 	echo '<form action="' . paf_url() . '" method="post">';
 	reset( $paf_page_options );
 	foreach ( $paf_page_options as $id => $page_option ) {
 		paf_print_option( $id );
 	}
 	echo '</form>';
+
+	// Add JS
+	paf_asset_js( 'paf', TRUE );
 
 	// Print debugging information
 	K::wrap(

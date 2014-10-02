@@ -1,18 +1,18 @@
 <?php
 
 /**
-* Main core file of the "Plugin Options" framework
-* 
-* The file loads the different parts of the framework
-* 
-* @package plugin-admin-framework
-*/
+ * Main core file of the "Plugin Options" framework
+ * 
+ * The file loads the different parts of the framework
+ * 
+ * @package plugin-admin-framework
+ */
 
 /**
-* Helps tracking that the framework core was loaded
-*
-* @var bool
-*/
+ * Helps tracking that the framework core was loaded
+ *
+ * @var bool
+ */
 define( 'PLUGIN_OPTIONS', 1 );
 
 /**
@@ -41,6 +41,36 @@ foreach ( array( 'pages', 'tabs', 'options' ) as $option_file_name ) {
  */
 foreach ( array( 'pages', 'options' ) as $core_file_name ) {
 	include dirname( __FILE__ ) . '/core-' . $core_file_name . '.php';
+}
+
+/**
+ * Add JS file
+ */
+function paf_asset_js( $asset, $block = FALSE ) {
+
+	// Trac files that are blocked in the futire
+	static $blocked = array();
+
+	$js[] = 'paf';
+
+	// Do nothing if asset not defined
+	if ( ! in_array( $asset, $js ) ) {
+		return;
+	}
+
+	// Do nothing if already loaded
+	if( in_array( $asset, $blocked ) ) {
+		return;
+	}
+
+	// Mark as blocked if needed
+	if( $block ) {
+		$blocked[] = $asset;
+	}
+
+	// Print asset
+	$src = dirname( __FILE__) . '/../assets/js/' . $asset . '.js';
+	printf( '<script>%s</script>', file_get_contents( $src ) );
 }
 
 function paf_url() {
