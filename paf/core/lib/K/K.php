@@ -67,7 +67,14 @@ class K {
 		}
 
 		// Add default color picker
-		if( preg_match( '/_color\]?$/', $name) && 'text' === $params[ 'type' ] && empty( $args[ 'nocolorpicker' ] ) ) {
+		if(
+			! empty ( $args[ 'colorpicker' ] )
+			|| (
+				'text' === $params[ 'type' ]
+				&& preg_match( '/_color\]?$/', $name) 
+				&& empty( $args[ 'nocolorpicker' ] ) 
+			)
+		) {
 			wp_enqueue_style( 'wp-color-picker' );
 			wp_enqueue_script( 'wp-color-picker' );
 			ob_start();

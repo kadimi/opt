@@ -52,6 +52,7 @@ function paf_print_option_type_text( $option_def ) {
 			'value' => K::get_var( 'value', $option, '' ),
 		)
 		, array(
+			'colorpicker' => K::get_var( 'colorpicker', $option, FALSE ),
 			'format' => sprintf( 
 				'<table class="form-table"><tbody><tr><th scope="row">%s</th><td>:input<br />%s</td></tr></tbody></table>'
 				, paf_option_return_title( $option_def )

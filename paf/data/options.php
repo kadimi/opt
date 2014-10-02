@@ -33,6 +33,7 @@ function paf_options() {
 
 	$options[ 'm_colorpicker' ] = array(
 		'page' => 'page_a',
+		'colorpicker' => true,
 	);
 
 	$options[ 'advanced' ] = array(
