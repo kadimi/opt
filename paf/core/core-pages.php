@@ -79,16 +79,9 @@ function paf_page_cb() {
 		}
 	}
 
-	// Get defined page options
-	foreach ( $paf_options as $id => $paf_option ) {
-		if( $paf_page === $paf_option[ 'page' ] ) {
-			$paf_page_options[ $id ] = $paf_option;
-		}
-	}
-
 	/**
 	 * Use the first tab:
-	 *   - if page has tabs and noe is specified in $_GET
+	 *   - if page has tabs and none is specified in $_GET
 	 *   - or if the specified tab doesn't exist
 	 */
 	if(
@@ -97,6 +90,26 @@ function paf_page_cb() {
 	) {
 		reset( $paf_page_tabs );
 		$paf_tab = key( $paf_page_tabs );
+	}
+
+	// If the page has a tab, force tab-less options to use the default tab
+	reset( $paf_options );
+	foreach ( $paf_options as $id => $paf_option ) {
+		if( $paf_page === $paf_option[ 'page' ] ) {
+			if( $paf_tab && ! K::get_var( 'tab', $paf_option ) ) {
+				$paf_options[ $id ][ 'tab' ] = key( $paf_page_tabs );
+			}
+		}
+	}
+
+	// Get defined page and tab options
+	reset( $paf_options );
+	foreach ( $paf_options as $id => $paf_option ) {
+		if( $paf_page === $paf_option[ 'page' ] ) {
+			if( ! $paf_tab || ( $paf_tab === $paf_option[ 'tab' ] ) ) {
+				$paf_page_options[ $id ] = $paf_option;
+			}
+		}
 	}
 
 	echo '<div class="wrap"><h2>' . $paf_page . '</h2>';
