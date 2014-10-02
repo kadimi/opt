@@ -3,7 +3,7 @@
  * The k framework
  * 
  * @author Nabil Kadimi <nabil@kadimi.com>
- * @version 1.0
+ * @version 1.0.2
  * @package k_framework
  */
 class K {
@@ -139,10 +139,11 @@ class K {
 				$value,
 				str_replace( array( '[', ']' ), '_', $name ) . mt_rand( 100, 999 ),
 				array(
-					'teeny' => true,
+					'editor_height' => K::get_var( 'editor_height', $args ),
+					'media_buttons' => K::get_var( 'media_buttons', $args, TRUE ),
+					'teeny' => K::get_var( 'teeny', $args ),
 					'textarea_name' => $name,
-					'media_buttons' => K::get_var( 'media_buttons', $args ),
-					'textarea_rows' => K::get_var( 'textarea_rows', $args ),
+					'textarea_rows' => K::get_var( 'textarea_rows', $args, 20 ),
 				)
 			);
 			$textarea = ob_get_clean();
@@ -184,6 +185,12 @@ class K {
 		$params += array(
 			'id' => '',
 		);
+
+		// Sanitize $params[multiple], and Add brackets if the former is true
+		if( ! empty( $params[ 'multiple' ] ) ) {
+			$params[ 'multiple' ] = 'multiple';
+			$name .= '[]';
+		}
 
 		// Add name
 		$params[ 'name' ] = $name;

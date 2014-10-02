@@ -25,9 +25,14 @@ function paf_options() {
 		'page' => 'page_b',
 	);
 
-	$options[ 'm_colorpicker' ] = array(
+	$options[ 'my_colorpicker' ] = array(
 		'page' => 'page_a',
 		'colorpicker' => true,
+	);
+
+	$options[ 'my_upload' ] = array(
+		'page' => 'page_a',
+		'type' => 'upload',
 	);
 
 	$options[ 'my_dropdown' ] = array(
@@ -39,12 +44,15 @@ function paf_options() {
 			'cat' => __( 'Cat' ),
 		),
 		'selected' => 'bird',
+		'multiple' => TRUE,
 	);
 
 	$options[ 'my_textarea' ] = array(
 		'type' => 'textarea',
-		'editor' => 1,
+		'editor' => TRUE,
 		'page' => 'page_a',
+		'editor_height' => '120',
+		'teeny' => TRUE,
 	);
 
 	$options[ 'advanced' ] = array(

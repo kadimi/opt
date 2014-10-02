@@ -3,7 +3,6 @@
 /**
  * @package plugin-admin-framework
  */
-
 add_action( 'admin_menu', 'paf_admin_add_pages' );
 
 /**
@@ -130,6 +129,7 @@ function paf_page_cb() {
 	}
 
 	// Print the options
+
 	echo '<form action="' . paf_url() . '" method="post">';
 	reset( $paf_page_options );
 	foreach ( $paf_page_options as $id => $page_option ) {

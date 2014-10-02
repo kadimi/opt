@@ -71,12 +71,15 @@ function paf_print_option_type_textarea( $option_def ) {
 		, array(
 			'value' => K::get_var( 'value', $option, '' ),
 			'editor' => K::get_var( 'editor', $option, FALSE ),
-			'media_buttons' => K::get_var( 'media', $option, TRUE ),
+			'editor_height' => K::get_var( 'editor_height', $option ),
 			'format' => sprintf( 
 				'<table class="form-table"><tbody><tr><th scope="row">%s</th><td>:textarea<br />%s</td></tr></tbody></table>'
 				, paf_option_return_title( $option_def )
 				, ''//@d( $option )
-			)
+			),
+			'media_buttons' => K::get_var( 'media_buttons', $option, TRUE ),
+			'teeny' => K::get_var( 'teeny', $option ),
+			'textarea_rows' => K::get_var( 'textarea_rows', $option ),
 		)
 	);
 }
@@ -88,6 +91,7 @@ function paf_print_option_type_select( $option_def ) {
 
 	K::select( 'paf_' . $option_id
 		, array(
+			'multiple' => K::get_var( 'multiple', $option ),
 		)
 		, array(
 			'options' => K::get_var( 'options', $option, array() ),
@@ -96,6 +100,51 @@ function paf_print_option_type_select( $option_def ) {
 				'<table class="form-table"><tbody><tr><th scope="row">%s</th><td>:select<br />%s</td></tr></tbody></table>'
 				, paf_option_return_title( $option_def )
 				, ''//@d( $option )
+			)
+		)
+	);
+}
+
+function paf_print_option_type_upload( $option_def ) {
+
+	$option_id = key( $option_def );
+	$option = $option_def[ $option_id ];
+
+	$option_html_name = 'paf_' . $option_id;
+
+	// Prepare the button specific Javascript code
+	ob_start(); 
+	?><script>
+		jQuery( document ).ready( function( $ ) {
+			
+			var $input = $( '[name="<?php echo $option_html_name ?>"]' );
+			var $button = $input.siblings( 'a' );
+
+			$input.add( $button ).click( function() {
+				
+				wp.media.editor.send.attachment = function( props, attachment ) {
+					$input.val( attachment.url ).change();
+				}
+				wp.media.editor.open( $ );
+				return false;
+			} );
+		} );
+	</script><?php
+	$js = ob_get_clean();
+
+	// Output
+	K::input( 'paf_' . $option_id
+		, array(
+			'class' => 'paf-option-type-upload',
+			'value' => K::get_var( 'value', $option, '' ),
+		)
+		, array(
+			'format' => sprintf( 
+				'<table class="form-table"><tbody><tr><th scope="row">%s</th><td>:input%s<br />%s</td></tr></tbody></table>%s'
+				, paf_option_return_title( $option_def )
+				, '<a class="button">' . __( 'Select Media') . '</a>'
+				, ''//@d( $option )
+				, $js
 			)
 		)
 	);
