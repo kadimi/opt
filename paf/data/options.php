@@ -25,13 +25,13 @@ function paf_options() {
 		'page' => 'page_b',
 	);
 
-	$options[ 'Text Area' ] = array(
+	$options[ 'my_textarea' ] = array(
 		'type' => 'textarea',
 		'editor' => 1,
 		'page' => 'page_a',
 	);
 
-	$options[ 'Color Picker' ] = array(
+	$options[ 'm_colorpicker' ] = array(
 		'page' => 'page_a',
 	);
 
