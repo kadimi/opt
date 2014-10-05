@@ -89,12 +89,39 @@ function paf_print_option_type_select( $option_def ) {
 	$option_id = key( $option_def );
 	$option = $option_def[ $option_id ];
 
+	$is_radio = 'radio' === $option[ 'type'];
+	$is_checkbox = 'checkbox' === $option[ 'type'];
+	$is_multiple = $is_checkbox || K::get_var( 'multiple', $option );
+
+	$options = array();
+	switch ( K::get_var( 'options', $option, array() ) ) {
+		case 'posts':
+			$posts = query_posts( K::get_var( 'args', $option, '' ) );
+			foreach ( $posts as $post ) {
+				$options[ $post->ID ] = $post->post_title;
+			}
+			break;
+		case 'terms':
+			$terms = get_terms(
+				K::get_var( 'taxonomies', $option, '' )
+				, K::get_var( 'args', $option )
+			);
+			foreach ( $terms as $term ) {
+				$options[ $term->term_id ] = $term->name;
+			}
+			break;
+		default:
+			$options = K::get_var( 'options', $option, array() );
+			break;
+	}
+
 	K::select( 'paf_' . $option_id
 		, array(
-			'multiple' => K::get_var( 'multiple', $option ),
+			'multiple' => $is_multiple,
+			'class' => 'paf-option-type-' . $option[ 'type' ],
 		)
 		, array(
-			'options' => K::get_var( 'options', $option, array() ),
+			'options' => $options,
 			'selected' => K::get_var( 'selected', $option ),
 			'format' => sprintf( 
 				'<table class="form-table"><tbody><tr><th scope="row">%s</th><td>:select<br />%s</td></tr></tbody></table>'
@@ -107,45 +134,12 @@ function paf_print_option_type_select( $option_def ) {
 
 function paf_print_option_type_radio( $option_def ) {
 
-	$option_id = key( $option_def );
-	$option = $option_def[ $option_id ];
-
-	K::select( 'paf_' . $option_id
-		, array(
-			'class' => 'paf-option-type-radio',
-		)
-		, array(
-			'options' => K::get_var( 'options', $option, array() ),
-			'selected' => K::get_var( 'selected', $option ),
-			'format' => sprintf( 
-				'<table class="form-table"><tbody><tr><th scope="row">%s</th><td>:select<br />%s</td></tr></tbody></table>'
-				, paf_option_return_title( $option_def )
-				, ''//@d( $option )
-			)
-		)
-	);
+	return paf_print_option_type_select( $option_def );
 }
 
-function paf_print_option_type_checkbox( $option_def ) {
+function paf_print_option_type_checkbox( $option_def ) {	
 
-	$option_id = key( $option_def );
-	$option = $option_def[ $option_id ];
-
-	K::select( 'paf_' . $option_id
-		, array(
-			'class' => 'paf-option-type-checkbox',
-			'multiple' => 'multiple',
-		)
-		, array(
-			'options' => K::get_var( 'options', $option, array() ),
-			'selected' => K::get_var( 'selected', $option, '' ),
-			'format' => sprintf( 
-				'<table class="form-table"><tbody><tr><th scope="row">%s</th><td>:select<br />%s</td></tr></tbody></table>'
-				, paf_option_return_title( $option_def )
-				, ''//@d( $option )
-			)
-		)
-	);
+	return paf_print_option_type_select( $option_def );
 }
 
 function paf_print_option_type_upload( $option_def ) {
