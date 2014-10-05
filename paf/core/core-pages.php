@@ -15,7 +15,7 @@ function paf_admin_add_pages() {
 	foreach ( $paf_pages as $slug => $paf_page ) {
 
 		// Add top level menu pages
-		if( ! $paf_page[ 'parent' ] ) {
+		if( ! K::get_var( 'parent',  $paf_page ) ) {
 			add_menu_page(
 				$paf_page[ 'title' ]
 				, $paf_page[ 'menu_title' ]
@@ -28,7 +28,7 @@ function paf_admin_add_pages() {
 		}
 
 		// Add sub menu pages
-		if( $paf_page[ 'parent' ] ) {
+		if( K::get_var( 'parent',  $paf_page ) ) {
 			add_submenu_page(
 				$paf_page[ 'parent' ]
 				, $paf_page[ 'title' ]

@@ -43,8 +43,29 @@ function paf_options() {
 			'bird' => __( 'Bird' ),
 			'cat' => __( 'Cat' ),
 		),
-		'selected' => 'bird',
+		'selected' => array( 'bird', 'cat' ),
+		'selected' => array( 'bird', 'cat' ),
 		'multiple' => TRUE,
+	);
+
+	$options[ 'my_radios' ] = array(
+		'page' => 'page_a',
+		'type' => 'radio',
+		'options' => array(
+			'bird' => __( 'Bird' ),
+			'cat' => __( 'Cat' ),
+		),
+		'selected' => 'bird',
+	);
+
+	$options[ 'my_checkboxes' ] = array(
+		'page' => 'page_a',
+		'type' => 'checkbox',
+		'options' => array(
+			'bird' => __( 'Bird' ),
+			'cat' => __( 'Cat' ),
+		),
+		'selected' => 'bird',
 	);
 
 	$options[ 'my_textarea' ] = array(
@@ -60,9 +81,9 @@ function paf_options() {
 		'tab'           => 'tab_1',
 		'section'       => 'advanced',
 		'section_title' => __( 'Advanced Stuff' ),
-		'editor' => TRUE,
+		'editor'        => TRUE,
 		'editor_height' => '120',
-		'teeny' => TRUE,
+		'teeny'         => TRUE,
 		'value'         => 'Some value',
 	);
 

@@ -95,6 +95,49 @@ function paf_print_option_type_select( $option_def ) {
 		)
 		, array(
 			'options' => K::get_var( 'options', $option, array() ),
+			'selected' => K::get_var( 'selected', $option ),
+			'format' => sprintf( 
+				'<table class="form-table"><tbody><tr><th scope="row">%s</th><td>:select<br />%s</td></tr></tbody></table>'
+				, paf_option_return_title( $option_def )
+				, ''//@d( $option )
+			)
+		)
+	);
+}
+
+function paf_print_option_type_radio( $option_def ) {
+
+	$option_id = key( $option_def );
+	$option = $option_def[ $option_id ];
+
+	K::select( 'paf_' . $option_id
+		, array(
+			'class' => 'paf-option-type-radio',
+		)
+		, array(
+			'options' => K::get_var( 'options', $option, array() ),
+			'selected' => K::get_var( 'selected', $option ),
+			'format' => sprintf( 
+				'<table class="form-table"><tbody><tr><th scope="row">%s</th><td>:select<br />%s</td></tr></tbody></table>'
+				, paf_option_return_title( $option_def )
+				, ''//@d( $option )
+			)
+		)
+	);
+}
+
+function paf_print_option_type_checkbox( $option_def ) {
+
+	$option_id = key( $option_def );
+	$option = $option_def[ $option_id ];
+
+	K::select( 'paf_' . $option_id
+		, array(
+			'class' => 'paf-option-type-checkbox',
+			'multiple' => 'multiple',
+		)
+		, array(
+			'options' => K::get_var( 'options', $option, array() ),
 			'selected' => K::get_var( 'selected', $option, '' ),
 			'format' => sprintf( 
 				'<table class="form-table"><tbody><tr><th scope="row">%s</th><td>:select<br />%s</td></tr></tbody></table>'

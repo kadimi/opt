@@ -3,7 +3,7 @@
  * The k framework
  * 
  * @author Nabil Kadimi <nabil@kadimi.com>
- * @version 1.0.2
+ * @version 1.0.3
  * @package k_framework
  */
 class K {
@@ -210,19 +210,35 @@ class K {
 			'selected' => '',
 		);
 
-		// Dismiss default if there is a selected value
-		if( $args[ 'selected' ] ) {
-			$args[ 'default' ] = '';
+		// Make 'selected' an array
+		if( $selected = $args[ 'selected' ] ) {
+			if( ! is_array( $selected ) ) {
+				$selected = array( $selected );
+			}
+		}
+
+		// Use 'default' is 'selected' is empty
+		if( ! $selected ) {
+			$selected = array( $args[ 'default' ] );
 		}
 
 		// Build options
 		$options = '';
 		foreach ( $args[ 'options' ] as $value => $label ) {
-			if( $value && in_array( $value, array( $args[ 'selected' ], $args[ 'default' ] ) ) ) {
-				$options .= '<option value="' . $value . '" selected >' . $label . '</option>';
-			} else {
-				$options .= '<option value="' . $value . '" >' . $label . '</option>';
-			}
+			$options .= K::wrap(
+				$label
+				, array(
+					'value' => $value,
+					'selected' => ( $value && in_array( $value, $selected ) ) 
+						? 'selected'
+						: null
+					,
+				)
+				, array(
+					'in' => 'option',
+					'return' => true,
+				)
+			);
 		}
 
 		// Build the input field html
