@@ -68,6 +68,20 @@ function paf_options() {
 		'selected' => 'bird',
 	);
 
+	$options[ 'my_posts_checkboxes' ] = array(
+		'page' => 'page_a',
+		'type' => 'checkbox',
+		'options' => 'posts',
+	);
+
+	$options[ 'my_terms_dropdown' ] = array(
+		'page' => 'page_a',
+		'type' => 'checkbox',
+		'options' => 'terms',
+		'taxonomies' => array( 'post_tag' ),
+		'args' => 'hide_empty=0',
+	);
+
 	$options[ 'my_textarea' ] = array(
 		'type' => 'textarea',
 		'page' => 'page_a',
