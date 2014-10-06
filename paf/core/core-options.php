@@ -17,6 +17,10 @@ function paf_print_option( $option_id ) {
 		$callback = 'paf_print_option_type_not_implemented';
 	}
 
+	/**
+	 * Call the function coresponding to the option, 
+	 * e.g. paf_print_option_type_text or paf_print_option_type_upload
+	 */
 	call_user_func( $callback, array( $option_id => $option ) );
 }
 
