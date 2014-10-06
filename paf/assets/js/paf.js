@@ -16,7 +16,9 @@ jQuery( document ).ready( function( $ ) {
 	} );
 
 	// Select2
-	$( '.paf-option-type-select' ).select2();
+	if ( $.isFunction( $.fn.semect2 ) ) {
+		$( '.paf-option-type-select' ).select2();
+	}
 
 	// turn select.paf-(radio|checkbox) into radio|checkbox
 	$( '.paf-option-type-checkbox,.paf-option-type-radio' ).each( function( i, select ) {
