@@ -44,7 +44,6 @@ function paf_options() {
 			'cat' => __( 'Cat' ),
 		),
 		'selected' => array( 'bird', 'cat' ),
-		'selected' => array( 'bird', 'cat' ),
 		'multiple' => TRUE,
 	);
 
@@ -55,7 +54,6 @@ function paf_options() {
 			'bird' => __( 'Bird' ),
 			'cat' => __( 'Cat' ),
 		),
-		'selected' => 'bird',
 	);
 
 	$options[ 'my_checkboxes' ] = array(
@@ -65,7 +63,7 @@ function paf_options() {
 			'bird' => __( 'Bird' ),
 			'cat' => __( 'Cat' ),
 		),
-		'selected' => 'bird',
+		'separator' => '&nbsp;&nbsp;|&nbsp;&nbsp;'
 	);
 
 	$options[ 'my_posts_checkboxes' ] = array(
@@ -76,7 +74,7 @@ function paf_options() {
 
 	$options[ 'my_terms_dropdown' ] = array(
 		'page' => 'page_a',
-		'type' => 'checkbox',
+		'type' => 'radio',
 		'options' => 'terms',
 		'taxonomies' => array( 'post_tag' ),
 		'args' => 'hide_empty=0',

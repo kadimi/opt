@@ -21,16 +21,22 @@ jQuery( document ).ready( function( $ ) {
 		var $this = $( this );
 		var $select = $( select );
 		var type = $this.hasClass( 'paf-option-type-checkbox' ) ? 'checkbox' : 'radio';
+		var separator = $this.data( 'paf-separator' );
 		
 		$select.find( 'option' ).each( function( j, option ){
 
 			var $option = $( option );
 
+			// Skip the empty radio
+			if( 'radio' === type && '__none__' === $option.val() ) {
+				return;
+			}
+
 			// Create a choice
 			var $choice = $( '<input />' )
 				.attr( 'type', type )
 				.attr( 'name', $select.attr( 'name' ) )
-				.attr( 'value', $option.val () )
+				.attr( 'value', $option.val() )
 			;
 
 			// Set checked if the option was selected
@@ -43,7 +49,12 @@ jQuery( document ).ready( function( $ ) {
 
 			// Insert 
 			$select.before( $choice );
-			$select.before("<br />");
+
+			// Insert separator
+			if( j < $select.find( 'option' ).length - 1 ) {
+				$select.before( separator );
+			}
+
 		});
 
 		// Remove dropdown
