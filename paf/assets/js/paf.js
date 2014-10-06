@@ -50,11 +50,10 @@ jQuery( document ).ready( function( $ ) {
 			// Insert 
 			$select.before( $choice );
 
-			// Insert separator
+			// Insert separator afterr all but last option
 			if( j < $select.find( 'option' ).length - 1 ) {
 				$select.before( separator );
 			}
-
 		});
 
 		// Remove dropdown
