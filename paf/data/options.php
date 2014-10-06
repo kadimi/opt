@@ -66,6 +66,17 @@ function paf_options() {
 		),
 	);
 
+	$options[ 'my_radios_images' ] = array(
+		'page'    => 'page_a',
+		'type'    => 'checkbox',
+		'options' => array(
+			'pressapps' => 'http://placehold.it/120x40/35d/fff&text=pressapps',
+			'wordpress' => 'http://placehold.it/120x40/3d5/fff&text=wordpress',
+			'codecanyon' => 'http://placehold.it/120x40/d35/fff&text=codecanyon',
+		),
+		'selected' => array( 'pressapps', 'codecanyon' ),
+	);
+
 	$options[ 'my_checkboxes' ] = array(
 		'page'      => 'page_a',
 		'type'      => 'checkbox',
