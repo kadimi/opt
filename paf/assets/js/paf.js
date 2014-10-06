@@ -16,7 +16,7 @@ jQuery( document ).ready( function( $ ) {
 	} );
 
 	// Select2
-	if ( $.isFunction( $.fn.semect2 ) ) {
+	if ( $.isFunction( $.fn.select2 ) ) {
 		$( '.paf-option-type-select' ).select2();
 	}
 
