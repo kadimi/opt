@@ -63,4 +63,9 @@ jQuery( document ).ready( function( $ ) {
 		$select.remove();
 	} );
 
+	// Show/hide form on load/unload
+	$( '#paf-form' ).animate( { opacity: '1' }, 150 );
+	$( window ).on( 'beforeunload', function() {
+		$( '#paf-form' ).animate( { opacity: '0' }, 150 );
+	} );
 } );

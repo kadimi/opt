@@ -35,7 +35,7 @@ function paf_options() {
 		'type' => 'upload',
 	);
 
-	$options[ 'my_dropdown' ] = array(
+	$options[ 'my_dropdown_single' ] = array(
 		'page'     => 'page_a',
 		'type'     => 'select',
 		'options'  => array(
@@ -43,8 +43,18 @@ function paf_options() {
 			'bird' => __( 'Bird' ),
 			'cat'  => __( 'Cat' ),
 		),
-		'selected' => array( 'bird', 'cat' ),
+		// 'selected' => array( 'bird', 'cat' ),
+	);
+
+	$options[ 'my_dropdown_multiple' ] = array(
+		'page'     => 'page_a',
+		'type'     => 'select',
+		'options'  => array(
+			'bird' => __( 'Bird' ),
+			'cat'  => __( 'Cat' ),
+		),
 		'multiple' => TRUE,
+		'selected' => array( 'bird', 'cat' ),
 	);
 
 	$options[ 'my_radios' ] = array(
@@ -70,6 +80,13 @@ function paf_options() {
 		'page'    => 'page_a',
 		'type'    => 'checkbox',
 		'options' => 'posts',
+	);
+
+	$options[ 'my_posts_multi' ] = array(
+		'page'     => 'page_a',
+		'type'     => 'select',
+		'options'  => 'posts',
+		'multiple' => TRUE,
 	);
 
 	$options[ 'my_terms_dropdown' ] = array(

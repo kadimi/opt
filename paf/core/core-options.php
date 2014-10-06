@@ -179,7 +179,7 @@ function paf_print_option_type_upload( $option_def ) {
 		)
 		, array(
 			'format' => sprintf( 
-				'<table class="form-table"><tbody><tr><th scope="row">%s</th><td>:input%s<br />%s</td></tr></tbody></table>'
+				'<table class="form-table"><tbody><tr><th scope="row">%s</th><td>:input%s</td></tr></tbody></table>'
 				, paf_option_return_title( $option_def )
 				, '<a class="button">' . __( 'Select Media') . '</a>'
 				, ''//@d( $option )

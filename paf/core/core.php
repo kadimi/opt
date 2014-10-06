@@ -48,29 +48,55 @@ foreach ( array( 'pages', 'options' ) as $core_file_name ) {
  */
 function paf_asset_js( $asset, $block = FALSE ) {
 
+	return paf_asset( $asset, 'js', $block );
+}
+
+/**
+ * Add CSS file
+ */
+function paf_asset_css( $asset, $block = FALSE ) {
+
+	return paf_asset( $asset, 'css', $block );
+}
+
+/**
+ * Add asset
+ */
+function paf_asset( $asset, $type, $block = FALSE ) {
+
 	// Trac files that are blocked in the futire
 	static $blocked = array();
 
+	// Exit function if type is not supported
+	if( ! in_array( $type, array( 'css', 'js' ) ) ) {
+		return;
+	}
+
 	$js[] = 'paf';
+	$css[] = 'paf';
 
 	// Do nothing if asset not defined
-	if ( ! in_array( $asset, $js ) ) {
+	if ( ! in_array( $asset, $$type ) ) {
 		return;
 	}
 
 	// Do nothing if already loaded
-	if( in_array( $asset, $blocked ) ) {
+	if( in_array( "$type/$asset", $blocked ) ) {
 		return;
 	}
 
 	// Mark as blocked if needed
 	if( $block ) {
-		$blocked[] = $asset;
+		$blocked[] = "$type/$asset";
 	}
 
 	// Print asset
-	$src = dirname( __FILE__) . '/../assets/js/' . $asset . '.js';
-	printf( '<script>%s</script>', file_get_contents( $src ) );
+	$src = dirname( __FILE__) . "/../assets/$type/$asset.$type";
+	printf( '<%s>%s</%s>'
+		, 'css' === $type ? 'style' : 'script'
+		, file_get_contents( $src )
+		, 'css' === $type ? 'style' : 'script'
+	);
 }
 
 function paf_url() {
