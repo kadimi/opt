@@ -46,6 +46,7 @@ function paf_print_option_type_text( $option_def ) {
 
 	K::input( 'paf_' . $option_id
 		, array(
+			'class' => 'regular-text',
 			'value' => K::get_var( 'value', $option, '' ),
 		)
 		, array(
@@ -93,6 +94,13 @@ function paf_print_option_type_select( $option_def ) {
 	$is_checkbox = 'checkbox' === $option[ 'type'];
 	$is_multiple = $is_checkbox || K::get_var( 'multiple', $option );
 
+	// Enqueue select 2
+	if( ! $is_checkbox && ! $is_radio ) {
+		$protocol = is_ssl() ? 'https' : 'http';
+		wp_enqueue_script( 'select2', $protocol . '://cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2.js' );
+		wp_enqueue_style( 'select2', $protocol . '://cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2.min.css' );
+	}
+
 	$options = array();
 	switch ( K::get_var( 'options', $option, array() ) ) {
 		case 'posts':
@@ -128,6 +136,7 @@ function paf_print_option_type_select( $option_def ) {
 			'class' => 'paf-option-type-' . $option[ 'type' ],
 			'data-paf-separator' => K::get_var( 'separator', $option, '<br />' ),
 			'multiple' => $is_multiple,
+			'style' => 'min-width: 25em;'
 		)
 		, array(
 			'options' => $options,
@@ -161,7 +170,7 @@ function paf_print_option_type_upload( $option_def ) {
 	// Output
 	K::input( 'paf_' . $option_id
 		, array(
-			'class' => 'paf-option-type-upload',
+			'class' => 'paf-option-type-upload regular-text',
 			'value' => K::get_var( 'value', $option, '' ),
 		)
 		, array(

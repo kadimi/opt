@@ -15,6 +15,9 @@ jQuery( document ).ready( function( $ ) {
 		} );
 	} );
 
+	// Select2
+	$( '.paf-option-type-select' ).select2();
+
 	// turn select.paf-(radio|checkbox) into radio|checkbox
 	$( '.paf-option-type-checkbox,.paf-option-type-radio' ).each( function( i, select ) {
 		
@@ -50,11 +53,11 @@ jQuery( document ).ready( function( $ ) {
 			// Insert 
 			$select.before( $choice );
 
-			// Insert separator afterr all but last option
+			// Insert separator after all but last option
 			if( j < $select.find( 'option' ).length - 1 ) {
 				$select.before( separator );
 			}
-		});
+		} );
 
 		// Remove dropdown
 		$select.remove();
