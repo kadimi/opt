@@ -21,3 +21,38 @@ html[dir=rtl] .paf-label-with-image > input + img {
 .paf-label-with-image > input:checked + img {
 	border: 3px dashed #2EA2CC;
 }
+.paf-option-type-upload-preview {
+	margin: .5em 2px 0 2px ;
+}
+.paf-option-type-upload-preview img {
+	box-shadow: 0 0 0 1px rgba(0, 0, 0, .1) inset;
+	max-height: 100px;
+	max-width: 100px;
+	padding: 2px;
+}
+.paf-option-type-upload-preview a {
+	background: #EEE;
+	box-shadow: 0 0 0 1px #FFF, 0 0 0 2px rgba(0, 0, 0, .15);
+	color: transparent;
+	display: inline-block;
+	height: 24px;
+	outline: none;
+	position: relative;
+	right: 20px;
+	top: 10px;
+	overflow: hidden;
+	width: 24px;
+	z-index: 10;
+}
+.paf-option-type-upload-preview a:hover {
+	background: #1E8CBE;
+}
+.paf-option-type-upload-preview a div {
+	background-position: -40px 0;
+	height: 15px;
+	width: 15px;
+	margin: 5px;
+}
+.paf-option-type-upload-preview a:hover div {
+	background-position: -60px 0;
+}

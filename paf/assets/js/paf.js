@@ -2,6 +2,7 @@ jQuery( document ).ready( function( $ ) {
 
 	// Media upload fields
 	$( '.paf-option-type-upload' ).each( function() {
+
 		var $input = $( this );
 		var $button = $input.siblings( 'a' );
 
@@ -15,6 +16,58 @@ jQuery( document ).ready( function( $ ) {
 		} );
 	} );
 
+	// Add thumbnails to media upload fields
+	$( '.paf-option-type-upload' ).change( function() {
+
+		var $input = $( this );
+		var $button = $input.siblings( 'a.button' );
+		var $parent = $input.parent();
+		var value = $input.val();
+		var $element;
+
+		// Add a thumbnail placeholder if missing
+		$element = $parent.find( '> .paf-option-type-upload-preview' );
+		if( ! $element.length ) {
+			$parent.append( '<div class="paf-option-type-upload-preview"></div>');
+			$element = $parent.find( '> .paf-option-type-upload-preview' );
+		}
+
+		// Empty then fill the placeholder
+		$element.html( null );
+		if( value ) {
+			var $img = $( '<img />' ).attr( 'src', value );
+			var $a = $( '<a />' )
+				.attr( 'class', 'paf-media-delete-button' )
+				.attr( 'href', '#' )
+				.append( '<div class="media-modal-icon">Remove</div>' )
+			;
+			$element.append( $img );
+			$element.append( $a );
+			$()
+				.add( $input )
+				.add( $button )
+				.hide()
+			;
+		} else {
+			$()
+				.add( $input )
+				.add( $button )
+				.slideDown( 'fast' )
+			;
+		}
+	} ).change();
+
+	// Handle media removal buttons
+	$( document ).on( 'click', '.paf-media-delete-button', function( e ) {
+		
+		e.preventDefault();
+
+		var $delete_button = $( this );
+		var $input = $delete_button.parent().siblings( 'input' );
+		
+		$input.val( '' ).change();
+	} );
+
 	// Select2
 	if ( $.isFunction( $.fn.select2 ) ) {
 		$( '.paf-option-type-select' ).select2();
@@ -22,12 +75,12 @@ jQuery( document ).ready( function( $ ) {
 
 	// turn select.paf-(radio|checkbox) into radio|checkbox
 	$( '.paf-option-type-checkbox,.paf-option-type-radio' ).each( function( i, select ) {
-		
+
 		var $this = $( this );
 		var $select = $( select );
 		var type = $this.hasClass( 'paf-option-type-checkbox' ) ? 'checkbox' : 'radio';
 		var separator = $this.data( 'paf-separator' );
-		
+
 		$select.find( 'option' ).each( function( j, option ){
 
 			var $option = $( option );
