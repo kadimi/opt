@@ -39,7 +39,7 @@ html[dir=rtl] .paf-label-with-image > input + img {
 	outline: none;
 	position: relative;
 	right: 20px;
-	top: 10px;
+	top: 3px;
 	overflow: hidden;
 	width: 24px;
 	z-index: 10;
