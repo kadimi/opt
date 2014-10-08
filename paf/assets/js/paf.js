@@ -34,7 +34,8 @@ jQuery( document ).ready( function( $ ) {
 
 		// Empty then fill the placeholder
 		$element.html( null );
-		if( value ) {
+		if( value && -1 !== $.inArray( extension( value ), [ 'gif', 'jpeg', 'jpg', 'png' ] ) ) {
+
 			var $img = $( '<img />' ).attr( 'src', value );
 			var $a = $( '<a />' )
 				.attr( 'class', 'paf-media-delete-button' )
@@ -134,19 +135,23 @@ jQuery( document ).ready( function( $ ) {
 	$( window ).on( 'beforeunload', function() {
 		$( '#paf-form' ).animate( { opacity: '0' }, 150 );
 	} );
-} );
 
-function isURL( url ) {
-	var pattern = new RegExp('^(https?:\\/\\/)?'				// protocol
-		+ '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'	// domain name
-		+ '((\\d{1,3}\\.){3}\\d{1,3}))'							// OR ip (v4) address
-		+ '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'						// port and path
-		+ '((\\?|&)[;&a-z\\d%_.~+=-]*)?'							// query string
-		+ '(\\#[-a-z\\d_]*)?$','i'								// fragment locator
-	);
-	if( pattern.test( url ) ) {
-		return true;
-	} else {
-		return false;
+	function isURL( url ) {
+		var pattern = new RegExp('^(https?:\\/\\/)?'				// protocol
+			+ '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'	// domain name
+			+ '((\\d{1,3}\\.){3}\\d{1,3}))'							// OR ip (v4) address
+			+ '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'						// port and path
+			+ '((\\?|&)[;&a-z\\d%_.~+=-]*)?'						// query string
+			+ '(\\#[-a-z\\d_]*)?$','i'								// fragment locator
+		);
+		if( pattern.test( url ) ) {
+			return true;
+		} else {
+			return false;
+		}
 	}
-}
+
+	function extension( path ) {
+		return path.split('.').pop();
+	}
+} );
