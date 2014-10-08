@@ -19,7 +19,7 @@ html[dir=rtl] .paf-label-with-image > input + img {
 	margin: 1em 0 0 1em;
 }
 .paf-label-with-image > input:checked + img {
-	border: 3px dashed #2EA2CC;
+	border: 3px solid #2EA2CC;
 }
 .paf-option-type-upload-preview {
 	margin: .5em 2px 0 2px ;
