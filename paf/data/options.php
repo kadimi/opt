@@ -77,6 +77,18 @@ function paf_options() {
 		'selected' => array( 'pressapps', 'codecanyon' ),
 	);
 
+	$options[ 'my_radios_images_2' ] = array(
+		'page'    => 'page_a',
+		'type'    => 'checkbox',
+		'options' => array(
+			'pressapps' => 'http://placehold.it/120x40/35d/fff&text=pressapps',
+			'wordpress' => 'http://placehold.it/120x40/3d5/fff&text=wordpress',
+			'codecanyon' => 'http://placehold.it/120x40/d35/fff&text=codecanyon',
+		),
+		'selected' => array( 'wordpress' ),
+		'separator' => ' ',
+	);
+
 	$options[ 'my_checkboxes' ] = array(
 		'page'      => 'page_a',
 		'type'      => 'checkbox',
@@ -122,7 +134,8 @@ function paf_options() {
 		'section'       => 'advanced',
 		'section_title' => __( 'Advanced Stuff' ),
 		'editor'        => TRUE,
-		'editor_height' => '120',
+		'editor_height' => 200,
+		// 'textarea_rows' => 10,
 		'teeny'         => TRUE,
 		'value'         => 'Some value',
 	);

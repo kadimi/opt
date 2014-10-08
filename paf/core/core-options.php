@@ -84,7 +84,7 @@ function paf_print_option_type_textarea( $option_def ) {
 			),
 			'media_buttons' => K::get_var( 'media_buttons', $option, TRUE ),
 			'teeny' => K::get_var( 'teeny', $option ),
-			'textarea_rows' => K::get_var( 'textarea_rows', $option ),
+			'textarea_rows' => K::get_var( 'textarea_rows', $option, 20 ),
 		)
 	);
 }
