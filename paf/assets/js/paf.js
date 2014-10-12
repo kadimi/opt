@@ -145,10 +145,10 @@ jQuery( document ).ready( function( $ ) {
 	} );
 
 	// Show/hide form on load/unload
-	$( '#paf-form' ).animate( { opacity: '1' }, 150 );
+	$( '#paf-form' ).show();
 	$( window ).on( 'beforeunload', function() {
 
-		$( '#paf-form' ).animate( { opacity: '0' }, 150 );
+		$( '#paf-form' ).animate( { opacity: '0' }, 100 );
 	} );
 
 	function isURL( url ) {

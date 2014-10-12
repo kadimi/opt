@@ -44,7 +44,8 @@ foreach ( array( 'pages', 'options' ) as $core_file_name ) {
 }
 
 /**
- * 
+ * Adds some JS in the header:
+ * - paf_assets, here paf assets can be found
  */
 function paf_header() {
 	$home_path = get_home_path();

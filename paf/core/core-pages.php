@@ -129,7 +129,7 @@ function paf_page_cb() {
 	}
 
 	// Print the options
-	echo '<form id="paf-form" action="' . paf_url() . '" method="post">';
+	echo '<form id="paf-form" class="hidden" action="' . paf_url() . '" method="post">';
 	reset( $paf_page_options );
 	foreach ( $paf_page_options as $id => $page_option ) {
 		paf_print_option( $id );
