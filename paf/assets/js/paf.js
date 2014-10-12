@@ -41,7 +41,7 @@ jQuery( document ).ready( function( $ ) {
 				preview_url = value;
 			} else {
 				// File is not an image
-				preview_url = paf_assets + 'img/' + extension( value ) + '.png';
+				preview_url = path2png( value ); //;paf_assets + 'img/' + extension( value ) + '.png';
 			}
 
 			var $img = $( '<img />' )
@@ -169,5 +169,60 @@ jQuery( document ).ready( function( $ ) {
 	function extension( path ) {
 
 		return path.split('.').pop();
+	}
+
+	function path2png( path ) {
+		
+		var extension = path.split('.').pop();
+		var filename = basename( path, '.' + extension );
+
+		if( filename.length > 10 ) {
+			filename = filename.substring( 0, 9 ) + '…';
+		}
+
+		// Create SVG
+		var $canvas = $( '<canvas height="80" width="100" />')
+			.attr( 'id', 'paf_canvas' )
+			.addClass( 'hidden' )
+		;
+		// Append to body
+		$( 'body' ).append( $canvas );
+		// Draw
+		var canvas = $canvas.get( 0 );
+		var context = canvas.getContext("2d");
+		// Background
+		context.fillStyle = "#444";
+		context.fillRect( 0, 0, 100, 100 );
+		// Text
+		context.textAlign = 'center';
+		context.fillStyle = "#FFF";
+		context.font = "bold 30px Arial";
+		context.fillText( '.' + extension, 50, 60 );
+		context.font = "bold 12px Arial";
+		context.fillText( filename, 50, 25 );
+		// Store 
+		r = canvas.toDataURL( 'image/png' );
+		// Remove from document
+		$canvas.remove();
+		// Return
+		return r;
+	}
+
+	function basename( path, suffix ) {
+
+		var b = path;
+		var lastChar = b.charAt( b.length - 1 );
+
+		if ( lastChar === '/' || lastChar === '\\' ) {
+			b = b.slice( 0, -1 );
+		}
+
+		b = b.replace( /^.*[\/\\]/g, '' );
+
+		if ( typeof suffix === 'string' && b.substr( b.length - suffix.length ) == suffix ) {
+			b = b.substr( 0, b.length - suffix.length );
+		}
+
+		return b;
 	}
 } );
