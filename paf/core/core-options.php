@@ -147,10 +147,7 @@ function paf_print_option_type_select( $option_def ) {
 
 	// Add an empty option to prevent auto-selecting the first radio
 	if( $is_radio ) {
-		$options = array_merge( 
-			array( '__none__' => '' )
-			, $options
-		);
+		$options = array( '__none__' => '' ) + $options;
 	}
 
 	K::select( 'paf[' . $option_id . ']'
