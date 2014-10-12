@@ -111,6 +111,15 @@ function paf_page_cb() {
 		}
 	}
 
+	// Get submit button text ( tab, page the default )
+	if ( $paf_tab && $submit_button_text = K::get_var( 'submit_button', $paf_page_tabs[ $paf_tab ] ) ) {
+		;
+	} else if ( $submit_button_text = K::get_var( 'submit_button', $paf_pages[ $paf_page ] ) ) {
+		;
+	} else {
+		$submit_button_text = __( 'Save Changes' );
+	}
+
 	echo '<div class="wrap"><h2>' . $paf_page . '</h2>';
 
 	// Print tabs links
@@ -134,6 +143,7 @@ function paf_page_cb() {
 	foreach ( $paf_page_options as $id => $page_option ) {
 		paf_print_option( $id );
 	}
+	submit_button( $submit_button_text );
 	echo '</form>';
 
 	// Add JS and CSS

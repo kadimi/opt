@@ -18,6 +18,7 @@ function paf_tabs() {
 		'title'      => __( 'Tab one' ),
 		'menu_title' => __( 'Tab 1' ),
 		'page'       => __( 'page_a' ),
+		'submit_button' => __( 'Save Tab 1 settings' ),
 	);
 	$tabs[ 'tab_2'] = array(
 		'title'      => __( 'Tab two' ),

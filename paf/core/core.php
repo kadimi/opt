@@ -48,6 +48,14 @@ foreach ( array( 'pages', 'options' ) as $core_file_name ) {
 }
 
 /**
+ * Save options
+ */
+function paf_save() {
+	/* TODO */;
+}
+add_action( 'admin_init', 'paf_save' );
+
+/**
  * Adds some JS in the header:
  * - paf_assets, here paf assets can be found
  */
