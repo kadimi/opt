@@ -43,9 +43,12 @@ html[dir=rtl] .paf-label-with-image > input + img {
 	overflow: hidden;
 	width: 24px;
 	z-index: 10;
+	transform: scale(.5);
+	transition: all .2s;
 }
 .paf-option-type-upload-preview a:hover {
 	background: #1E8CBE;
+	transform: scale(1);
 }
 .paf-option-type-upload-preview a div {
 	background-position: -40px 0;

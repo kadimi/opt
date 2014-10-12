@@ -44,6 +44,26 @@ foreach ( array( 'pages', 'options' ) as $core_file_name ) {
 }
 
 /**
+ * 
+ */
+function paf_header() {
+	$home_path = get_home_path();
+	$assets_path = str_replace(
+		array( $home_path, 'core/core.php' )
+		, array( '', 'assets/' )
+		, __FILE__
+	);
+	
+	$assets_dir_url = home_url( $assets_path );
+    printf(
+    	'<script>var paf_assets = "%s"</script>'
+    	, $assets_dir_url
+	);
+}
+// Add hook for admin <head></head>
+add_action( 'admin_head', 'paf_header' );
+
+/**
  * Add JS file
  */
 function paf_asset_js( $asset, $block = FALSE ) {
@@ -100,6 +120,7 @@ function paf_asset( $asset, $type, $block = FALSE ) {
 }
 
 function paf_url() {
+
 	return 'http'
 		. ( is_ssl() ? 's' : '' )
 		. '://'

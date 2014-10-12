@@ -23,6 +23,7 @@ jQuery( document ).ready( function( $ ) {
 		var $button = $input.siblings( 'a.button' );
 		var $parent = $input.parent();
 		var value = $input.val();
+		var preview_url;
 		var $element;
 
 		// Add a thumbnail placeholder if missing
@@ -34,9 +35,21 @@ jQuery( document ).ready( function( $ ) {
 
 		// Empty then fill the placeholder
 		$element.html( null );
-		if( value && -1 !== $.inArray( extension( value ), [ 'gif', 'jpeg', 'jpg', 'png' ] ) ) {
+		if ( value ) {
 
-			var $img = $( '<img />' ).attr( 'src', value );
+			if ( -1 !== $.inArray( extension( value ), [ 'gif', 'jpeg', 'jpg', 'png' ] ) ) {
+				// File is an image
+				preview_url = value;
+			} else {
+				// File is not an image
+				preview_url = paf_assets + 'img/' + extension( value ) + '.png';
+			}
+
+			var $img = $( '<img />' )
+				.attr( 'src', preview_url )
+				.attr( 'alt', value )
+				.attr( 'title', value )
+			;
 			var $a = $( '<a />' )
 				.attr( 'class', 'paf-media-delete-button' )
 				.attr( 'href', '#' )
@@ -71,6 +84,7 @@ jQuery( document ).ready( function( $ ) {
 
 	// Select2
 	if ( $.isFunction( $.fn.select2 ) ) {
+
 		$( '.paf-option-type-select' ).select2();
 	}
 
@@ -133,10 +147,12 @@ jQuery( document ).ready( function( $ ) {
 	// Show/hide form on load/unload
 	$( '#paf-form' ).animate( { opacity: '1' }, 150 );
 	$( window ).on( 'beforeunload', function() {
+
 		$( '#paf-form' ).animate( { opacity: '0' }, 150 );
 	} );
 
 	function isURL( url ) {
+
 		var pattern = new RegExp('^(https?:\\/\\/)?'				// protocol
 			+ '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'	// domain name
 			+ '((\\d{1,3}\\.){3}\\d{1,3}))'							// OR ip (v4) address
@@ -152,6 +168,7 @@ jQuery( document ).ready( function( $ ) {
 	}
 
 	function extension( path ) {
+
 		return path.split('.').pop();
 	}
 } );
