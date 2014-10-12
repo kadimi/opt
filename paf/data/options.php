@@ -14,8 +14,12 @@ function paf_options() {
 	/**
 	 * Add options here
 	 */
-	$options[ 'basic' ] = array(
+	$options[ 'basic_0' ] = array(
 		'page' => 'page_a',
+	);
+	$options[ 'basic_1' ] = array(
+		'page' => 'page_a',
+		'value' => 'overriden',
 	);
 	$options[ 'basic_2' ] = array(
 		'page' => 'page_a',
@@ -137,7 +141,7 @@ function paf_options() {
 		'editor_height' => 200,
 		// 'textarea_rows' => 10,
 		'teeny'         => TRUE,
-		'value'         => 'Some value',
+		'value'         => 'Overriden...Overriden...Overriden...',
 	);
 
 	/**

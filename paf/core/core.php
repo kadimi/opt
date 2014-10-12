@@ -49,9 +49,24 @@ foreach ( array( 'pages', 'options' ) as $core_file_name ) {
 
 /**
  * Save options
+ * 
+ * The function will preserve options saved on other pages
  */
 function paf_save() {
-	/* TODO */;
+
+	// Do not save if the nonce is not valid
+	if ( ! wp_verify_nonce( K::get_var( 'paf_nonce', $_POST ), 'paf_save' ) ) {
+
+		return;
+	} else {
+
+		// Combine old and saved options
+		$paf = get_option( 'paf ', array() );
+		$paf = array_merge( $paf, $_POST[ 'paf' ] );
+		// Save
+		delete_option( 'paf' );
+		add_option( 'paf', $paf, '', TRUE );
+	}
 }
 add_action( 'admin_init', 'paf_save' );
 

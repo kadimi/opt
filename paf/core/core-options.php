@@ -4,6 +4,18 @@
  * @package plugin-admin-framework
  */
 
+/**
+ * Gets the option value
+ * 
+ * @param string $option_id
+ * @return mixed The paf option value
+ */
+function paf( $option_id ) {
+
+	$paf = get_option( 'paf', array() );
+	return K::get_var( $option_id, $paf );
+}
+
 function paf_print_option( $option_id ) {
 	
 	global $paf_page_options;
@@ -48,10 +60,13 @@ function paf_print_option_type_text( $option_def ) {
 	$option_id = key( $option_def );
 	$option = $option_def[ $option_id ];
 
-	K::input( 'paf_' . $option_id
+	K::input( 'paf[' . $option_id . ']'
 		, array(
 			'class' => 'regular-text',
-			'value' => K::get_var( 'value', $option, '' ),
+			'value' => isset( $option[ 'value' ] )
+				? $option[ 'value' ]
+				: paf( $option_id )
+			,
 		)
 		, array(
 			'colorpicker' => K::get_var( 'colorpicker', $option, FALSE ),
@@ -69,12 +84,15 @@ function paf_print_option_type_textarea( $option_def ) {
 	$option_id = key( $option_def );
 	$option = $option_def[ $option_id ];
 
-	K::textarea( 'paf_' . $option_id
+	K::textarea( 'paf[' . $option_id . ']'
 		, array(
 			'class' => K::get_var( 'class', $option, 'large-text' ),
 		)
 		, array(
-			'value' => K::get_var( 'value', $option, '' ),
+			'value' => isset( $option[ 'value' ] )
+				? $option[ 'value' ]
+				: paf( $option_id )
+			,
 			'editor' => K::get_var( 'editor', $option, FALSE ),
 			'editor_height' => K::get_var( 'editor_height', $option ),
 			'format' => sprintf( 
@@ -135,7 +153,7 @@ function paf_print_option_type_select( $option_def ) {
 		);
 	}
 
-	K::select( 'paf_' . $option_id
+	K::select( 'paf[' . $option_id . ']'
 		, array(
 			'class' => 'paf-option-type-' . $option[ 'type' ],
 			'data-paf-separator' => K::get_var( 'separator', $option, '<br />' ),
@@ -144,7 +162,10 @@ function paf_print_option_type_select( $option_def ) {
 		)
 		, array(
 			'options' => $options,
-			'selected' => K::get_var( 'selected', $option ),
+			'selected' => isset( $option[ 'selected' ] )
+				? $option[ 'selected' ]
+				: paf( $option_id )
+			,
 			'format' => sprintf( 
 				'<table class="form-table"><tbody><tr><th scope="row">%s</th><td>:select<br />%s</td></tr></tbody></table>'
 				, paf_option_return_title( $option_def )
@@ -169,10 +190,10 @@ function paf_print_option_type_upload( $option_def ) {
 	$option_id = key( $option_def );
 	$option = $option_def[ $option_id ];
 
-	$option_html_name = 'paf_' . $option_id;
+	$option_html_name = 'paf[' . $option_id . ']';
 
 	// Output
-	K::input( 'paf_' . $option_id
+	K::input( 'paf[' . $option_id . ']'
 		, array(
 			'class' => 'paf-option-type-upload regular-text',
 			'value' => K::get_var( 'value', $option, '' ),
@@ -193,7 +214,7 @@ function paf_print_option_type_not_implemented( $option_def ) {
 	$option_id = key( $option_def );
 	$option = $option_def[ $option_id ];
 
-	K::input( 'paf_' . $option_id
+	K::input( 'paf[' . $option_id . ']'
 		, array(
 			'value' => K::get_var( 'value', $option, '' ),
 		)

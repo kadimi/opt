@@ -143,7 +143,8 @@ function paf_page_cb() {
 	foreach ( $paf_page_options as $id => $page_option ) {
 		paf_print_option( $id );
 	}
-	submit_button( $submit_button_text );
+	wp_nonce_field( 'paf_save', 'paf_nonce' );
+	submit_button( $submit_button_text, 'primary large', 'paf_submit' );
 	echo '</form>';
 
 	// Add JS and CSS
