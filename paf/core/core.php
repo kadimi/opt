@@ -48,6 +48,7 @@ foreach ( array( 'pages', 'options' ) as $core_file_name ) {
  * - paf_assets, here paf assets can be found
  */
 function paf_header() {
+
 	$home_path = get_home_path();
 	$assets_path = str_replace(
 		array( $home_path, 'core/core.php' )
@@ -56,12 +57,11 @@ function paf_header() {
 	);
 	
 	$assets_dir_url = home_url( $assets_path );
-    printf(
-    	'<script>var paf_assets = "%s"</script>'
-    	, $assets_dir_url
+	printf(
+		'<script>var paf_assets = "%s"</script>'
+		, $assets_dir_url
 	);
 }
-// Add hook for admin <head></head>
 add_action( 'admin_head', 'paf_header' );
 
 /**
