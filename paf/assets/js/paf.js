@@ -36,7 +36,6 @@ jQuery( document ).ready( function( $ ) {
 		// Empty then fill the placeholder
 		$element.html( null );
 		if ( value ) {
-
 			if ( -1 !== $.inArray( extension( value ), [ 'gif', 'jpeg', 'jpg', 'png' ] ) ) {
 				// File is an image
 				preview_url = value;
