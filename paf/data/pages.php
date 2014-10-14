@@ -21,6 +21,7 @@ function paf_pages() {
 		'position'   => 1, // defaults to NULL, ignored if using parent
 		// 'parent'     => '', // defaults to NULL
 		'submit_button' => __( 'Save Page A settings' ),
+		'success' => __( 'Settings saved successfully.' ),
 	);
 
 	$pages[ 'page_b'] = array(
