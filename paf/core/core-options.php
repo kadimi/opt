@@ -193,7 +193,10 @@ function paf_print_option_type_upload( $option_def ) {
 	K::input( 'paf[' . $option_id . ']'
 		, array(
 			'class' => 'paf-option-type-upload regular-text',
-			'value' => K::get_var( 'value', $option, '' ),
+			'value' => isset( $option[ 'value' ] )
+				? $option[ 'value' ]
+				: paf( $option_id )
+			,
 		)
 		, array(
 			'format' => sprintf( 

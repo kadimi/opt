@@ -58,7 +58,7 @@ function paf_options() {
 			'cat'  => __( 'Cat' ),
 		),
 		'multiple' => TRUE,
-		'selected' => array( 'bird', 'cat' ),
+		// 'selected' => array( 'bird', 'cat' ),
 	);
 
 	$options[ 'my_radios' ] = array(
@@ -78,7 +78,7 @@ function paf_options() {
 			'wordpress' => 'http://placehold.it/120x40/3d5/fff&text=wordpress',
 			'codecanyon' => 'http://placehold.it/120x40/d35/fff&text=codecanyon',
 		),
-		'selected' => array( 'pressapps', 'codecanyon' ),
+		// 'selected' => array( 'pressapps', 'codecanyon' ),
 	);
 
 	$options[ 'my_radios_images_2' ] = array(
@@ -89,7 +89,7 @@ function paf_options() {
 			'wordpress' => 'http://placehold.it/120x40/3d5/fff&text=wordpress',
 			'codecanyon' => 'http://placehold.it/120x40/d35/fff&text=codecanyon',
 		),
-		'selected' => array( 'wordpress' ),
+		// 'selected' => array( 'wordpress' ),
 		'separator' => ' ',
 	);
 
