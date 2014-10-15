@@ -87,6 +87,94 @@ jQuery( document ).ready( function( $ ) {
 		$( '.paf-option-type-select' ).select2();
 	}
 
+	// Handle conditions
+	/**
+	 * Build a new object
+	 * { { master, slave, operator, value }, ... }
+	 */
+	var dependencies = [];
+
+	$( '[data-conditions]' ).each( function() {
+
+		var $slave = $( this );
+		var slave_name = $slave.attr( 'name' );
+		var conditions = JSON.parse( unescape( $slave.data( 'conditions' ) ) );
+
+		for ( var i in conditions ) {
+
+			var master = conditions[ i ][0];
+			var operator = conditions[ i ][1];
+			var value = conditions[ i ][2];
+
+			dependencies.push( {
+				"master" : master
+				, "slave" : slave_name
+				, "operator" : operator
+				, "value" : value
+			} );
+		}
+		return;
+	} );
+
+	function get_slaves( master ) {
+
+		var slaves = [];
+
+		for ( i in dependencies ) {
+			if( slaves.indexOf( dependencies[i].slave ) == -1 ) {
+				slaves.push( dependencies[i].slave );
+			}
+		};
+
+		return slaves;
+	}
+
+	function handle_slave( slave ) {
+		
+		var $slave = $( '[name="' + slave + '"]' );
+
+		for( i in dependencies ) {
+			if ( slave != dependencies[i].slave ) {
+				// Not interested in other slaves
+				continue;
+			} else {
+				var master_value = $( '[name="paf[' + dependencies[i].master + ']"]' ).val();
+				var master_value_req = dependencies[i].value;
+				if ( master_value == master_value_req ) {
+					continue;
+				} else {
+					$slave.hide();
+					return;
+				}
+			}
+		}
+		$slave.show();
+		return;
+	}
+
+	// Attach dependency checker on when applicable
+	$( '[name^="paf["]' ).each( function() {
+
+		var $master = $( this );
+		master = $master.attr( 'name' );
+
+		for( i in dependencies ) {
+			var dependency_master = 'paf[' + dependencies[i].master + ']';
+			if( dependency_master === master ) {
+				$master
+					.bind( 'change keyup', function() {
+
+						var slaves = get_slaves( master );
+						for( i in slaves ) {
+							handle_slave( slaves [ i ] );
+						}
+					} )
+					.change()
+				;
+			}
+		}
+	} );
+
 	// turn select.paf-(radio|checkbox) into radio|checkbox
 	$( '.paf-option-type-checkbox,.paf-option-type-radio' ).each( function( i, select ) {
 

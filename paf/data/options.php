@@ -16,19 +16,36 @@ function paf_options() {
 	 */
 	$options[ 'basic_0' ] = array(
 		'page' => 'page_a',
+		'value' => 'overriden',
 	);
 	$options[ 'basic_1' ] = array(
 		'page' => 'page_a',
-		'value' => 'overriden',
+		'placeholder' => __( 'Try &quot;123&quot;' ),
 	);
 	$options[ 'basic_2' ] = array(
 		'page' => 'page_a',
-		'tab'  => 'tab_2',
+		'placeholder' => __( 'Try &quot;456&quot;' ),
 	);
 	$options[ 'basic_3' ] = array(
+		'page' => 'page_a',
+		'tab'  => 'tab_2',
+	);
+	$options[ 'basic_4' ] = array(
 		'page' => 'page_b',
 	);
-
+	$options[ 'depenency_1' ] = array(
+		'page' => 'page_a',
+		'conditions' => array(
+			array( 'basic_1', 'eq', '123'),
+		),
+	);
+	$options[ 'depenency_2' ] = array(
+		'page' => 'page_a',
+		'conditions' => array(
+			array( 'basic_1', 'eq', '123'),
+			array( 'basic_2', 'eq', '456'),
+		),
+	);
 	$options[ 'my_colorpicker' ] = array(
 		'page'        => 'page_a',
 		'colorpicker' => true,

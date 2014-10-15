@@ -63,9 +63,14 @@ function paf_print_option_type_text( $option_def ) {
 	K::input( 'paf[' . $option_id . ']'
 		, array(
 			'class' => 'regular-text',
+			'placeholder' => K::get_var( 'placeholder', $option ),
 			'value' => isset( $option[ 'value' ] )
 				? $option[ 'value' ]
 				: paf( $option_id )
+			,
+			'data-conditions' => K::get_var( 'conditions', $option )
+				? urlencode( json_encode( K::get_var( 'conditions', $option ), JSON_FORCE_OBJECT ) )
+				: null
 			,
 		)
 		, array(
