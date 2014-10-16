@@ -90,7 +90,7 @@ jQuery( document ).ready( function( $ ) {
 	// Handle conditions
 	/**
 	 * Build a new object
-	 * { { master, slave, operator, value }, ... }
+	 * { { master, slave, operator, values }, ... }
 	 */
 	var dependencies = [];
 
@@ -104,13 +104,13 @@ jQuery( document ).ready( function( $ ) {
 
 			var master = conditions[ i ][0];
 			var operator = conditions[ i ][1];
-			var value = conditions[ i ][2];
+			var values = conditions[ i ][2];
 
 			dependencies.push( {
 				"master" : master
 				, "slave" : slave_name
 				, "operator" : operator
-				, "value" : value
+				, "values" : values
 			} );
 		}
 		return;
@@ -132,24 +132,69 @@ jQuery( document ).ready( function( $ ) {
 	function handle_slave( slave ) {
 		
 		var $slave = $( '[name="' + slave + '"]' );
+		var $slave_tbl = $slave.parents( 'table' );
 
 		for( i in dependencies ) {
 			if ( slave != dependencies[i].slave ) {
 				// Not interested in other slaves
 				continue;
 			} else {
-				var master_value = $( '[name="paf[' + dependencies[i].master + ']"]' ).val();
-				var master_value_req = dependencies[i].value;
-				if ( master_value == master_value_req ) {
+				var master_values = $( '[name="paf[' + dependencies[i].master + ']"]' ).val();
+				var master_values_req = dependencies[i].values;
+				var operator = dependencies[i].operator;
+				if ( check_condition( master_values, master_values_req, operator ) ) {
 					continue;
 				} else {
-					$slave.hide();
+					$slave_tbl
+						.stop()
+						.slideUp( 'fast' )
+						.css( 'opacity', '0' )
+					;
 					return;
 				}
 			}
 		}
-		$slave.show();
+		$slave_tbl
+			.stop()
+			.slideDown( 'fast' )
+			.fadeTo( 'fast', '1' )
+		;
 		return;
+	}
+
+	/** 
+	 * Checks if 'inputs [oprator] values' is true
+	 */
+	function check_condition( inputs, values, operator ) {
+
+		// turn inputs and values into an array suitable for the function and sort the values in that array
+		if ( ! ( inputs instanceof Array ) ) {
+			inputs = explode( '|' , inputs ).sort();
+		}
+		if ( ! ( values instanceof Array ) ) {
+			values = explode( '|' , values ).sort();
+		}
+
+		switch ( operator ) {
+			case 'eq':
+			case '=':
+				return inputs.toString() == values.toString();
+			case 'neq':
+			case '!':
+				return inputs.toString() != values.toString();
+			case 'gt':
+			case '>':
+				return isNumber( inputs[0] ) && inputs[0] > values[0];
+			case 'lt':
+			case '<':
+				return isNumber( inputs[0] ) && inputs[0] < values[0];
+			case 'gte':
+			case '>=':
+				return isNumber( inputs[0] ) && inputs[0] >= values[0];
+			case 'lte':
+			case '<=':
+				return isNumber( inputs[0] ) && inputs[0] <= values[0];
+		}
 	}
 
 	// Attach dependency checker on when applicable
@@ -202,7 +247,7 @@ jQuery( document ).ready( function( $ ) {
 			var $choice = $( '<input />' )
 				.attr( 'type', type )
 				.attr( 'name', $select.attr( 'name' ) )
-				.attr( 'value', $option.val() )
+				.attr( 'values', $option.val() )
 			;
 
 			// Set checked if the option was selected
@@ -296,21 +341,11 @@ jQuery( document ).ready( function( $ ) {
 		return r;
 	}
 
-	function basename( path, suffix ) {
-
-		var b = path;
-		var lastChar = b.charAt( b.length - 1 );
-
-		if ( lastChar === '/' || lastChar === '\\' ) {
-			b = b.slice( 0, -1 );
-		}
-
-		b = b.replace( /^.*[\/\\]/g, '' );
-
-		if ( typeof suffix === 'string' && b.substr( b.length - suffix.length ) == suffix ) {
-			b = b.substr( 0, b.length - suffix.length );
-		}
-
-		return b;
+	function isNumber( n ) {
+		return ! isNaN( parseFloat( n ) ) && isFinite( n );
 	}
+
+	function basename(path,suffix){var b=path;var lastChar=b.charAt(b.length-1);if(lastChar==='/'||lastChar==='\\'){b=b.slice(0,-1)}b=b.replace(/^.*[\/\\]/g,'');if(typeof suffix==='string'&&b.substr(b.length-suffix.length)==suffix){b=b.substr(0,b.length-suffix.length)}return b}
+
+	function explode(delimiter,string,limit){if(arguments.length<2||typeof delimiter==='undefined'||typeof string==='undefined')return null;if(delimiter===''||delimiter===false||delimiter===null)return false;if(typeof delimiter==='function'||typeof delimiter==='object'||typeof string==='function'||typeof string==='object'){return{0:''}}if(delimiter===true)delimiter='1';delimiter+='';string+='';var s=string.split(delimiter);if(typeof limit==='undefined')return s;if(limit===0)limit=1;if(limit>0){if(limit>=s.length)return s;return s.slice(0,limit-1).concat([s.slice(limit-1).join(delimiter)])}if(-limit>=s.length)return[];s.splice(s.length+limit);return s}
 } );
