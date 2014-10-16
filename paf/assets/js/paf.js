@@ -87,6 +87,62 @@ jQuery( document ).ready( function( $ ) {
 		$( '.paf-option-type-select' ).select2();
 	}
 
+	// turn select.paf-(radio|checkbox) into radio|checkbox
+	$( '.paf-option-type-checkbox,.paf-option-type-radio' ).each( function( i, select ) {
+
+		var $this = $( this );
+		var $select = $( select );
+		var type = $this.hasClass( 'paf-option-type-checkbox' ) ? 'checkbox' : 'radio';
+		var separator = $this.data( 'paf-separator' );
+
+		$select.find( 'option' ).each( function( j, option ){
+
+			var $option = $( option );
+			var option_is_url = isURL( $option.text() );
+
+			// Turn URLs into image tags
+			if ( option_is_url ) {
+				$option.text( '<img src="' + $option.text() + '" />' );
+			}
+
+			// Skip the empty radio
+			if( 'radio' === type && '__none__' === $option.val() ) {
+				return;
+			}
+
+			// Create a choice
+			var $choice = $( '<input />' )
+				.attr( 'type', type )
+				.attr( 'name', $select.attr( 'name' ) )
+				.attr( 'value', $option.val() )
+			;
+
+			// Set checked if the option was selected
+			if ( $option.attr( 'selected' ) ) {
+				$choice.attr( 'checked', 'checked' );
+			}
+
+			// Wrap inside label
+			$choice = $( '<label />' ).html( $choice[0].outerHTML + $option.text() );
+
+			// Mark if image 
+			if ( option_is_url ) {
+				$choice.addClass( 'paf-label-with-image' );
+			}
+
+			// Insert 
+			$select.before( $choice );
+
+			// Insert separator after all but last option
+			if( j < $select.find( 'option' ).length - 1 ) {
+				$select.before( separator );
+			}
+		} );
+
+		// Remove dropdown
+		$select.remove();
+	} );
+
 	// Handle conditions
 	/**
 	 * Build a new object
@@ -130,7 +186,7 @@ jQuery( document ).ready( function( $ ) {
 	}
 
 	function handle_slave( slave ) {
-		
+
 		var $slave = $( '[name="' + slave + '"]' );
 		var $slave_tbl = $slave.parents( 'table' );
 
@@ -139,9 +195,55 @@ jQuery( document ).ready( function( $ ) {
 				// Not interested in other slaves
 				continue;
 			} else {
-				var master_values = $( '[name="paf[' + dependencies[i].master + ']"]' ).val();
+				var master = dependencies[i].master;
+				var $master = $( '[name="paf[' + master + ']"]' );
+				var master_type;
+				var master_values;
 				var master_values_req = dependencies[i].values;
 				var operator = dependencies[i].operator;
+
+				// Get master_type
+				if ( ! $master.length ) {
+					master_type = 'checkbox';
+				} else if ( $master.is( 'textarea' ) ) {
+					master_type = 'textarea';
+				} else {
+					master_type = $master.attr( 'type' );
+				}
+
+				// Get master values
+				switch ( master_type ) {
+					case 'select':
+						$master = $( '[name="paf[' + master + '][]"]' );
+						master_values = $master
+							.find( ':selected' )
+							.map( function() { return this.value; } )
+							.get()
+						;
+						break;
+					case 'radio':
+						$master = $( '[name="paf[' + master + ']"]' );
+						master_values = $master
+							.filter( ':checked' )
+							.map( function() { return this.value; } )
+							.get()
+						;
+						break;
+					case 'checkbox':
+						$master = $( '[name="paf[' + master + '][]"]' );
+						master_values = $master
+							.filter( ':checked' )
+							.map( function() { return this.value; } )
+							.get()
+						;
+						break;
+					default:
+						$master = $( '[name="paf[' + master + ']"]' );
+						master_values = $master.val();
+						/* */
+						break;
+				}
+
 				if ( check_condition( master_values, master_values_req, operator ) ) {
 					continue;
 				} else {
@@ -209,6 +311,10 @@ jQuery( document ).ready( function( $ ) {
 
 		var $master = $( this );
 		master = $master.attr( 'name' );
+		// Maybe it's a checkbox in which case the name will have [] at the end, we have to remove it
+		if( master.lastIndexOf( '[]' ) > -1 ) {
+			master = master.slice( 0, master.length - 2 );
+		}
 
 		for( i in dependencies ) {
 			var dependency_master = 'paf[' + dependencies[i].master + ']';
@@ -225,62 +331,6 @@ jQuery( document ).ready( function( $ ) {
 				;
 			}
 		}
-	} );
-
-	// turn select.paf-(radio|checkbox) into radio|checkbox
-	$( '.paf-option-type-checkbox,.paf-option-type-radio' ).each( function( i, select ) {
-
-		var $this = $( this );
-		var $select = $( select );
-		var type = $this.hasClass( 'paf-option-type-checkbox' ) ? 'checkbox' : 'radio';
-		var separator = $this.data( 'paf-separator' );
-
-		$select.find( 'option' ).each( function( j, option ){
-
-			var $option = $( option );
-			var option_is_url = isURL( $option.text() );
-
-			// Turn URLs into image tags
-			if ( option_is_url ) {
-				$option.text( '<img src="' + $option.text() + '" />' );
-			}
-
-			// Skip the empty radio
-			if( 'radio' === type && '__none__' === $option.val() ) {
-				return;
-			}
-
-			// Create a choice
-			var $choice = $( '<input />' )
-				.attr( 'type', type )
-				.attr( 'name', $select.attr( 'name' ) )
-				.attr( 'values', $option.val() )
-			;
-
-			// Set checked if the option was selected
-			if ( $option.attr( 'selected' ) ) {
-				$choice.attr( 'checked', 'checked' );
-			}
-
-			// Wrap inside label
-			$choice = $( '<label />' ).html( $choice[0].outerHTML + $option.text() );
-
-			// Mark if image 
-			if ( option_is_url ) {
-				$choice.addClass( 'paf-label-with-image' );
-			}
-
-			// Insert 
-			$select.before( $choice );
-
-			// Insert separator after all but last option
-			if( j < $select.find( 'option' ).length - 1 ) {
-				$select.before( separator );
-			}
-		} );
-
-		// Remove dropdown
-		$select.remove();
 	} );
 
 	// Show/hide form on load/unload

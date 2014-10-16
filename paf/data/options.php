@@ -46,15 +46,15 @@ function paf_options() {
 	$options[ 'depenency_1' ] = array(
 		'page' => 'page_a',
 		'conditions' => array(
-			array( 'basic_1', 'eq', '123'),
+			array( 'basic_1', 'eq', '123' ),
 		),
 	);
 	$options[ 'depenency_2' ] = array(
 		'page' => 'page_a',
 		'conditions' => array(
-			array( 'basic_1', 'eq', '123'),
-			array( 'basic_2', 'eq', '456'),
-			array( 'my_dropdown_single', 'in', 'cat,bird'),
+			array( 'basic_1', 'eq', '123' ),
+			array( 'basic_2', 'eq', '456' ),
+			array( 'my_dropdown_single', 'in', 'cat,bird' ),
 		),
 	);
 	$options[ 'my_colorpicker' ] = array(
