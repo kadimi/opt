@@ -33,6 +33,16 @@ function paf_options() {
 	$options[ 'basic_4' ] = array(
 		'page' => 'page_b',
 	);
+	$options[ 'my_dropdown_single' ] = array(
+		'page'     => 'page_a',
+		'type'     => 'select',
+		'options'  => array(
+			''     => __( 'Choose an animal' ),
+			'bird' => __( 'Bird' ),
+			'cat'  => __( 'Cat' ),
+		),
+		// 'selected' => array( 'bird', 'cat' ),
+	);
 	$options[ 'depenency_1' ] = array(
 		'page' => 'page_a',
 		'conditions' => array(
@@ -44,6 +54,7 @@ function paf_options() {
 		'conditions' => array(
 			array( 'basic_1', 'eq', '123'),
 			array( 'basic_2', 'eq', '456'),
+			array( 'my_dropdown_single', 'in', 'cat,bird'),
 		),
 	);
 	$options[ 'my_colorpicker' ] = array(
@@ -54,17 +65,6 @@ function paf_options() {
 	$options[ 'my_upload' ] = array(
 		'page' => 'page_a',
 		'type' => 'upload',
-	);
-
-	$options[ 'my_dropdown_single' ] = array(
-		'page'     => 'page_a',
-		'type'     => 'select',
-		'options'  => array(
-			''     => __( 'Choose an animal' ),
-			'bird' => __( 'Bird' ),
-			'cat'  => __( 'Cat' ),
-		),
-		// 'selected' => array( 'bird', 'cat' ),
 	);
 
 	$options[ 'my_dropdown_multiple' ] = array(

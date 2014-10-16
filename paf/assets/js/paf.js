@@ -169,10 +169,10 @@ jQuery( document ).ready( function( $ ) {
 
 		// turn inputs and values into an array suitable for the function and sort the values in that array
 		if ( ! ( inputs instanceof Array ) ) {
-			inputs = explode( '|' , inputs ).sort();
+			inputs = explode( ',' , inputs ).sort();
 		}
 		if ( ! ( values instanceof Array ) ) {
-			values = explode( '|' , values ).sort();
+			values = explode( ',' , values ).sort();
 		}
 
 		switch ( operator ) {
@@ -194,6 +194,13 @@ jQuery( document ).ready( function( $ ) {
 			case 'lte':
 			case '<=':
 				return isNumber( inputs[0] ) && inputs[0] <= values[0];
+			case 'in':
+				for ( i in inputs ) {
+					if ( values.indexOf( inputs[i] ) != -1 ) {
+						return true;
+					}
+				}
+				return false;
 		}
 	}
 
