@@ -48,6 +48,30 @@ foreach ( array( 'pages', 'options' ) as $core_file_name ) {
 }
 
 /**
+ * Enqueue JS/CSS
+ */
+function paf_enqueue() {
+
+	$protocol = 'http' . ( is_ssl() ? 's' : '' );
+
+	$js = array(
+		'highlight' => "$protocol://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js",
+	);
+
+	$css = array(
+		'highlight' => "$protocol://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/default.min.css",
+	);
+
+	foreach ( $js as $handle => $src ) {
+		wp_enqueue_script( $handle, $src );
+	}
+	foreach ( $css as $handle => $src ) {
+		wp_enqueue_style( $handle, $src );
+	}
+}
+add_action( 'admin_init', 'paf_enqueue' );
+
+/**
  * Load important gobal data
  * 
  * The data is:
@@ -187,10 +211,12 @@ function paf_header() {
 	);
 	
 	$assets_dir_url = home_url( $assets_path );
-	printf(
-		'<script>var paf_assets = "%s"</script>'
-		, $assets_dir_url
-	);
+	?>
+		<script>
+			var paf_assets = "<?php echo $assets_dir_url ?>";
+			hljs.initHighlightingOnLoad();
+		</script>
+	<?php
 }
 add_action( 'admin_head', 'paf_header' );
 
@@ -259,4 +285,9 @@ function paf_url() {
 		. ( 80 != $_SERVER[ 'SERVER_PORT' ] ? ":$_SERVER[SERVER_PORT]" : '' )
 		. $_SERVER[ 'REQUEST_URI' ]
 	;
+}
+
+function paf_htmlspecialchars_recursive( &$array ) {
+
+	$array = htmlspecialchars( $array );
 }

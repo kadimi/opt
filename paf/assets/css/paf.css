@@ -4,6 +4,10 @@
 #paf-form {
 }
 
+.paf-code-block {
+	background: rgba( 0, 0, 0, .1 );
+}
+
 /* Labels using images */
 .paf-label-with-image input {
 	display: none;

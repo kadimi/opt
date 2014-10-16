@@ -15,8 +15,10 @@ function paf_options() {
 	 * Add options here
 	 */
 	$options[ 'basic_0' ] = array(
+		'title' => __( 'Basic text field' ),
+		'subtitle' => __( 'id: <code>basic_0</code>' ),
 		'page' => 'page_a',
-		'value' => 'overriden',
+		'description' => '~',
 	);
 	$options[ 'basic_1' ] = array(
 		'page' => 'page_a',
@@ -24,13 +26,9 @@ function paf_options() {
 	);
 	$options[ 'basic_2' ] = array(
 		'page' => 'page_a',
-		'placeholder' => __( 'Try &quot;456&quot;' ),
-	);
-	$options[ 'basic_3' ] = array(
-		'page' => 'page_a',
 		'tab'  => 'tab_2',
 	);
-	$options[ 'basic_4' ] = array(
+	$options[ 'basic_3' ] = array(
 		'page' => 'page_b',
 	);
 	$options[ 'my_dropdown_single' ] = array(
@@ -40,7 +38,9 @@ function paf_options() {
 			''     => __( 'Choose an animal' ),
 			'bird' => __( 'Bird' ),
 			'cat'  => __( 'Cat' ),
+			'fish'  => __( 'Fish' ),
 		),
+		'description'     => '<p class="description">' . __( 'Try bird or cat here and 123 above to show a conditional field' ) . '</p>',
 		// 'selected' => array( 'bird', 'cat' ),
 	);
 	$options[ 'depenency_1' ] = array(
@@ -53,9 +53,9 @@ function paf_options() {
 		'page' => 'page_a',
 		'conditions' => array(
 			array( 'basic_1', 'eq', '123' ),
-			array( 'basic_2', 'eq', '456' ),
 			array( 'my_dropdown_single', 'in', 'cat,bird' ),
 		),
+		'description' => '~',
 	);
 	$options[ 'my_colorpicker' ] = array(
 		'page'        => 'page_a',
@@ -117,7 +117,10 @@ function paf_options() {
 			'bird' => __( 'Bird' ),
 			'cat'  => __( 'Cat' ),
 		),
-		'separator' => '&nbsp;&nbsp;|&nbsp;&nbsp;'
+		'separator' => '&nbsp;&nbsp;|&nbsp;&nbsp;',
+		'conditions' => array(
+			array( 'my_radios_images', 'in', 'codecanyon,pressapps' ),
+		),
 	);
 
 	$options[ 'my_posts_checkboxes' ] = array(
@@ -154,6 +157,7 @@ function paf_options() {
 		'tab'           => 'tab_1',
 		'section'       => 'advanced',
 		'section_title' => __( 'Advanced Stuff' ),
+		'description'   => __( 'This is an advanced field' ),
 		'editor'        => TRUE,
 		'editor_height' => 200,
 		// 'textarea_rows' => 10,

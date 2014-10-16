@@ -29,6 +29,9 @@ function paf_print_option( $option_id ) {
 		$callback = 'paf_print_option_type_not_implemented';
 	}
 
+	// Sort option parameters for a better display when using 'description' = '~'
+	ksort( $option );
+
 	/**
 	 * Call the function coresponding to the option, 
 	 * e.g. paf_print_option_type_text or paf_print_option_type_upload
@@ -66,10 +69,50 @@ function paf_option_return_format( $option_type = 'input' ) {
 	}
 }
 
+/**
+  * Generate formatted and syntax highlighted dump
+  */
+function paf_option_return_dump( $option_id ) {
+
+	global $paf_options;
+	$option = $paf_options[ $option_id ];
+	ksort( $option );
+
+	array_walk_recursive( $option, 'paf_htmlspecialchars_recursive' );
+
+	$dump = K::wrap(
+			"\$options[ '$option_id' ] = "
+			. var_export( $option, true )
+			. ';'
+		, array(
+			'class' => 'php paf-code-block',
+		)
+		, array(
+			'html_before' => '<pre>',
+			'html_after' => '</pre>',
+			'in' => 'code',
+			'return' => true,
+		)
+	);
+
+	// Remove white space before 'array ('
+	$dump = preg_replace( '/=>\s+array \(/s', '=> array (', $dump );
+
+	// Replace 2 spaces with 4 spaces
+	$pattern = "/((?:  )+)(\d+|'|array|\))/";
+	$dump = preg_replace( $pattern, '\1$1$2', $dump );
+
+	return $dump;
+}
+
 function paf_print_option_type_text( $option_def ) {
 
 	$option_id = key( $option_def );
 	$option = $option_def[ $option_id ];
+
+	if( '~' === K::get_var( 'description', $option ) ) {
+		$option[ 'description' ] = paf_option_return_dump( $option_id );
+	}
 
 	K::input( 'paf[' . $option_id . ']'
 		, array(
@@ -89,7 +132,7 @@ function paf_print_option_type_text( $option_def ) {
 			'format' => sprintf( 
 				paf_option_return_format()
 				, paf_option_return_title( $option_def )
-				, ''//@d( $option )
+				, K::get_var( 'description', $option, '' )
 			)
 		)
 	);
@@ -99,6 +142,10 @@ function paf_print_option_type_textarea( $option_def ) {
 
 	$option_id = key( $option_def );
 	$option = $option_def[ $option_id ];
+
+	if( '~' === K::get_var( 'description', $option ) ) {
+		$option[ 'description' ] = paf_option_return_dump( $option_id );
+	}
 
 	K::textarea( 'paf[' . $option_id . ']'
 		, array(
@@ -114,7 +161,7 @@ function paf_print_option_type_textarea( $option_def ) {
 			'format' => sprintf( 
 				paf_option_return_format( 'textarea' )
 				, paf_option_return_title( $option_def )
-				, ''//@d( $option )
+				, K::get_var( 'description', $option, '' )
 			),
 			'media_buttons' => K::get_var( 'media_buttons', $option, TRUE ),
 			'teeny' => K::get_var( 'teeny', $option ),
@@ -127,6 +174,10 @@ function paf_print_option_type_select( $option_def ) {
 
 	$option_id = key( $option_def );
 	$option = $option_def[ $option_id ];
+
+	if( '~' === K::get_var( 'description', $option ) ) {
+		$option[ 'description' ] = paf_option_return_dump( $option_id );
+	}
 
 	$is_radio = 'radio' === $option[ 'type'];
 	$is_checkbox = 'checkbox' === $option[ 'type'];
@@ -182,7 +233,7 @@ function paf_print_option_type_select( $option_def ) {
 			'format' => sprintf( 
 				paf_option_return_format( 'select' )
 				, paf_option_return_title( $option_def )
-				, ''//@d( $option )
+				, K::get_var( 'description', $option, '' )
 			)
 		)
 	);
@@ -203,6 +254,10 @@ function paf_print_option_type_upload( $option_def ) {
 	$option_id = key( $option_def );
 	$option = $option_def[ $option_id ];
 
+	if( '~' === K::get_var( 'description', $option ) ) {
+		$option[ 'description' ] = paf_option_return_dump( $option_id );
+	}
+
 	$option_html_name = 'paf[' . $option_id . ']';
 
 	// Output
@@ -219,7 +274,7 @@ function paf_print_option_type_upload( $option_def ) {
 				paf_option_return_format()
 				, paf_option_return_title( $option_def )
 				, '<a class="button">' . __( 'Select Media') . '</a>'
-				, ''//@d( $option )
+				, K::get_var( 'description', $option, '' )
 			)
 		)
 	);
@@ -229,6 +284,10 @@ function paf_print_option_type_not_implemented( $option_def ) {
 
 	$option_id = key( $option_def );
 	$option = $option_def[ $option_id ];
+
+	if( '~' === K::get_var( 'description', $option ) ) {
+		$option[ 'description' ] = paf_option_return_dump( $option_id );
+	}
 
 	K::input( 'paf[' . $option_id . ']'
 		, array(
@@ -242,7 +301,7 @@ function paf_print_option_type_not_implemented( $option_def ) {
 					'<p class="description"><span class="dashicons dashicons-no"></span> ' . __( 'The option type <code>%s</code> is not yet implemented' ) . '</p>'
 					, $option[ 'type' ]
 				)
-				, ''//@d( $option )
+				, K::get_var( 'description', $option, '' )
 			)
 		)
 	);
