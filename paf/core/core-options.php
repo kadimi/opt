@@ -55,6 +55,17 @@ function paf_option_return_title( $option_def ) {
 	return $return;
 }
 
+function paf_option_return_format( $option_type = 'input' ) {
+
+	switch ( $option_type ) {
+		case 'input':
+		case 'select':
+		case 'textarea':
+		default:
+			return '<table class="form-table"><tbody><tr><th scope="row">%s</th><td>:' . $option_type . '<br />%s</td></tr></tbody></table>' ;
+	}
+}
+
 function paf_print_option_type_text( $option_def ) {
 
 	$option_id = key( $option_def );
@@ -76,7 +87,7 @@ function paf_print_option_type_text( $option_def ) {
 		, array(
 			'colorpicker' => K::get_var( 'colorpicker', $option, FALSE ),
 			'format' => sprintf( 
-				'<table class="form-table"><tbody><tr><th scope="row">%s</th><td>:input<br />%s</td></tr></tbody></table>'
+				paf_option_return_format()
 				, paf_option_return_title( $option_def )
 				, ''//@d( $option )
 			)
@@ -101,7 +112,7 @@ function paf_print_option_type_textarea( $option_def ) {
 			'editor' => K::get_var( 'editor', $option, FALSE ),
 			'editor_height' => K::get_var( 'editor_height', $option ),
 			'format' => sprintf( 
-				'<table class="form-table"><tbody><tr><th scope="row">%s</th><td>:textarea<br />%s</td></tr></tbody></table>'
+				paf_option_return_format( 'textarea' )
 				, paf_option_return_title( $option_def )
 				, ''//@d( $option )
 			),
@@ -169,7 +180,7 @@ function paf_print_option_type_select( $option_def ) {
 				: paf( $option_id )
 			,
 			'format' => sprintf( 
-				'<table class="form-table"><tbody><tr><th scope="row">%s</th><td>:select<br />%s</td></tr></tbody></table>'
+				paf_option_return_format( 'select' )
 				, paf_option_return_title( $option_def )
 				, ''//@d( $option )
 			)
@@ -205,7 +216,7 @@ function paf_print_option_type_upload( $option_def ) {
 		)
 		, array(
 			'format' => sprintf( 
-				'<table class="form-table"><tbody><tr><th scope="row">%s</th><td>:input%s</td></tr></tbody></table>'
+				paf_option_return_format()
 				, paf_option_return_title( $option_def )
 				, '<a class="button">' . __( 'Select Media') . '</a>'
 				, ''//@d( $option )
@@ -225,7 +236,7 @@ function paf_print_option_type_not_implemented( $option_def ) {
 		)
 		, array(
 			'format' => sprintf( 
-				'<table class="form-table"><tbody><tr><th scope="row">%s</th><td>:input<br />%s<br />%s</td></tr></tbody></table>'
+				paf_option_return_format()
 				, paf_option_return_title( $option_def )
 				, sprintf(
 					'<p class="description"><span class="dashicons dashicons-no"></span> ' . __( 'The option type <code>%s</code> is not yet implemented' ) . '</p>'
