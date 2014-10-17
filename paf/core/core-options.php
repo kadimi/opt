@@ -61,6 +61,8 @@ function paf_option_return_title( $option_def ) {
 function paf_option_return_format( $option_type = 'input' ) {
 
 	switch ( $option_type ) {
+		case 'upload':
+			return '<table class="form-table"><tbody><tr><th scope="row">%s</th><td>:input%s</td></tr></tbody></table>';
 		case 'input':
 		case 'select':
 		case 'textarea':
@@ -122,7 +124,7 @@ function paf_print_option_type_text( $option_def ) {
 				? $option[ 'value' ]
 				: paf( $option_id )
 			,
-			'data-conditions' => K::get_var( 'conditions', $option )
+			'data-paf-conditions' => K::get_var( 'conditions', $option )
 				? urlencode( json_encode( K::get_var( 'conditions', $option ), JSON_FORCE_OBJECT ) )
 				: null
 			,
@@ -150,6 +152,10 @@ function paf_print_option_type_textarea( $option_def ) {
 	K::textarea( 'paf[' . $option_id . ']'
 		, array(
 			'class' => K::get_var( 'class', $option, 'large-text' ),
+			'data-paf-conditions' => K::get_var( 'conditions', $option )
+				? urlencode( json_encode( K::get_var( 'conditions', $option ), JSON_FORCE_OBJECT ) )
+				: null
+			,
 		)
 		, array(
 			'value' => isset( $option[ 'value' ] )
@@ -222,7 +228,11 @@ function paf_print_option_type_select( $option_def ) {
 			'class' => 'paf-option-type-' . $option[ 'type' ],
 			'data-paf-separator' => K::get_var( 'separator', $option, '<br />' ),
 			'multiple' => $is_multiple,
-			'style' => 'min-width: 25em;'
+			'style' => 'min-width: 25em;',
+			'data-paf-conditions' => K::get_var( 'conditions', $option )
+				? urlencode( json_encode( K::get_var( 'conditions', $option ), JSON_FORCE_OBJECT ) )
+				: null
+			,
 		)
 		, array(
 			'options' => $options,
@@ -268,10 +278,14 @@ function paf_print_option_type_upload( $option_def ) {
 				? $option[ 'value' ]
 				: paf( $option_id )
 			,
+			'data-paf-conditions' => K::get_var( 'conditions', $option )
+				? urlencode( json_encode( K::get_var( 'conditions', $option ), JSON_FORCE_OBJECT ) )
+				: null
+			,
 		)
 		, array(
 			'format' => sprintf( 
-				paf_option_return_format()
+				paf_option_return_format( 'upload' )
 				, paf_option_return_title( $option_def )
 				, '<a class="button">' . __( 'Select Media') . '</a>'
 				, K::get_var( 'description', $option, '' )

@@ -94,6 +94,7 @@ jQuery( document ).ready( function( $ ) {
 		var $select = $( select );
 		var type = $this.hasClass( 'paf-option-type-checkbox' ) ? 'checkbox' : 'radio';
 		var separator = $this.data( 'paf-separator' );
+		var conditions = $this.data( 'paf-conditions' );
 
 		$select.find( 'option' ).each( function( j, option ){
 
@@ -116,6 +117,10 @@ jQuery( document ).ready( function( $ ) {
 				.attr( 'name', $select.attr( 'name' ) )
 				.attr( 'value', $option.val() )
 			;
+
+			if ( conditions ) {
+				$choice.attr( 'data-paf-conditions', conditions );
+			}
 
 			// Set checked if the option was selected
 			if ( $option.attr( 'selected' ) ) {
@@ -150,11 +155,11 @@ jQuery( document ).ready( function( $ ) {
 	 */
 	var dependencies = [];
 
-	$( '[data-conditions]' ).each( function() {
+	$( '[data-paf-conditions]' ).each( function() {
 
 		var $slave = $( this );
 		var slave_name = $slave.attr( 'name' );
-		var conditions = JSON.parse( unescape( $slave.data( 'conditions' ) ) );
+		var conditions = JSON.parse( unescape( $slave.data( 'paf-conditions' ) ) );
 
 		for ( var i in conditions ) {
 
@@ -170,6 +175,40 @@ jQuery( document ).ready( function( $ ) {
 			} );
 		}
 		return;
+	} );
+
+	// Attach dependency checker on when applicable
+	$( '[name^="paf["]' ).each( function() {
+
+		var $master = $( this );
+		master = $master.attr( 'name' );
+		// Maybe it's a checkbox in which case the name will have [] at the end, we have to remove it
+		if( master.lastIndexOf( '[]' ) > -1 ) {
+			master = master.slice( 0, master.length - 2 );
+		}
+
+		for( i in dependencies ) {
+			var dependency_master = 'paf[' + dependencies[i].master + ']';
+			if( dependency_master === master ) {
+				$master
+					.bind( 'change keyup', function() {
+
+						var slaves = get_slaves( master );
+						for( i in slaves ) {
+							handle_slave( slaves [ i ] );
+						}
+					} )
+					.change()
+				;
+			}
+		}
+	} );
+
+	// Show/hide form on load/unload
+	$( '#paf-form' ).show();
+	$( window ).on( 'beforeunload', function() {
+
+		$( '#paf-form' ).animate( { opacity: '0' }, 100 );
 	} );
 
 	function get_slaves( master ) {
@@ -196,41 +235,37 @@ jQuery( document ).ready( function( $ ) {
 				continue;
 			} else {
 				var master = dependencies[i].master;
-				var $master = $( '[name="paf[' + master + ']"]' );
+				var $master;
 				var master_type;
 				var master_values;
 				var master_values_req = dependencies[i].values;
 				var operator = dependencies[i].operator;
 
+				$master = $( '[name="paf[' + master + ']"]' );
+				if( ! $master.length ) {
+					$master = $( '[name="paf[' + master + '][]"]' );
+				}
+
 				// Get master_type
-				if ( ! $master.length ) {
-					master_type = 'checkbox';
+				if ( $master.is( 'select' ) ) {
+					master_type = 'select';
 				} else if ( $master.is( 'textarea' ) ) {
 					master_type = 'textarea';
 				} else {
-					master_type = $master.attr( 'type' );
+					master_type = $master.first().attr( 'type' );
 				}
 
 				// Get master values
 				switch ( master_type ) {
 					case 'select':
-						$master = $( '[name="paf[' + master + '][]"]' );
 						master_values = $master
-							.find( ':selected' )
+							.find( 'option:selected' )
 							.map( function() { return this.value; } )
 							.get()
 						;
 						break;
 					case 'radio':
-						$master = $( '[name="paf[' + master + ']"]' );
-						master_values = $master
-							.filter( ':checked' )
-							.map( function() { return this.value; } )
-							.get()
-						;
-						break;
 					case 'checkbox':
-						$master = $( '[name="paf[' + master + '][]"]' );
 						master_values = $master
 							.filter( ':checked' )
 							.map( function() { return this.value; } )
@@ -238,30 +273,19 @@ jQuery( document ).ready( function( $ ) {
 						;
 						break;
 					default:
-						$master = $( '[name="paf[' + master + ']"]' );
 						master_values = $master.val();
-						/* */
-						break;
 				}
 
 				if ( check_condition( master_values, master_values_req, operator ) ) {
 					continue;
 				} else {
-					$slave_tbl
-						.stop()
-						.slideUp( 'fast' )
-						.css( 'opacity', '0' )
-					;
-					return;
+					// Hide and exit funtion
+					return $slave_tbl.stop().slideUp( 'fast' ).css( 'opacity', '0' );
 				}
 			}
 		}
-		$slave_tbl
-			.stop()
-			.slideDown( 'fast' )
-			.fadeTo( 'fast', '1' )
-		;
-		return;
+		// Show and exit function
+		return $slave_tbl.stop().slideDown( 'fast' ).fadeTo( 'fast', '1' );
 	}
 
 	/** 
@@ -305,40 +329,6 @@ jQuery( document ).ready( function( $ ) {
 				return false;
 		}
 	}
-
-	// Attach dependency checker on when applicable
-	$( '[name^="paf["]' ).each( function() {
-
-		var $master = $( this );
-		master = $master.attr( 'name' );
-		// Maybe it's a checkbox in which case the name will have [] at the end, we have to remove it
-		if( master.lastIndexOf( '[]' ) > -1 ) {
-			master = master.slice( 0, master.length - 2 );
-		}
-
-		for( i in dependencies ) {
-			var dependency_master = 'paf[' + dependencies[i].master + ']';
-			if( dependency_master === master ) {
-				$master
-					.bind( 'change keyup', function() {
-
-						var slaves = get_slaves( master );
-						for( i in slaves ) {
-							handle_slave( slaves [ i ] );
-						}
-					} )
-					.change()
-				;
-			}
-		}
-	} );
-
-	// Show/hide form on load/unload
-	$( '#paf-form' ).show();
-	$( window ).on( 'beforeunload', function() {
-
-		$( '#paf-form' ).animate( { opacity: '0' }, 100 );
-	} );
 
 	function isURL( url ) {
 
@@ -399,6 +389,7 @@ jQuery( document ).ready( function( $ ) {
 	}
 
 	function isNumber( n ) {
+
 		return ! isNaN( parseFloat( n ) ) && isFinite( n );
 	}
 

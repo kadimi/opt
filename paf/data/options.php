@@ -31,6 +31,7 @@ function paf_options() {
 	$options[ 'basic_3' ] = array(
 		'page' => 'page_b',
 	);
+
 	$options[ 'my_dropdown_single' ] = array(
 		'page'     => 'page_a',
 		'type'     => 'select',
@@ -40,15 +41,17 @@ function paf_options() {
 			'cat'  => __( 'Cat' ),
 			'fish'  => __( 'Fish' ),
 		),
-		'description'     => '<p class="description">' . __( 'Try bird or cat here and 123 above to show a conditional field' ) . '</p>',
+		'description'     => '<p class="description">' . __( 'Try <strong>Bird</strong> or <strong>Cat</strong> here and <strong>123</strong> above to show a conditional field.' ) . '</p>',
 		// 'selected' => array( 'bird', 'cat' ),
 	);
+
 	$options[ 'depenency_1' ] = array(
 		'page' => 'page_a',
 		'conditions' => array(
 			array( 'basic_1', 'eq', '123' ),
 		),
 	);
+
 	$options[ 'depenency_2' ] = array(
 		'page' => 'page_a',
 		'conditions' => array(
@@ -57,6 +60,7 @@ function paf_options() {
 		),
 		'description' => '~',
 	);
+
 	$options[ 'my_colorpicker' ] = array(
 		'page'        => 'page_a',
 		'colorpicker' => true,
@@ -118,9 +122,6 @@ function paf_options() {
 			'cat'  => __( 'Cat' ),
 		),
 		'separator' => '&nbsp;&nbsp;|&nbsp;&nbsp;',
-		'conditions' => array(
-			array( 'my_radios_images', 'in', 'codecanyon,pressapps' ),
-		),
 	);
 
 	$options[ 'my_posts_checkboxes' ] = array(
