@@ -32,14 +32,6 @@ if ( ! class_exists ( 'Kint' ) ) {
 }
 
 /**
- * Include options files
- */
-foreach ( array( 'pages', 'tabs', 'options' ) as $option_file_name ) {
-
-	require dirname( __FILE__ ) . '/../data/' . $option_file_name . '.php';
-}
-
-/**
  * Include core files
  */
 foreach ( array( 'pages', 'options' ) as $core_file_name ) {
@@ -75,9 +67,6 @@ add_action( 'admin_init', 'paf_enqueue' );
  * Load important gobal data
  * 
  * The data is:
- *  - paf_options
- *  - paf_pages
- *  - paf_tabs
  *  - paf_page_tabs
  *  - paf_page_sections
  *  - paf_page_options
@@ -87,12 +76,6 @@ add_action( 'admin_init', 'paf_enqueue' );
 function paf_load() {
 
 	global $paf_options, $paf_pages, $paf_tabs;
-	foreach ( array( 'options', 'pages', 'tabs' ) as $k ) {
-		$k = 'paf_' . $k;
-		if ( ! K::get_var( $k, $GLOBALS ) ) {
-			$GLOBALS[ $k ] = call_user_func( $k );
-		}
-	}
 
 	global $paf_page_tabs, $paf_page_sections, $paf_page_options;
 	$paf_page_tabs = $paf_page_sections = $paf_page_options = array();
@@ -174,6 +157,31 @@ function paf_save() {
 	}
 }
 add_action( 'admin_init', 'paf_save' );
+
+/**
+ * Add $pages to the global $paf_pages
+ */
+function paf_pages( $pages ) {
+
+	$GLOBALS[ 'paf_pages'] = array_merge( K::get_var( 'paf_pages', $GLOBALS, array() ) , $pages );
+}
+
+/**
+ * Add $options to the global $paf_options
+ */
+function paf_options( $options ) {
+
+	$GLOBALS[ 'paf_options'] = array_merge( K::get_var( 'paf_options', $GLOBALS, array() ) , $options );
+}
+
+/**
+ * Add $tabs to the global $paf_tabs
+ */
+function paf_tabs( $tabs ) {
+
+	$GLOBALS[ 'paf_tabs'] = array_merge( K::get_var( 'paf_tabs', $GLOBALS, array() ) , $tabs );
+	ksort( $GLOBALS[ 'paf_tabs' ] );
+}
 
 /**
  * Show message when options are saved successfully

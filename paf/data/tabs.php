@@ -1,34 +1,26 @@
 <?php
 
 /**
-* Tabs definitions
-* 
-* @package plugin-admin-framework
-*/
-
-/**
- * Defines tabs for this plugin
+ * Tabs definitions
+ *
+ * @package plugin-admin-framework
  */
-function paf_tabs() {
 
-	/**
-	 * Add tabs here
-	 */
-	$tabs[ 'tab_1'] = array(
-		'title'      => __( 'Tab one' ),
-		'menu_title' => __( 'Tab 1' ),
-		'page'       => __( 'page_a' ),
-		'submit_button' => __( 'Save Tab 1 settings' ),
-		'success' => __( 'Saved' ),
-	);
-	$tabs[ 'tab_2'] = array(
-		'title'      => __( 'Tab two' ),
-		'menu_title' => __( 'Tab 2' ),
-		'page'       => __( 'page_a' ),
-	);
+// Make sure our temporary variable is empty
+$tabs = array();
 
-	/**
-	 * Do not touch this line
-	 */
-	return empty( $tabs ) ? array() : $tabs;
-}
+$tabs[ 'tab_1'] = array(
+	'title'         => __( 'Tab one' ),
+	'menu_title'    => __( 'Tab 1' ),
+	'page'          => __( 'page_a' ),
+	'submit_button' => __( 'Save Tab 1 settings' ),
+	'success'       => __( 'Saved' ),
+);
+$tabs[ 'tab_2'] = array(
+	'title'      => __( 'Tab two' ),
+	'menu_title' => __( 'Tab 2' ),
+	'page'       => __( 'page_a' ),
+);
+
+// Register tabs
+paf_tabs( $tabs );

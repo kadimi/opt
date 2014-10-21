@@ -15,3 +15,11 @@
 if ( ! defined( 'PLUGIN_OPTIONS' ) ) {
 	include dirname( __FILE__ ) . '/core/core.php';
 }
+
+/**
+ * Include options files
+ */
+foreach ( array( 'pages', 'tabs', 'options' ) as $option_file_name ) {
+
+	require dirname( __FILE__ ) . '/data/' . $option_file_name . '.php';
+}

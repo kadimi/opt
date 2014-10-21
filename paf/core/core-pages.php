@@ -10,12 +10,30 @@ add_action( 'admin_menu', 'paf_admin_add_pages' );
  */
 function paf_admin_add_pages() {
 
-	$paf_pages = paf_pages();
+	global $paf_pages;
 
 	foreach ( $paf_pages as $slug => $paf_page ) {
 
 		// Add top level menu pages
 		if( ! K::get_var( 'parent',  $paf_page ) ) {
+	
+			/**
+			 * Handle position, no top level menus should have the same position
+			 * 
+			 * - We will append a dot and the binary representation of the slug (to assure alphabetical order)
+			 * - We add 5 after the dot so that menues with go to the middle, this way,
+			 *   if you want a menu to go to the top use a decimal lover than .5 and vice versa
+			 */
+			$paf_page[ 'position' ] = K::get_var( 'position', $paf_page, null );
+			if ( preg_match( '/^\d+$/' , $paf_page[ 'position' ] ) ) {
+				$slug_unpacked = unpack('H*', $slug );
+				$paf_page[ 'position' ] = ( string ) (
+					$paf_page[ 'position' ]
+					. '.5'
+					. base_convert( $slug_unpacked[1], 16, 2 )
+				);
+			}
+
 			add_menu_page(
 				$paf_page[ 'title' ]
 				, $paf_page[ 'menu_title' ]
@@ -24,6 +42,7 @@ function paf_admin_add_pages() {
 				, 'paf_page_cb'
 				, $paf_page[ 'icon_url' ]
 				, $paf_page[ 'position' ]
+
 			);
 		}
 
