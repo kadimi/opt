@@ -109,7 +109,7 @@ function paf_load() {
 	 */
 	if(
 		( $paf_page_tabs && ! $paf_tab )
-		|| ( $paf_page_tabs && $paf_tab && ! $paf_page_tabs[ $paf_tab ] )
+		|| ( $paf_page_tabs && $paf_tab && ! K::get_var( $paf_tab, $paf_page_tabs ) )
 	) {
 		reset( $paf_page_tabs );
 		$paf_tab = key( $paf_page_tabs );
