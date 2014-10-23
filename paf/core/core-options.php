@@ -8,7 +8,8 @@
  * Gets options
  * 
  * Return all paf options array
- * If $option_id is set, the function will that option
+ * If $option_id is set, the function will that option current
+ * If not find it will return it's default value if any
  * 
  * @param string $option_id
  * @return mixed The paf option value
@@ -18,7 +19,12 @@ function paf( $option_id  = '' ) {
 	$paf = get_option( 'paf', array() );
 
 	if( strlen( $option_id ) ) {
-		return K::get_var( $option_id, $paf );
+		if( isset( $paf[ $option_id ] ) ) {
+			return $paf[ $option_id ];
+		} else {
+			$def = paf_d( $option_id );
+			return K::get_var( 'default', $def );
+		}
 	} else {
 		return $paf;
 	}

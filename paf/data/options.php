@@ -28,6 +28,12 @@ $options[ 'basic_2' ] = array(
 
 $options[ 'basic_3' ] = array( 'page' => 'page_b' );
 
+$options[ 'basic_4' ] = array(
+	'description' => '<p class="description">An option with  default value <code>DEF</code></p>',
+	'page' => 'page_a',
+	'default' => 'DEF',
+);
+
 $options[ 'my_dropdown_single' ] = array(
 	'page'     => 'page_a',
 	'type'     => 'select',
