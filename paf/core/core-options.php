@@ -5,15 +5,23 @@
  */
 
 /**
- * Gets the option value
+ * Gets options
+ * 
+ * Return all paf options array
+ * If $option_id is set, the function will that option
  * 
  * @param string $option_id
  * @return mixed The paf option value
  */
-function paf( $option_id ) {
+function paf( $option_id  = '' ) {
 
 	$paf = get_option( 'paf', array() );
-	return K::get_var( $option_id, $paf );
+
+	if( strlen( $option_id ) ) {
+		return K::get_var( $option_id, $paf );
+	} else {
+		return $paf;
+	}
 }
 
 function paf_print_option( $option_id ) {

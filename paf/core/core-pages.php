@@ -65,6 +65,7 @@ function paf_admin_add_pages() {
  */
 function paf_page_cb() {
 
+	global $paf;
 	global $paf_options, $paf_pages, $paf_tabs;
 	global $paf_page_tabs, $paf_page_sections, $paf_page_options;
 	global $paf_page, $paf_tab;
@@ -110,18 +111,18 @@ function paf_page_cb() {
 	paf_asset_js( 'paf', TRUE );
 	paf_asset_css( 'paf', TRUE );
 
-	// // Print debugging information
-	// K::wrap(
-	// 	__( 'Debugging information' )
-	// 	, array( 'style' => 'margin-top: 5em;' )
-	// 	, array( 'in' => 'h3' )
-	// );
+	// Print debugging information
+	K::wrap(
+		__( 'Debugging information' )
+		, array( 'style' => 'margin-top: 5em;' )
+		, array( 'in' => 'h3' )
+	);
 
-	// if( $paf_page_tabs ) {
-	// 	d( $paf_pages[ $paf_page ], $paf_page_tabs, $paf_page_sections, $paf_page_options );
-	// } else {
-	// 	d( $paf_pages[ $paf_page ], $paf_page_sections, $paf_page_options );
-	// }
+	if( $paf_page_tabs ) {
+		d( $paf, $paf_pages[ $paf_page ], $paf_page_tabs, $paf_page_sections, $paf_page_options );
+	} else {
+		d( $paf, $paf_pages[ $paf_page ], $paf_page_sections, $paf_page_options );
+	}
 
 	echo '</div>';
 }

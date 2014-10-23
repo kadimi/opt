@@ -67,6 +67,7 @@ add_action( 'admin_init', 'paf_enqueue' );
  * Load important gobal data
  * 
  * The data is:
+ *  - paf
  *  - paf_page_tabs
  *  - paf_page_sections
  *  - paf_page_options
@@ -74,6 +75,9 @@ add_action( 'admin_init', 'paf_enqueue' );
  *  - paf_tab
  */
 function paf_load() {
+
+	global $paf;
+	$paf = get_option( 'paf', array() );
 
 	global $paf_options, $paf_pages, $paf_tabs;
 
