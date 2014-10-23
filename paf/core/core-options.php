@@ -24,6 +24,16 @@ function paf( $option_id  = '' ) {
 	}
 }
 
+/**
+ * Get option definition
+ */
+function paf_d( $option_id ){
+	
+	global $paf_options;
+	
+	return K::get_var( $option_id, $paf_options, FALSE );
+}
+
 function paf_print_option( $option_id ) {
 	
 	global $paf_page_options;
