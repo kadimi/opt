@@ -112,7 +112,8 @@ function paf_page_cb() {
 	}
 	wp_nonce_field( 'paf_save', 'paf_nonce' );
 	
-	submit_button( $submit_button_text, 'primary large', 'paf_submit' );
+	// Submit and Reset buttons
+	echo '<p>';
 	K::input(
 		'paf_submit'
 		, array(
@@ -126,17 +127,20 @@ function paf_page_cb() {
 			'in' => 'input',
 		)
 	);
-	echo ' ';
-	K::wrap( 'Reset'
-		,array(
-			'class' => 'button button-large paf-reset',
-			'href' => '#',
-			'id' => 'paf-reset',
-		)
-		, array(
-			'in' => 'a'
-		)
-	);
+	if( $reset_button_text ) {
+		echo ' ';
+		K::wrap( 'Reset'
+			,array(
+				'class' => 'button button-large paf-reset',
+				'href' => '#',
+				'id' => 'paf-reset',
+			)
+			, array(
+				'in' => 'a'
+			)
+		);
+	}
+	echo '</p>';
 
 	echo '</form>';
 
