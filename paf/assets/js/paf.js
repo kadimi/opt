@@ -29,7 +29,7 @@ jQuery( document ).ready( function( $ ) {
 		// Add a thumbnail placeholder if missing
 		$element = $parent.find( '> .paf-option-type-upload-preview' );
 		if( ! $element.length ) {
-			$parent.append( '<div class="paf-option-type-upload-preview"></div>');
+			$parent.append( '<div class="paf-option-type-upload-preview"></div>' );
 			$element = $parent.find( '> .paf-option-type-upload-preview' );
 		}
 
@@ -154,7 +154,6 @@ jQuery( document ).ready( function( $ ) {
 	 * { { master, slave, operator, values }, ... }
 	 */
 	var dependencies = [];
-
 	$( '[data-paf-conditions]' ).each( function() {
 
 		var $slave = $( this );
@@ -176,7 +175,6 @@ jQuery( document ).ready( function( $ ) {
 		}
 		return;
 	} );
-
 	// Attach dependency checker on when applicable
 	$( '[name^="paf["]' ).each( function() {
 
@@ -202,6 +200,35 @@ jQuery( document ).ready( function( $ ) {
 				;
 			}
 		}
+	} );
+
+	// Handle reset button
+	$( '#paf-reset' ).click( function( e ) {
+
+		e.preventDefault();
+
+		// Reset text
+		$( 'input[type="email"],input[type="password"],input[type="text"]', '#paf-form' ).val( '' ).change();
+
+		// Reset checkbox
+		$( '#paf-form input[type="checkbox"]' ).attr( 'checked', false ).change();
+
+		// Reset radio
+		$( '#paf-form input[type="radio"]' ).attr( 'checked', false ).change();
+
+		// Reset select
+		$( '#paf-form option' ).attr( 'selected', false ).change();
+		$( 'paf-option-type-select' ).select2( 'destroy' ).select2();
+
+		// Reset textarea and wp-editor
+		$( '#paf-form .wp-editor-wrap iframe' ).contents().find( 'body' ).html( '' );
+		$( '#paf-form textarea' ).val( '' ).change();
+
+		// Restore defaults for text
+		$( '#paf-form input[type="text"][data-paf-default]' )
+			.val( function() { return $( this ).data( 'paf-default' ); } )
+			.change()
+		;
 	} );
 
 	// Show/hide form on load/unload
@@ -332,7 +359,7 @@ jQuery( document ).ready( function( $ ) {
 
 	function isURL( url ) {
 
-		var pattern = new RegExp('^(https?:\\/\\/)?'				// protocol
+		var pattern = new RegExp( '^(https?:\\/\\/)?'				// protocol
 			+ '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'	// domain name
 			+ '((\\d{1,3}\\.){3}\\d{1,3}))'							// OR ip (v4) address
 			+ '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'						// port and path
@@ -348,12 +375,12 @@ jQuery( document ).ready( function( $ ) {
 
 	function extension( path ) {
 
-		return path.split('.').pop();
+		return path.split( '.' ).pop();
 	}
 
 	function path2png( path ) {
 		
-		var extension = path.split('.').pop();
+		var extension = path.split( '.' ).pop();
 		var filename = basename( path, '.' + extension );
 
 		if( filename.length > 10 ) {
@@ -361,7 +388,7 @@ jQuery( document ).ready( function( $ ) {
 		}
 
 		// Create SVG
-		var $canvas = $( '<canvas height="80" width="100" />')
+		var $canvas = $( '<canvas height="80" width="100" />' )
 			.attr( 'id', 'paf_canvas' )
 			.addClass( 'hidden' )
 		;

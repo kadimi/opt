@@ -152,6 +152,7 @@ function paf_print_option_type_text( $option_def ) {
 				? urlencode( json_encode( K::get_var( 'conditions', $option ), JSON_FORCE_OBJECT ) )
 				: null
 			,
+			'data-paf-default' => K::get_var( 'default', $option ),
 		)
 		, array(
 			'colorpicker' => K::get_var( 'colorpicker', $option, FALSE ),
@@ -306,6 +307,7 @@ function paf_print_option_type_upload( $option_def ) {
 				? urlencode( json_encode( K::get_var( 'conditions', $option ), JSON_FORCE_OBJECT ) )
 				: null
 			,
+			'data-paf-default' => K::get_var( 'default', $option ),
 		)
 		, array(
 			'format' => sprintf( 

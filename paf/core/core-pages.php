@@ -79,6 +79,13 @@ function paf_page_cb() {
 		$submit_button_text = __( 'Save Changes' );
 	}
 
+	// Get reset button text (looks in: tab > page )
+	if ( $paf_tab && $reset_button_text = K::get_var( 'reset_button', $paf_page_tabs[ $paf_tab ] ) ) {
+		;
+	} else if ( $reset_button_text = K::get_var( 'reset_button', $paf_pages[ $paf_page ] ) ) {
+		;
+	}
+
 	// Start output
 	echo '<div class="wrap"><h2>' . $paf_page . '</h2>';
 
@@ -104,7 +111,33 @@ function paf_page_cb() {
 		paf_print_option( $id );
 	}
 	wp_nonce_field( 'paf_save', 'paf_nonce' );
+	
 	submit_button( $submit_button_text, 'primary large', 'paf_submit' );
+	K::input(
+		'paf_submit'
+		, array(
+			'class' => 'button button-large button-primary',
+			'href' => '#',
+			'id' => 'paf-submit',
+			'type' => 'submit',
+			'value' => $submit_button_text,
+		)
+		, array(
+			'in' => 'input',
+		)
+	);
+	echo ' ';
+	K::wrap( 'Reset'
+		,array(
+			'class' => 'button button-large paf-reset',
+			'href' => '#',
+			'id' => 'paf-reset',
+		)
+		, array(
+			'in' => 'a'
+		)
+	);
+
 	echo '</form>';
 
 	// Add JS and CSS

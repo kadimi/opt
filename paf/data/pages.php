@@ -16,6 +16,7 @@ $pages[ 'page_a'] = array(
 	'position'      => 1, // defaults to NULL, ignored if using parent
 	// 'parent'        => '', // defaults to NULL
 	'submit_button' => __( 'Save Page A settings' ),
+	'reset_button'  => __( 'Reset' ),
 	'success'       => __( 'Settings saved successfully.' ),
 );
 
