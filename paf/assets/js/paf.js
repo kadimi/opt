@@ -218,7 +218,10 @@ jQuery( document ).ready( function( $ ) {
 
 		// Reset select
 		$( '#paf-form option' ).attr( 'selected', false ).change();
-		$( 'paf-option-type-select' ).select2( 'destroy' ).select2();
+		if ( $.isFunction( $.fn.select2 ) ) {
+		
+			$( 'paf-option-type-select' ).select2( 'destroy' ).select2();
+		}
 
 		// Reset textarea and wp-editor
 		$( '#paf-form .wp-editor-wrap iframe' ).contents().find( 'body' ).html( '' );
@@ -226,6 +229,12 @@ jQuery( document ).ready( function( $ ) {
 
 		// Restore defaults for text
 		$( '#paf-form input[type="text"][data-paf-default]' )
+			.val( function() { return $( this ).data( 'paf-default' ); } )
+			.change()
+		;
+
+		// Restore defaults for textarea
+		$( '#paf-form textarea[data-paf-default]' )
 			.val( function() { return $( this ).data( 'paf-default' ); } )
 			.change()
 		;

@@ -44,7 +44,7 @@ $options[ 'my_dropdown_single' ] = array(
 		'fish'  => __( 'Fish' ),
 	),
 	'description'     => '<p class="description">' . __( 'Try <strong>Bird</strong> or <strong>Cat</strong> here and <strong>123</strong> above to show a conditional field.' ) . '</p>',
-	// 'selected' => array( 'bird', 'cat' ),
+	// 'selected' => array( 'bird' ),
 );
 
 $options[ 'depenency_1' ] = array(

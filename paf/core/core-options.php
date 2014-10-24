@@ -181,6 +181,7 @@ function paf_print_option_type_textarea( $option_def ) {
 				? urlencode( json_encode( K::get_var( 'conditions', $option ), JSON_FORCE_OBJECT ) )
 				: null
 			,
+			'data-paf-default' => K::get_var( 'default', $option ),
 		)
 		, array(
 			'value' => isset( $option[ 'value' ] )
