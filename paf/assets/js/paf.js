@@ -82,10 +82,7 @@ jQuery( document ).ready( function( $ ) {
 	} );
 
 	// Select2
-	if ( $.isFunction( $.fn.select2 ) ) {
-
-		$( '.paf-option-type-select' ).select2();
-	}
+	$( '.paf-option-type-select' ).select2();
 
 	// turn select.paf-(radio|checkbox) into radio|checkbox
 	$( '.paf-option-type-checkbox,.paf-option-type-radio' ).each( function( i, select ) {
@@ -95,6 +92,7 @@ jQuery( document ).ready( function( $ ) {
 		var type = $this.hasClass( 'paf-option-type-checkbox' ) ? 'checkbox' : 'radio';
 		var separator = $this.data( 'paf-separator' );
 		var conditions = $this.data( 'paf-conditions' );
+		var _default = $this.data( 'paf-default' );
 
 		$select.find( 'option' ).each( function( j, option ){
 
@@ -120,6 +118,10 @@ jQuery( document ).ready( function( $ ) {
 
 			if ( conditions ) {
 				$choice.attr( 'data-paf-conditions', conditions );
+			}
+
+			if ( _default ) {
+				$choice.attr( 'data-paf-default', _default );
 			}
 
 			// Set checked if the option was selected
@@ -185,14 +187,14 @@ jQuery( document ).ready( function( $ ) {
 			master = master.slice( 0, master.length - 2 );
 		}
 
-		for( i in dependencies ) {
+		for ( i in dependencies ) {
 			var dependency_master = 'paf[' + dependencies[i].master + ']';
 			if( dependency_master === master ) {
 				$master
 					.bind( 'change keyup', function() {
 
 						var slaves = get_slaves( master );
-						for( i in slaves ) {
+						for ( i in slaves ) {
 							handle_slave( slaves [ i ] );
 						}
 					} )
@@ -217,11 +219,8 @@ jQuery( document ).ready( function( $ ) {
 		$( '#paf-form input[type="radio"]' ).attr( 'checked', false ).change();
 
 		// Reset select
-		$( '#paf-form option' ).attr( 'selected', false ).change();
-		if ( $.isFunction( $.fn.select2 ) ) {
-		
-			$( 'paf-option-type-select' ).select2( 'destroy' ).select2();
-		}
+		$( '#paf-form option' ).attr( 'selected', false );
+		$( '#paf-form select' ).change();
 
 		// Reset textarea and wp-editor
 		$( '#paf-form .wp-editor-wrap iframe' ).contents().find( 'body' ).html( '' );
@@ -234,8 +233,45 @@ jQuery( document ).ready( function( $ ) {
 		;
 
 		// Restore defaults for textarea
-		$( '#paf-form textarea[data-paf-default]' )
+		$( '#paf-form radio[data-paf-default]' )
 			.val( function() { return $( this ).data( 'paf-default' ); } )
+			.change()
+		;
+		// todo: wp-editors
+
+		// Restore defaults for select
+		$( '#paf-form select[data-paf-default]' )
+			.filter( function() {
+				
+				var $this = $( this );
+				var _default = JSON.parse( unescape( $( this ).data( 'paf-default' ) ) );
+
+				// select defaults
+				for ( i in _default ) {
+					$this
+						.find( 'option[value="' + _default[ i ] + '"]' )
+						.attr( 'selected', 'selected' )
+					;
+				}
+
+				return true;
+			} )
+			.change()
+		;
+
+		// Restore defaults for radio
+		$( '#paf-form input[type=radio][data-paf-default]' )
+			.attr( 'checked', function() {
+
+				var $this = $( this );
+				var _default = JSON.parse( unescape( $this.data( 'paf-default' ) ) );
+
+				for( i in _default ) {
+					if( _default[ i ] == $this.val() ) {
+						return true;
+					}
+				}
+			} )
 			.change()
 		;
 	} );
@@ -265,7 +301,7 @@ jQuery( document ).ready( function( $ ) {
 		var $slave = $( '[name="' + slave + '"]' );
 		var $slave_tbl = $slave.parents( 'table' );
 
-		for( i in dependencies ) {
+		for ( i in dependencies ) {
 			if ( slave != dependencies[i].slave ) {
 				// Not interested in other slaves
 				continue;

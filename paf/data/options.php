@@ -41,10 +41,9 @@ $options[ 'my_dropdown_single' ] = array(
 		''     => __( 'Choose an animal' ),
 		'bird' => __( 'Bird' ),
 		'cat'  => __( 'Cat' ),
-		'fish'  => __( 'Fish' ),
+		'fish' => __( 'Fish' ),
 	),
 	'description'     => '<p class="description">' . __( 'Try <strong>Bird</strong> or <strong>Cat</strong> here and <strong>123</strong> above to show a conditional field.' ) . '</p>',
-	// 'selected' => array( 'bird' ),
 );
 
 $options[ 'depenency_1' ] = array(
@@ -75,25 +74,28 @@ $options[ 'my_upload' ] = array(
 
 $options[ 'my_dropdown_multiple' ] = array(
 	'page'     => 'page_a',
+	'tab'      => 'tab_2',
 	'type'     => 'select',
 	'options'  => array(
 		'bird' => __( 'Bird' ),
 		'cat'  => __( 'Cat' ),
 	),
 	'multiple' => TRUE,
-	// 'selected' => array( 'bird', 'cat' ),
+	'default' => 'cat',
 );
 
 $options[ 'my_radios' ] = array(
 	'page'    => 'page_a',
+	'tab'     => 'tab_2',
 	'type'    => 'radio',
 	'options' => array(
 		'bird' => __( 'Bird' ),
 		'cat'  => __( 'Cat' ),
 	),
+	'default' => 'cat',
 );
 
-$options[ 'my_radios_images' ] = array(
+$options[ 'my_checkboxes_images' ] = array(
 	'page'    => 'page_a',
 	'type'    => 'checkbox',
 	'options' => array(
@@ -104,7 +106,7 @@ $options[ 'my_radios_images' ] = array(
 	// 'selected' => array( 'pressapps', 'codecanyon' ),
 );
 
-$options[ 'my_radios_images_2' ] = array(
+$options[ 'my_checkboxes_images_2' ] = array(
 	'page'    => 'page_a',
 	'type'    => 'checkbox',
 	'options' => array(

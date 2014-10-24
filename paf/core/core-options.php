@@ -8,8 +8,8 @@
  * Gets options
  * 
  * Return all paf options array
- * If $option_id is set, the function will that option current
- * If not find it will return it's default value if any
+ * If $option_id is set, the function will that option current value
+ * If not find it will return it's default value if it's defined
  * 
  * @param string $option_id
  * @return mixed The paf option value
@@ -126,7 +126,7 @@ function paf_option_return_dump( $option_id ) {
 
 	// Replace 2 spaces with 4 spaces
 	$pattern = "/((?:  )+)(\d+|'|array|\))/";
-	$dump = preg_replace( $pattern, '\1$1$2', $dump );
+	$dump = preg_replace( $pattern, '\1\1\2', $dump );
 
 	return $dump;
 }
@@ -259,6 +259,11 @@ function paf_print_option_type_select( $option_def ) {
 				? urlencode( json_encode( K::get_var( 'conditions', $option ), JSON_FORCE_OBJECT ) )
 				: null
 			,
+			'data-paf-default' => K::get_var( 'default', $option )
+				? urlencode( json_encode( explode( ',', K::get_var( 'default', $option ) ), JSON_FORCE_OBJECT ) )
+				: null
+			,
+			'data-paf-default' => K::get_var( 'default', $option ),
 		)
 		, array(
 			'options' => $options,
