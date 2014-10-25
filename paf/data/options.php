@@ -163,7 +163,8 @@ $options[ 'advanced' ] = array(
 	'editor_height' => 100,
 	// 'textarea_rows' => 10,
 	'teeny'         => TRUE,
-	'value'         => 'Overriden...Overriden...Overriden...',
+	'default'       => 'This is the default, it appears after reset',
+	'value'         => 'This is value on page load (click reset)',
 );
 
 // Register options
