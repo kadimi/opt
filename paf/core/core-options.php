@@ -105,6 +105,11 @@ function paf_option_prepare( $option_id ) {
 	global $paf_options;
 	$option = &$paf_options[ $option_id ];
 
+	// Add type if not specified
+	if( ! isset( $option[ 'type' ] ) ) {
+		$option[ 'type' ] = 'text';
+	}
+
 	// Format selected as an array
 	if( isset( $option[ 'selected' ] ) ) {
 		$option[ 'selected' ] = K::get_var( 'selected', $option, array() );
@@ -114,10 +119,12 @@ function paf_option_prepare( $option_id ) {
 	}
 
 	// Format default as an array
-	if( isset( $option[ 'default' ] ) ) {
-		$option[ 'default' ] = K::get_var( 'default', $option, array() );
-		if ( ! is_array( $option[ 'default' ] ) ) {
-			$option[ 'default' ] = explode( ',', $option[ 'default' ] );
+	if( in_array( $option[ 'type' ], array( 'select', 'radio', 'checkbox' ) ) ) {
+		if( isset( $option[ 'default' ] ) ) {
+			$option[ 'default' ] = K::get_var( 'default', $option, array() );
+			if ( ! is_array( $option[ 'default' ] ) ) {
+				$option[ 'default' ] = explode( ',', $option[ 'default' ] );
+			}
 		}
 	}
 

@@ -235,11 +235,44 @@ jQuery( document ).ready( function( $ ) {
 		;
 
 		// Restore defaults for textarea
-		$( '#paf-form radio[data-paf-default]' )
+		$( '#paf-form textarea[data-paf-default]' )
 			.val( function() { return $( this ).data( 'paf-default' ); } )
 			.change()
 		;
-		// todo: wp-editors
+
+		// Restore defaults for wp-editor/text
+		$( '#paf-form textarea' )
+			.each( function() {
+
+				var $this = $( this );
+				var $parent_with_default = $this.parents( '[data-paf-default]' );
+				var _default;
+
+				if( $parent_with_default.length ) {
+					_default = $parent_with_default.data( 'paf-default' );
+					$this
+						.val( _default )
+						.change()
+					;
+				}
+			} )
+		;
+
+		// Restore defaults for wp-editor/visual
+		$( '#paf-form .wp-editor-wrap' )
+			.each( function() {
+
+				var $this = $( this );
+				var $parent_with_default = $this.parents( '[data-paf-default]' );
+				var _default;
+
+				if( $parent_with_default.length ) {
+					_default = $parent_with_default.data( 'paf-default' );
+					$this.val( _default );
+					$( 'iframe', $this ).contents().find( 'body' ).html( _default );
+				}
+			}
+		);
 
 		// Restore defaults for select
 		$( '#paf-form select[data-paf-default]' )

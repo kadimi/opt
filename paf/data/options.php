@@ -101,9 +101,6 @@ $options[ 'my_checkboxes_images' ] = array(
 		'wordpress' => 'http://placehold.it/120x40/3d5/fff&text=wordpress',
 		'codecanyon' => 'http://placehold.it/120x40/d35/fff&text=codecanyon',
 	),
-	'tab'     => 'tab_2',
-	'default' => 'wordpress',
-	'selected' => 'pressapps,codecanyon,wordpress',
 );
 
 $options[ 'my_checkboxes_images_2' ] = array(
@@ -114,7 +111,6 @@ $options[ 'my_checkboxes_images_2' ] = array(
 		'wordpress' => 'http://placehold.it/120x40/3d5/fff&text=wordpress',
 		'codecanyon' => 'http://placehold.it/120x40/d35/fff&text=codecanyon',
 	),
-	// 'selected' => array( 'wordpress' ),
 	'separator' => ' ',
 );
 
@@ -162,9 +158,9 @@ $options[ 'advanced' ] = array(
 	'tab'           => 'tab_1',
 	'section'       => 'advanced',
 	'section_title' => __( 'Advanced Stuff' ),
-	'description'   => __( 'This is an advanced field' ),
+	'description'   => '~',
 	'editor'        => TRUE,
-	'editor_height' => 200,
+	'editor_height' => 100,
 	// 'textarea_rows' => 10,
 	'teeny'         => TRUE,
 	'value'         => 'Overriden...Overriden...Overriden...',
