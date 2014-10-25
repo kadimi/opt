@@ -82,7 +82,9 @@ jQuery( document ).ready( function( $ ) {
 	} );
 
 	// Select2
-	$( '.paf-option-type-select' ).select2();
+	if( $( '.paf-option-type-select' ).length ) {
+		$( '.paf-option-type-select' ).select2();
+	}
 
 	// turn select.paf-(radio|checkbox) into radio|checkbox
 	$( '.paf-option-type-checkbox,.paf-option-type-radio' ).each( function( i, select ) {
@@ -261,6 +263,24 @@ jQuery( document ).ready( function( $ ) {
 
 		// Restore defaults for radio
 		$( '#paf-form input[type=radio][data-paf-default]' )
+			.attr( 'checked', function() {
+
+				var $this = $( this );
+				var _default = JSON.parse( unescape( $this.data( 'paf-default' ) ) );
+
+				for( i in _default ) {
+					if( _default[ i ] == $this.val() ) {
+						return true;
+					}
+				}
+			} )
+			.change()
+		;
+
+		// Restore defaults for checkbox and radio
+		$()
+			.add( $( '#paf-form input[type=radio][data-paf-default]' ) )
+			.add( $( '#paf-form input[type=checkbox][data-paf-default]' ) )
 			.attr( 'checked', function() {
 
 				var $this = $( this );

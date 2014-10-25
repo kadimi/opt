@@ -44,7 +44,7 @@ function paf_print_option( $option_id ) {
 	
 	global $paf_page_options;
 
-	$option = $paf_page_options[ $option_id ];
+	$option = paf_option_prepare( $option_id );
 	$option_type = K::get_var( 'type', $option, 'text' );
 
 	// Determine the option callback function
@@ -96,6 +96,40 @@ function paf_option_return_format( $option_type = 'input' ) {
 }
 
 /**
+ * Prepare option
+ * 
+ * Change different option attributes to a suitable format
+ */
+function paf_option_prepare( $option_id ) {
+
+	global $paf_options;
+	$option = &$paf_options[ $option_id ];
+
+	// Format selected as an array
+	if( isset( $option[ 'selected' ] ) ) {
+		$option[ 'selected' ] = K::get_var( 'selected', $option, array() );
+		if ( ! is_array( $option[ 'selected' ] ) ) {
+			$option[ 'selected' ] = explode( ',', $option[ 'selected' ] );
+		}
+	}
+
+	// Format default as an array
+	if( isset( $option[ 'default' ] ) ) {
+		$option[ 'default' ] = K::get_var( 'default', $option, array() );
+		if ( ! is_array( $option[ 'default' ] ) ) {
+			$option[ 'default' ] = explode( ',', $option[ 'default' ] );
+		}
+	}
+
+	// Add code for generating the option is the description is "~"
+	if( '~' === K::get_var( 'description', $option ) ) {
+		$option[ 'description' ] = paf_option_return_dump( $option_id );
+	}
+
+	return $option;
+}
+
+/**
   * Generate formatted and syntax highlighted dump
   */
 function paf_option_return_dump( $option_id ) {
@@ -135,10 +169,6 @@ function paf_print_option_type_text( $option_def ) {
 
 	$option_id = key( $option_def );
 	$option = $option_def[ $option_id ];
-
-	if( '~' === K::get_var( 'description', $option ) ) {
-		$option[ 'description' ] = paf_option_return_dump( $option_id );
-	}
 
 	K::input( 'paf[' . $option_id . ']'
 		, array(
@@ -260,10 +290,9 @@ function paf_print_option_type_select( $option_def ) {
 				: null
 			,
 			'data-paf-default' => K::get_var( 'default', $option )
-				? urlencode( json_encode( explode( ',', K::get_var( 'default', $option ) ), JSON_FORCE_OBJECT ) )
+				? urlencode( json_encode( K::get_var( 'default', $option ), JSON_FORCE_OBJECT ) )
 				: null
 			,
-			'data-paf-default' => K::get_var( 'default', $option ),
 		)
 		, array(
 			'options' => $options,

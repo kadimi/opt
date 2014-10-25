@@ -70,29 +70,27 @@ $options[ 'my_colorpicker' ] = array(
 $options[ 'my_upload' ] = array(
 	'page' => 'page_a',
 	'type' => 'upload',
+	'default' => 'https://www.google.com/images/srpr/logo11w.png',
 );
 
 $options[ 'my_dropdown_multiple' ] = array(
 	'page'     => 'page_a',
-	'tab'      => 'tab_2',
 	'type'     => 'select',
 	'options'  => array(
 		'bird' => __( 'Bird' ),
 		'cat'  => __( 'Cat' ),
 	),
 	'multiple' => TRUE,
-	'default' => 'cat',
+	'default' => 'cat,bird',
 );
 
 $options[ 'my_radios' ] = array(
 	'page'    => 'page_a',
-	'tab'     => 'tab_2',
 	'type'    => 'radio',
 	'options' => array(
 		'bird' => __( 'Bird' ),
 		'cat'  => __( 'Cat' ),
 	),
-	'default' => 'cat',
 );
 
 $options[ 'my_checkboxes_images' ] = array(
@@ -103,7 +101,9 @@ $options[ 'my_checkboxes_images' ] = array(
 		'wordpress' => 'http://placehold.it/120x40/3d5/fff&text=wordpress',
 		'codecanyon' => 'http://placehold.it/120x40/d35/fff&text=codecanyon',
 	),
-	// 'selected' => array( 'pressapps', 'codecanyon' ),
+	'tab'     => 'tab_2',
+	'default' => 'wordpress',
+	'selected' => 'pressapps,codecanyon,wordpress',
 );
 
 $options[ 'my_checkboxes_images_2' ] = array(
