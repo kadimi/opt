@@ -86,10 +86,9 @@ function paf_page_cb() {
 		;
 	}
 
-	d( $paf_page );
-
 	// Start output
-	echo '<div class="wrap"><h2>'
+	echo '<div class="wrap">'
+		. '<h2>'
 		. K::get_var( 'title', $paf_pages[ $paf_page ], $paf_page )
 		. '</h2>'
 	;
