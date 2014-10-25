@@ -67,10 +67,12 @@ $options[ 'my_colorpicker' ] = array(
 	'colorpicker' => true,
 );
 
-$options[ 'my_upload' ] = array(
+$options[ 'my_media' ] = array(
 	'page' => 'page_a',
-	'type' => 'upload',
-	'default' => 'https://www.google.com/images/srpr/logo11w.png',
+	'type' => 'media',
+	'description' => '~',
+	'placeholder' => __( 'Insert file URL' ),
+	'button_text' => __( 'Select Media' ),
 );
 
 $options[ 'my_dropdown_multiple' ] = array(

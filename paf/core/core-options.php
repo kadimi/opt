@@ -58,7 +58,7 @@ function paf_print_option( $option_id ) {
 
 	/**
 	 * Call the function coresponding to the option, 
-	 * e.g. paf_print_option_type_text or paf_print_option_type_upload
+	 * e.g. paf_print_option_type_text or paf_print_option_type_media
 	 */
 	call_user_func( $callback, array( $option_id => $option ) );
 }
@@ -85,8 +85,8 @@ function paf_option_return_title( $option_def ) {
 function paf_option_return_format( $option_type = 'input' ) {
 
 	switch ( $option_type ) {
-		case 'upload':
-			return '<table class="form-table"><tbody><tr><th scope="row">%s</th><td>:input%s</td></tr></tbody></table>';
+		case 'media':
+			return '<table class="form-table"><tbody><tr><th scope="row">%s</th><td>:input%s<br />%s</td></tr></tbody></table>';
 		case 'input':
 		case 'select':
 		case 'textarea':
@@ -326,7 +326,7 @@ function paf_print_option_type_checkbox( $option_def ) {
 	return paf_print_option_type_select( $option_def );
 }
 
-function paf_print_option_type_upload( $option_def ) {
+function paf_print_option_type_media( $option_def ) {
 
 	$option_id = key( $option_def );
 	$option = $option_def[ $option_id ];
@@ -335,12 +335,13 @@ function paf_print_option_type_upload( $option_def ) {
 		$option[ 'description' ] = paf_option_return_dump( $option_id );
 	}
 
-	$option_html_name = 'paf[' . $option_id . ']';
+	$button_text = K::get_var( 'button_text', $option, __( 'Select media' ) );
 
 	// Output
 	K::input( 'paf[' . $option_id . ']'
 		, array(
-			'class' => 'paf-option-type-upload regular-text',
+			'class' => 'paf-option-type-media regular-text',
+			'placeholder' => K::get_var( 'placeholder', $option ),
 			'value' => isset( $option[ 'value' ] )
 				? $option[ 'value' ]
 				: paf( $option_id )
@@ -353,9 +354,9 @@ function paf_print_option_type_upload( $option_def ) {
 		)
 		, array(
 			'format' => sprintf( 
-				paf_option_return_format( 'upload' )
+				paf_option_return_format( 'media' )
 				, paf_option_return_title( $option_def )
-				, '<a class="button">' . __( 'Select Media') . '</a>'
+				, '<a class="button">' . $button_text . '</a>'
 				, K::get_var( 'description', $option, '' )
 			)
 		)

@@ -1,23 +1,27 @@
 jQuery( document ).ready( function( $ ) {
 
 	// Media upload fields
-	$( '.paf-option-type-upload' ).each( function() {
+	$( '.paf-option-type-media' ).each( function() {
 
 		var $input = $( this );
 		var $button = $input.siblings( 'a' );
 
-		$input.add( $button ).click( function() {
+		$()
+			// .add( $input )
+			.add( $button )
+			.click( function() {
 
-			wp.media.editor.send.attachment = function( props, attachment ) {
-				$input.val( attachment.url ).change();
-			}
-			wp.media.editor.open( $ );
-			return false;
-		} );
+				wp.media.editor.send.attachment = function( props, attachment ) {
+					$input.val( attachment.url ).change();
+				}
+				wp.media.editor.open( $ );
+				return false;
+			} )
+		;
 	} );
 
 	// Add thumbnails to media upload fields
-	$( '.paf-option-type-upload' ).change( function() {
+	$( '.paf-option-type-media' ).change( function() {
 
 		var $input = $( this );
 		var $button = $input.siblings( 'a.button' );
@@ -27,10 +31,10 @@ jQuery( document ).ready( function( $ ) {
 		var $element;
 
 		// Add a thumbnail placeholder if missing
-		$element = $parent.find( '> .paf-option-type-upload-preview' );
+		$element = $parent.find( '> .paf-option-type-media-preview' );
 		if( ! $element.length ) {
-			$parent.append( '<div class="paf-option-type-upload-preview"></div>' );
-			$element = $parent.find( '> .paf-option-type-upload-preview' );
+			$parent.append( '<div class="paf-option-type-media-preview"></div>' );
+			$element = $parent.find( '> .paf-option-type-media-preview' );
 		}
 
 		// Empty then fill the placeholder
