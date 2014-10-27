@@ -33,7 +33,7 @@ jQuery( document ).ready( function( $ ) {
 		// Add a thumbnail placeholder if missing
 		$element = $parent.find( '> .paf-option-type-media-preview' );
 		if( ! $element.length ) {
-			$parent.append( '<div class="paf-option-type-media-preview"></div>' );
+			$parent.prepend( '<div class="paf-option-type-media-preview"></div>' );
 			$element = $parent.find( '> .paf-option-type-media-preview' );
 		}
 
