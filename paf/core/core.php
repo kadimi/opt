@@ -1,167 +1,321 @@
-## PressApps Options Framework
+<?php
 
-### Purpose
+/**
+ * Main core file of the "Plugin Options" framework
+ * 
+ * The file loads the different parts of the framework
+ * 
+ * @package plugin-admin-framework
+ */
 
-The framework allows plugin authors to create advanced option pages in the matter of minutes.
+/**
+ * Helps tracking that the framework core was loaded
+ *
+ * @var bool
+ */
+define( 'PLUGIN_OPTIONS', 1 );
 
-### Installation
+/**
+ * Load the class K
+ */
+if ( ! class_exists( 'K' ) ) {
 
-Let's assume that you want to use PAF in your plugin called "My plugin" (and whose slug is most probably `my_plugin`)
+	require dirname( __FILE__ ) . '/lib/K/K.php';
+}
 
-* Drop the `paf` folder inside your plugin folder
-* Include PAF's bootstrap file inside your plugin, for example:
+/**
+ * Load the class Kint
+ */
+if ( ! class_exists ( 'Kint' ) ) {
 
-```PHP
-    <?php
-    // wp-content/my_plugin/my_plugin.php
+	require dirname( __FILE__ ) . '/lib/kint/Kint.class.php';
+}
 
-    /**
-     * My plugin code
-     */
+/**
+ * Include core files
+ */
+foreach ( array( 'pages', 'options' ) as $core_file_name ) {
 
-    // Include PAF
-    include dirname( __FILE__ ) . '/paf/main.php';
-```
+	include dirname( __FILE__ ) . '/core-' . $core_file_name . '.php';
+}
 
-### Usage
+/**
+ * Enqueue JS/CSS
+ */
+function paf_enqueue() {
 
-#### Defining pages, tabs and options
+	$protocol = 'http' . ( is_ssl() ? 's' : '' );
 
-Pages, tabs and options definitions for a plugin using PAF are found in the `paf/data` folder:
+	$js = array(
+		'highlight' => "$protocol://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js",
+	);
 
-* `paf/data/pages.php` contains pages definitions
-* `paf/data/tabs.php` contains tabs definitions
-* `paf/data/options.php` contains options definitions
+	$css = array(
+		'highlight' => "$protocol://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/default.min.css",
+	);
 
-PAF comes with a few examples demonstrating the different features, you can use them as a starting point.
+	foreach ( $js as $handle => $src ) {
+		wp_enqueue_script( $handle, $src );
+	}
+	foreach ( $css as $handle => $src ) {
+		wp_enqueue_style( $handle, $src );
+	}
+}
+add_action( 'admin_init', 'paf_enqueue' );
 
-###Register Pages
+/**
+ * Load important gobal data
+ * 
+ * The data is:
+ *  - paf
+ *  - paf_page_tabs
+ *  - paf_page_sections
+ *  - paf_page_options
+ *  - paf_page
+ *  - paf_tab
+ */
+function paf_load() {
 
-Here is an example of defining a page:
+	global $paf;
+	$paf = get_option( 'paf', array() );
 
-```PHP
-    <?php
-    // wp-content/my_plugin/data/pages.php
+	global $paf_options, $paf_pages, $paf_tabs;
 
-    // Make sure our temporary variable is empty
-    $pages = array();
-    
-    $pages[ 'my_page_slug' ] = array(
-        'title'         => __( 'PAF Demo Page' ),   
-        'menu_title'    => __( 'PAF Demo' ),     
-    );
+	global $paf_page_tabs, $paf_page_sections, $paf_page_options;
+	$paf_page_tabs = $paf_page_sections = $paf_page_options = array();
 
-    // Register pages
-    paf_pages( $pages );
-```
+	global $paf_page, $paf_tab;
+	$paf_page = K::get_var( 'page', $_GET );
+	$paf_tab = K::get_var( 'tab', $_GET );
 
-#####Pages Parameters
+	// Get defined page tabs
+	foreach ( $paf_tabs as $slug => $page_tab ) {
+		if( $paf_page === $paf_tabs[ $slug ][ 'page' ] ) {
+			$paf_page_tabs[ $slug ] = $page_tab;
+		}
+	}
 
-* `title` The page title
+	// Get defined page sections
+	foreach ( $paf_options as $id => $page_option ) {
+		if ( $paf_page === $page_option[ 'page' ] && K::get_var( 'section', $page_option ) ) {
+			$paf_page_sections[ $page_option[ 'section' ] ] = $page_option[ 'section_title' ];
+		}
+	}
 
-* `menu_title` The text for the page menu item
+	/**
+	 * Use the first tab:
+	 *   - if page has tabs and none is specified in $_GET
+	 *   - or if the specified tab doesn't exist
+	 */
+	if(
+		( $paf_page_tabs && ! $paf_tab )
+		|| ( $paf_page_tabs && $paf_tab && ! K::get_var( $paf_tab, $paf_page_tabs ) )
+	) {
+		reset( $paf_page_tabs );
+		$paf_tab = key( $paf_page_tabs );
+	}
 
-* `icon_url` The menu icon, ignored when using parent since subpages don't have icons in WordPress, this parameter accepts the same values you would use in WordPress own [add_menu_page()](http://codex.wordpress.org/Function_Reference/add_menu_page).
+	// If the page has a tab, force tab-less options to use the default tab
+	reset( $paf_options );
+	foreach ( $paf_options as $id => $paf_option ) {
+		if( $paf_page === $paf_option[ 'page' ] ) {
+			if( $paf_tab && ! K::get_var( 'tab', $paf_option ) ) {
+				$paf_options[ $id ][ 'tab' ] = key( $paf_page_tabs );
+			}
+		}
+	}
 
-* `position` The position in the menu order this menu should appear, as you would use in [add_menu_page()](http://codex.wordpress.org/Function_Reference/add_menu_page).
+	// Get defined page and tab options
+	reset( $paf_options );
+	foreach ( $paf_options as $id => $paf_option ) {
+		if( $paf_page === $paf_option[ 'page' ] ) {
+			if( ! $paf_tab || ( $paf_tab === $paf_option[ 'tab' ] ) ) {
+				$paf_page_options[ $id ] = $paf_option;
+			}
+		}
+	}
+}
+add_action( 'admin_init', 'paf_load' );
 
-* `parent` The slug name for the parent menu, as you would use in [add_submenu_page()](http://codex.wordpress.org/Function_Reference/add_submenu_page).
+/**
+ * Save options
+ * 
+ * The function will preserve options saved on other pages
+ */
+function paf_save() {
 
-* `submit_button (default='Save Changes')` Text for the submit button.
+	global $paf_page_options;
 
-* `reset_button` Text for the reset button, if ommitted, there will be no reset button.
+	// Abort saving if the nonce is not valid
+	if ( ! wp_verify_nonce( K::get_var( 'paf_nonce', $_POST ), 'paf_save' ) ) {
 
-* `success (default='Settings saved.')` Text for the success message.
+		return;
+	}
 
-###Register Tabs
+	// Force select and radio to have a value to prevent skipping empty
+	foreach ( $paf_page_options as $option_id => $option_def ) {
+		$option_type = K::get_var( 'type', $option_def, 'text' );
+		switch ( $option_type ) {
+			case 'radio':
+				$_POST['paf'][ $option_id ] = K::get_var( $option_id, $_POST['paf'], '' );
+			case 'checkbox':
+			case 'select':
+				$_POST['paf'][ $option_id ] = K::get_var( $option_id, $_POST['paf'], array() );
+				break;
+		}
+	}
 
-Registering tabs work in the same way:
+	// Combine old and saved options
+	$paf = get_option( 'paf ', array() );
+	$paf = array_merge( $paf, $_POST[ 'paf' ] );
 
-```PHP
-    <?php
-    // wp-content/my_plugin/data/tabs.php
+	// Save
+	delete_option( 'paf' );
+	add_option( 'paf', $paf, '', TRUE );
 
-    $tabs = array();
-    
-    $tabs[ 'tab_1'] = array(
-        'title'         => __( 'Tab one' ),
-        'menu_title'    => __( 'Tab 1' ),
-        'page'          => __( 'page_a' ),
-    );
+	// Bind showing the success message
+	add_action( 'admin_notices', 'paf_notice' );
+}
+add_action( 'admin_init', 'paf_save' );
 
-    // Register tabs
-    paf_tabs( $tabs );
-```
+/**
+ * Add $pages to the global $paf_pages
+ */
+function paf_pages( $pages ) {
 
-----
+	$GLOBALS[ 'paf_pages'] = array_merge( K::get_var( 'paf_pages', $GLOBALS, array() ) , $pages );
+}
 
-###Register Options
+/**
+ * Add $options to the global $paf_options
+ */
+function paf_options( $options ) {
 
-Here is an example of defining a text field:
+	$GLOBALS[ 'paf_options'] = array_merge( K::get_var( 'paf_options', $GLOBALS, array() ) , $options );
+}
 
-```PHP
-    <?php
-    // wp-content/my_plugin/data/options.php
+/**
+ * Add $tabs to the global $paf_tabs
+ */
+function paf_tabs( $tabs ) {
 
-    $options = array();
-    
-    $options[ 'my_option_name' ] = array(
-        'type' => 'text',
-        'page' => 'page_a',
-        'title' => __( 'Welcome to my text field' ),
-    );
-```
+	$GLOBALS[ 'paf_tabs'] = array_merge( K::get_var( 'paf_tabs', $GLOBALS, array() ) , $tabs );
+	ksort( $GLOBALS[ 'paf_tabs' ] );
+}
 
-#####Options Parameters
+/**
+ * Show message when options are saved successfully
+ * 
+ * Seeks in this order: tab > page > default
+ */
+function paf_notice() {
 
-* `page` The PAF slug of the page the option belongs to.
+	global $paf_pages, $paf_tabs, $paf_page, $paf_tab;
 
-* `tab` The PAF slug of the tab the option belongs to.
+	// Look in tab configuration
+	if ( $paf_tab && $message = K::get_var( 'success', $paf_tabs[ $paf_tab ] ) ) {}
+	// Look in page configuration
+	else if ( $message = K::get_var( 'success', $paf_pages[ $paf_page ] ) ) {}
+	// Use default
+	else { $message = __( 'Settings saved.'); }
 
-* `type (default=text)` The option type
+	printf(
+		'<div class="updated"><p>%s</p></div>'
+		, $message
+	);
+}
 
-  * `text`
-  * `textarea`
-  * `checkbox`
-  * `radio`
-  * `select`
+/**
+ * Adds some JS in the header:
+ * - paf_assets, here paf assets can be found
+ */
+function paf_header() {
 
+	$home_path = get_home_path();
+	$assets_path = str_replace(
+		array( $home_path, 'core/core.php' )
+		, array( '', 'assets/' )
+		, __FILE__
+	);
+	
+	$assets_dir_url = home_url( $assets_path );
+	?>
+		<script>
+			var paf_assets = "<?php echo $assets_dir_url ?>";
+			hljs.initHighlightingOnLoad();
+		</script>
+	<?php
+}
+add_action( 'admin_head', 'paf_header' );
 
-* `title` The option title
+/**
+ * Add JS file
+ */
+function paf_asset_js( $asset, $block = FALSE ) {
 
-* `subtitle` A small description under the option title
+	return paf_asset( $asset, 'js', $block );
+}
 
-* `description` The text to show under the form field, setting it to `~` will instruct the framework to output the code that defines the current option. 
+/**
+ * Add CSS file
+ */
+function paf_asset_css( $asset, $block = FALSE ) {
 
-* `placeholder` The placeholder text
+	return paf_asset( $asset, 'css', $block );
+}
 
-* `default` The default value, use arrays or comma separated values when working with `select`, `radio` or `checkbox`.
+/**
+ * Add asset
+ */
+function paf_asset( $asset, $type, $block = FALSE ) {
 
-* `value` The value to show in the form for textual fields
+	// Trac files that are blocked in the futire
+	static $blocked = array();
 
-* `selected` The value to show in the form for selection based fields, use arrays or comma separated values.
+	// Exit function if type is not supported
+	if( ! in_array( $type, array( 'css', 'js' ) ) ) {
+		return;
+	}
 
-* `multiple` Tells `select` fields to allow multiple choice
+	$js[] = 'paf';
+	$css[] = 'paf';
 
-* `options` Associative array of value/text pair that make the available choices for `select`, `radio` or `checkbox`. 
+	// Do nothing if asset not defined
+	if ( ! in_array( $asset, $$type ) ) {
+		return;
+	}
 
-  **Tip:** Accepts also `posts` and `terms`
-  
-  **Tip:** If the text matches an image URL, the image is shown instead of the URL.
-  
-* `args` The parameter to pass to WordPress `get_posts()` or `get_terms()` when necessary, i.e, when the `options` parameter of a selection based field was set to `posts` or `terms`.
+	// Do nothing if already loaded
+	if( in_array( "$type/$asset", $blocked ) ) {
+		return;
+	}
 
-* `taxonomies (defaut=category,post_tag,link_category,post_format)` The taxonomies to query when using `terms` as a value for `options` on a selection based form field.
+	// Mark as blocked if needed
+	if( $block ) {
+		$blocked[] = "$type/$asset";
+	}
 
-  
-* `separator (default=<br />)` The separator between `radio` and `checkbox` options
+	// Print asset
+	$src = dirname( __FILE__) . "/../assets/$type/$asset.$type";
+	printf( '<%s>%s</%s>'
+		, 'css' === $type ? 'style' : 'script'
+		, file_get_contents( $src )
+		, 'css' === $type ? 'style' : 'script'
+	);
+}
 
-* `editor` If set to true for a textarea, it will use a WYSIWYG editor.
+function paf_url() {
 
-* `editor_height` An integer, the height in pixels of the WYSIWYG editor, see [this](http://wordpress.stackexchange.com/a/163260/17187) for more information about WYSIWYG height in WordPress.
+	return 'http'
+		. ( is_ssl() ? 's' : '' )
+		. '://'
+		. $_SERVER[ 'SERVER_NAME' ]
+		. ( 80 != $_SERVER[ 'SERVER_PORT' ] ? ":$_SERVER[SERVER_PORT]" : '' )
+		. $_SERVER[ 'REQUEST_URI' ]
+	;
+}
 
-* `textarea_rows (default=20)` An integer, the number of rows in the WYSIWYG editor, see [this](http://wordpress.stackexchange.com/a/163260/17187) for more information about WYSIWYG height in WordPress.
+function paf_htmlspecialchars_recursive( &$array ) {
 
-* `teeny` If set to true, the WYSIWYG editor will have less icons.
-
-* `media_buttons (default=TRUE)` Weither to show the media upload button or not.
+	$array = htmlspecialchars( $array );
+}
