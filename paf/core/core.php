@@ -144,21 +144,37 @@ add_action( 'admin_init', 'paf_load' );
  */
 function paf_save() {
 
-	// Do not save if the nonce is not valid
+	global $paf_page_options;
+
+	// Abort saving if the nonce is not valid
 	if ( ! wp_verify_nonce( K::get_var( 'paf_nonce', $_POST ), 'paf_save' ) ) {
 
 		return;
-	} else {
-
-		// Combine old and saved options
-		$paf = get_option( 'paf ', array() );
-		$paf = array_merge( $paf, $_POST[ 'paf' ] );
-		// Save
-		delete_option( 'paf' );
-		add_option( 'paf', $paf, '', TRUE );
-		// Show success message
-		add_action( 'admin_notices', 'paf_notice' );
 	}
+
+	// Force select and radio to have a value to prevent skipping empty
+	foreach ( $paf_page_options as $option_id => $option_def ) {
+		$option_type = K::get_var( 'type', $option_def, 'text' );
+		switch ( $option_type ) {
+			case 'radio':
+				$_POST['paf'][ $option_id ] = K::get_var( $option_id, $_POST['paf'], '' );
+			case 'checkbox':
+			case 'select':
+				$_POST['paf'][ $option_id ] = K::get_var( $option_id, $_POST['paf'], array() );
+				break;
+		}
+	}
+
+	// Combine old and saved options
+	$paf = get_option( 'paf ', array() );
+	$paf = array_merge( $paf, $_POST[ 'paf' ] );
+
+	// Save
+	delete_option( 'paf' );
+	add_option( 'paf', $paf, '', TRUE );
+
+	// Bind showing the success message
+	add_action( 'admin_notices', 'paf_notice' );
 }
 add_action( 'admin_init', 'paf_save' );
 

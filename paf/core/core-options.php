@@ -268,10 +268,12 @@ function paf_print_option_type_select( $option_def ) {
 			}
 			break;
 		case 'terms':
-			$terms = get_terms(
-				K::get_var( 'taxonomies', $option, '' )
-				, K::get_var( 'args', $option )
-			);
+			$taxonomies = K::get_var( 'taxonomies', $option, 'category,post_tag,link_category,post_format' );
+			if ( ! is_array( $taxonomies ) ) {
+				$taxonomies = explode( ',', $taxonomies );
+			}
+			$args = K::get_var( 'args', $option, array() );
+			$terms = get_terms( $taxonomies, $args );
 			foreach ( $terms as $term ) {
 				$options[ $term->term_id ] = $term->name;
 			}
