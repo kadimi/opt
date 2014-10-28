@@ -1,4 +1,4 @@
-## Press Apps Options Framework
+## PressApps Options Framework
 
 ### Purpose
 
