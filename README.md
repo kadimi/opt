@@ -140,9 +140,9 @@ Here is an example of defining a text field:
 
 * `editor`: If set to true for a textarea, it will use a WYSIWYG editor.
 
-* `editor_height`: An integer, the height in pixels of the WYSIWYG editor.
+* `editor_height`: An integer, the height in pixels of the WYSIWYG editor, see http://wordpress.stackexchange.com/a/163260/17187 for more information about WYSIWYG height in WordPress.
 
-* `textarea_rows (default=20)`: An integer, the number of rows in the WYSIWYG editor.
+* `textarea_rows (default=20)`: An integer, the number of rows in the WYSIWYG editor, see http://wordpress.stackexchange.com/a/163260/17187 for more information about WYSIWYG height in WordPress.
 
 * `teeny`: If set to true, WYSIWYG editor will have only a few icons.
 
