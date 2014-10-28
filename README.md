@@ -50,7 +50,7 @@ Here is an example of defining a page:
         'title'         => __( PAF 'Demo Page' ),   
         'menu_title'    => __( 'PAF Demo' ),     
     );
-    
+
     // Register pages
     paf_pages( $pages );
 ```
@@ -133,17 +133,17 @@ Here is an example of defining a text field:
   
 * `args` The parameter to pass to WordPress `get_posts()` or `get_terms()` when necessary, i.e, when the `options` parameter of a selection based field was set to `posts` or `terms`.
 
-* `taxonomies (defaut=category,post_tag,link_category,post_format)` The taxonomies to query when using `terms` as a value for `options` on a selecteion based form field.
+* `taxonomies (defaut=category,post_tag,link_category,post_format)` The taxonomies to query when using `terms` as a value for `options` on a selection based form field.
 
   
-* `separator (default=<br />)`: The separator between `radio` and `checkbox` options
+* `separator (default=<br />)` The separator between `radio` and `checkbox` options
 
-* `editor`: If set to true for a textarea, it will use a WYSIWYG editor.
+* `editor` If set to true for a textarea, it will use a WYSIWYG editor.
 
-* `editor_height`: An integer, the height in pixels of the WYSIWYG editor, see http://wordpress.stackexchange.com/a/163260/17187 for more information about WYSIWYG height in WordPress.
+* `editor_height` An integer, the height in pixels of the WYSIWYG editor, see [this](http://wordpress.stackexchange.com/a/163260/17187) for more information about WYSIWYG height in WordPress.
 
-* `textarea_rows (default=20)`: An integer, the number of rows in the WYSIWYG editor, see http://wordpress.stackexchange.com/a/163260/17187 for more information about WYSIWYG height in WordPress.
+* `textarea_rows (default=20)` An integer, the number of rows in the WYSIWYG editor, see [this](http://wordpress.stackexchange.com/a/163260/17187) for more information about WYSIWYG height in WordPress.
 
-* `teeny`: If set to true, WYSIWYG editor will have only a few icons.
+* `teeny` If set to true, the WYSIWYG editor will have less icons.
 
-* `media_buttons (default=TRUE)`: Weither to show the media upload button.
+* `media_buttons (default=TRUE)` Weither to show the media upload button or not.
