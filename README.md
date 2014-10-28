@@ -81,7 +81,7 @@ Registering tabs work in the same way:
 
 Here is an example of defining a text field:
 
- ```PHP
+```PHP
     <?php
     // wp-content/my_plugin/data/options.php
 
