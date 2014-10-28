@@ -1,13 +1,8 @@
 ## PressApps Options Framework
 
-
-&nbsp;
-
 ### Intro
 
 The framework allows plugin authors to create advanced option pages very fast.
-
-&nbsp;
 
 ######Contents
 
@@ -17,8 +12,6 @@ The framework allows plugin authors to create advanced option pages very fast.
 * [Register Pages](#register-pages)
 * [Register Tabs](#register-tabs)
 * [Register Options](#register-options)
-
-&nbsp;
 
 ###<a name="installation"></a>Installation
 
@@ -39,11 +32,7 @@ Let's assume that you want to use PAF in your plugin called "My plugin" (and who
     include dirname( __FILE__ ) . '/paf/main.php';
 ```
 
-&nbsp;
-
 ###<a name="file-structure"></a>File Structure
-
-&nbsp;
 
 > It's just pages, tabs and options
 
@@ -55,11 +44,7 @@ Pages, tabs and options definitions for a plugin using PAF are found in the `paf
 
 PAF comes with a few examples demonstrating the different features, you can use them as a starting point.
 
-&nbsp;
-
 ###<a name="register-pages"></a>Register Pages
-
-&nbsp;
 
 Here is an example of defining a page:
 
@@ -79,11 +64,7 @@ Here is an example of defining a page:
     paf_pages( $pages );
 ```
 
-&nbsp;
-
 #####Pages Parameters
-
-&nbsp;
 
 * `title` The page title
 
@@ -101,11 +82,7 @@ Here is an example of defining a page:
 
 * `success (default='Settings saved.')` Text for the success message.
 
-&nbsp;
-
 ###<a name="register-tabs"></a>Register Tabs
-
-&nbsp;
 
 Registering tabs work in the same way:
 
@@ -125,21 +102,13 @@ Registering tabs work in the same way:
     paf_tabs( $tabs );
 ```
 
-&nbsp;
-
 ####Tabs Parameters
-
-&nbsp;
 
 Most page parameters work for tabs as well but don't forget to specify which page the tabs belong to with the `page` parameter.
 
 * `page` The PAF slug for the page the tab belongs to.
 
-&nbsp;
-
 ###<a name="register-options"></a>Register Options
-
-&nbsp;
 
 Here is an example of defining a text field:
 
@@ -156,11 +125,7 @@ Here is an example of defining a text field:
     );
 ```
 
-&nbsp;
-
 ####Options Parameters
-
-&nbsp;
 
 * `page` The PAF slug of the page the option belongs to.
 
