@@ -83,15 +83,21 @@ Registering tabs work in the same way:
 
     $tabs = array();
     
-    $tabs[ 'tab_1'] = array(
+    $tabs[ 'my_tab_slug'] = array(
         'title'         => __( 'Tab one' ),
         'menu_title'    => __( 'Tab 1' ),
-        'page'          => __( 'page_a' ),
+        'page'          => __( 'my_page_slug' ),
     );
 
     // Register tabs
     paf_tabs( $tabs );
 ```
+
+#####Tabs Parameters
+
+Most page parameters work for tabs as well but don't forget to specify which page the tabs belong to with the `page` parameter.
+
+* `page` The PAF slug for the page the tab belongs to.
 
 ###Register Options
 
