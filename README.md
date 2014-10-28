@@ -46,14 +46,32 @@ Here is an example of defining a page:
     // Make sure our temporary variable is empty
     $pages = array();
     
-    $pages[ 'page_a'] = array(
-        'title'         => __( PAF 'Demo Page' ),   
+    $pages[ 'my_page_slug' ] = array(
+        'title'         => __( 'PAF Demo Page' ),   
         'menu_title'    => __( 'PAF Demo' ),     
     );
 
     // Register pages
     paf_pages( $pages );
 ```
+
+#####Pages Parameters
+
+* `title` The page title
+
+* `menu_title` The text for the page menu item
+
+* `icon_url` The menu icon, ignored when using parent since subpages don't have icons in WordPress, this parameter accepts the same values you would use in WordPress own [add_menu_page()](http://codex.wordpress.org/Function_Reference/add_menu_page).
+
+* `position` The position in the menu order this menu should appear, as you would use in [add_menu_page()](http://codex.wordpress.org/Function_Reference/add_menu_page).
+
+* `parent` The slug name for the parent menu, as you would use in [add_submenu_page()](http://codex.wordpress.org/Function_Reference/add_submenu_page).
+
+* `submit_button (default='Save Changes')` Text for the submit button.
+
+* `reset_button` Text for the reset button, if ommitted, there will be no reset button.
+
+* `success (default='Settings saved.')` Text for the success message.
 
 ###Register Tabs
 
