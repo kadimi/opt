@@ -93,8 +93,6 @@ Registering tabs work in the same way:
     paf_tabs( $tabs );
 ```
 
-----
-
 ###Register Options
 
 Here is an example of defining a text field:
