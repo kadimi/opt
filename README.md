@@ -11,7 +11,8 @@ Let's assume that you want to use PAF in your plugin called "My plugin" (and who
 * Drop the `paf` folder inside your plugin folder
 * Include PAF's bootstrap file inside your plugin, for example:
 
-```
+```PHP
+    <?php
     // wp-content/my_plugin/my_plugin.php
 
     /**
@@ -38,7 +39,8 @@ PAF comes with a few examples demonstrating the different features, you can use 
 
 Here is an example of defining a page:
 
-```
+```PHP
+    <?php
     // wp-content/my_plugin/data/pages.php
 
     // Make sure our temporary variable is empty
@@ -57,7 +59,8 @@ Here is an example of defining a page:
 
 Registering tabs work in the same way:
 
-```
+```PHP
+    <?php
     // wp-content/my_plugin/data/tabs.php
 
     $tabs = array();
@@ -78,7 +81,8 @@ Registering tabs work in the same way:
 
 Here is an example of defining a text field:
 
- ```
+ ```PHP
+    <?php
     // wp-content/my_plugin/data/options.php
 
     $options = array();
