@@ -67,7 +67,7 @@ This comes in handy when you want to know the default value of an option for exa
     // wp-content/my_plugin/somewhere.php
 
     $my_option = paf_d( 'my_option_id' );
-    $my_option_default = isset( $my_option[ 'default'] ) ? $my_option[ 'default'] : FALSE;
+    $my_option_default = isset( $my_option[ 'default' ] ) ? $my_option[ 'default' ] : FALSE;
     var_dump( $my_option_default );
 ```
 
