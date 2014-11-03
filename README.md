@@ -138,6 +138,7 @@ Here is an example of defining a text field:
   * `checkbox`
   * `radio`
   * `select`
+  * `media` produces an input field with upload functionality
 
 
 * `title` The option title
