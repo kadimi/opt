@@ -33,8 +33,7 @@ Let's assume that you want to use PAF in your plugin called "My plugin" (and who
 ```
 
 ###<a name="usage"></a>Usage
-
-You can access options you defined like this:
+* You can access options you defined like this:
 
 ####All options values
 
@@ -42,7 +41,11 @@ You can access options you defined like this:
     <?php
     // wp-content/my_plugin/somewhere.php
 
+    // Method 1
     $all_my_options = paf();
+
+    // Method 2
+    $all_my_options = $GLOBALS[ 'paf' ];
 
     var_dump( $all_my_options );
 ```
@@ -53,7 +56,11 @@ You can access options you defined like this:
     <?php
     // wp-content/my_plugin/somewhere.php
 
+    // Method 1
     $my_option = paf( 'my_option_id' );
+
+    // Method 2
+    $my_option = $GLOBALS[ 'paf' ][ 'my_option_id' ];
 
     var_dump( $my_option );
 ```
