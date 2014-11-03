@@ -7,7 +7,7 @@ The framework allows plugin authors to create advanced option pages very fast.
 ######Contents
 
 * [Installation](#installation)
-* [**Basic Usage** (coming soon)](#)
+* [Usage](#usage)
 * [File Structure](#file-structure)
 * [Register Pages](#register-pages)
 * [Register Tabs](#register-tabs)
@@ -30,6 +30,45 @@ Let's assume that you want to use PAF in your plugin called "My plugin" (and who
 
     // Include PAF
     include dirname( __FILE__ ) . '/paf/main.php';
+```
+
+###<a name="usage"></a>Usage
+
+You can access options you defined like this:
+
+####All options values
+
+```PHP
+    <?php
+    // wp-content/my_plugin/somewhere.php
+
+    $all_my_options = paf();
+
+    var_dump( $all_my_options );
+```
+
+####A single option value
+
+```PHP
+    <?php
+    // wp-content/my_plugin/somewhere.php
+
+    $my_option = paf( 'my_option_id' );
+
+    var_dump( $my_option );
+```
+
+####A single option definition
+
+This comes in handy when you want to know the default value of an option for example.
+
+```PHP
+    <?php
+    // wp-content/my_plugin/somewhere.php
+
+    $my_option = paf_d( 'my_option_id' );
+    $my_option_default = isset( $my_option[ 'default'] ) ? $my_option[ 'default'] : FALSE;
+    var_dump( $my_option_default );
 ```
 
 ###<a name="file-structure"></a>File Structure
