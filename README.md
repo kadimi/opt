@@ -152,6 +152,8 @@ Here is an example of defining a text field:
 
 * `value` The value to show in the form for textual fields
 
+* `colorpicker` If set to true for a text input field, it will become a color picker.
+
 * `selected` The value to show in the form for selection based fields, use arrays or comma separated values.
 
 * `multiple` Tells `select` fields to allow multiple choice
