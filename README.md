@@ -111,7 +111,7 @@ Here is an example of defining a page:
     paf_pages( $pages );
 ```
 
-This alternative syntax works as well assuming your server runs PHP 5.4 or higher:
+Here is an alternative, passing the array directly to `paf_pages()` and using brackets (`[...]`) instead of `array()`, beware, brackets were introduced in PHP 5.4:
 
 ```PHP
     <?php
