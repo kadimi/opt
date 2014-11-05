@@ -153,17 +153,17 @@ function paf_page_cb() {
 	paf_asset_css( 'paf', TRUE );
 
 	// Print debugging information
-	K::wrap(
-		__( 'Debugging information' )
-		, array( 'style' => 'margin-top: 5em;' )
-		, array( 'in' => 'h3' )
-	);
+	// K::wrap(
+	// 	__( 'Debugging information' )
+	// 	, array( 'style' => 'margin-top: 5em;' )
+	// 	, array( 'in' => 'h3' )
+	// );
 
-	if( $paf_page_tabs ) {
-		d( $paf, $paf_pages[ $paf_page ], $paf_page_tabs, $paf_page_sections, $paf_page_options );
-	} else {
-		d( $paf, $paf_pages[ $paf_page ], $paf_page_sections, $paf_page_options );
-	}
+	// if( $paf_page_tabs ) {
+	// 	d( $paf, $paf_pages[ $paf_page ], $paf_page_tabs, $paf_page_sections, $paf_page_options );
+	// } else {
+	// 	d( $paf, $paf_pages[ $paf_page ], $paf_page_sections, $paf_page_options );
+	// }
 
 	echo '</div>';
 }
