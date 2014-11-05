@@ -1,6 +1,6 @@
 ## PressApps Plugin Framework
 
-### Intro
+### Introduction
 
 The framework allows plugin authors to create advanced option pages very fast.
 
@@ -15,7 +15,7 @@ The framework allows plugin authors to create advanced option pages very fast.
 
 ###<a name="installation"></a>Installation
 
-Let's assume that you want to use PAF in your plugin called "My plugin" (and whose slug is most probably `my_plugin`)
+Let's assume that you want to use framework in your plugin called "My plugin" (and whose slug is most probably `my_plugin`)
 
 * Drop the `admin` folder somewhere inside your plugin folder
 * Include the plugin bootstrap file in your plugin, make sure you get the path write, here is an example, it assumes that the admin folder sits on the root of your plugin:
@@ -74,7 +74,8 @@ This comes in handy when you want to know the default value of an option for exa
     // wp-content/my_plugin/somewhere.php
 
     $my_option = paf_d( 'my_option_id' );
-    $my_option_default = isset( $my_option[ 'default' ] ) ? $my_option[ 'default' ] : FALSE;
+    $my_option_default = $my_option[ 'default' ];
+
     var_dump( $my_option_default );
 ```
 
@@ -82,13 +83,13 @@ This comes in handy when you want to know the default value of an option for exa
 
 > It's just pages, tabs and options
 
-Pages, tabs and options definitions for a plugin using PAF are found in the `paf/data` folder:
+Pages, tabs and options definitions for a plugin using the framework are found in the `admin/data` folder:
 
-* `paf/data/pages.php` contains pages definitions
-* `paf/data/tabs.php` contains tabs definitions
-* `paf/data/options.php` contains options definitions
+* `admin/data/pages.php` contains pages definitions
+* `admin/data/tabs.php` contains tabs definitions
+* `admin/data/options.php` contains options definitions
 
-PAF comes with a few examples demonstrating the different features, you can use them as a starting point.
+The framework comes with a few examples demonstrating the different features, you can use them as a starting point.
 
 ###<a name="register-pages"></a>Register Pages
 
@@ -102,8 +103,8 @@ Here is an example of defining a page:
     $pages = array();
     
     $pages[ 'my_page_slug' ] = array(
-        'title'         => __( 'PAF Demo Page' ),   
-        'menu_title'    => __( 'PAF Demo' ),     
+        'title'         => __( 'Framework Demo Page' ),   
+        'menu_title'    => __( 'Framework Demo' ),     
     );
 
     // Register pages
@@ -152,7 +153,7 @@ Registering tabs work in the same way:
 
 Most page parameters work for tabs as well but don't forget to specify which page the tabs belong to with the `page` parameter.
 
-* `page` The PAF slug for the page the tab belongs to.
+* `page` The slug for the page the tab belongs to.
 
 ###<a name="register-options"></a>Register Options
 
@@ -173,9 +174,9 @@ Here is an example of defining a text field:
 
 ####Options Parameters
 
-* `page` The PAF slug of the page the option belongs to.
+* `page` The slug of the page the option belongs to.
 
-* `tab` The PAF slug of the tab the option belongs to.
+* `tab` The slug of the tab the option belongs to.
 
 * `type (default=text)` The option type
 
