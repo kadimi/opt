@@ -1,4 +1,4 @@
-## PressApps Options Framework
+## PressApps Plugin Framework
 
 ### Intro
 
@@ -17,8 +17,8 @@ The framework allows plugin authors to create advanced option pages very fast.
 
 Let's assume that you want to use PAF in your plugin called "My plugin" (and whose slug is most probably `my_plugin`)
 
-* Drop the `paf` folder inside your plugin folder
-* Include PAF's bootstrap file inside your plugin, for example:
+* Drop the `admin` folder somewhere inside your plugin folder
+* Include the plugin bootstrap file in your plugin, make sure you get the path write, here is an example, it assumes that the admin folder sits on the root of your plugin:
 
 ```PHP
     <?php
@@ -28,8 +28,8 @@ Let's assume that you want to use PAF in your plugin called "My plugin" (and who
      * My plugin code
      */
 
-    // Include PAF
-    include dirname( __FILE__ ) . '/paf/main.php';
+    // Include the PressApps Admin Framework
+    include dirname( __FILE__ ) . '/admin/admin.php';
 ```
 
 ###<a name="usage"></a>Usage

@@ -1,18 +1,19 @@
 <?php
 
 /**
-* Main file of the "Plugin Options" framework
+* @file
+* Main file of the "PressApps Plugin Framework"
 * 
 * The file loads the core files if not already done inside another plugin,
 * then it loads the options defined in the options folder.
 * 
-* @package plugin-admin-framework
+* @package pressapps-admin-framework
 */
 
 /**
  * Load the framework core if not done inside another plugin
  */
-if ( ! defined( 'PLUGIN_OPTIONS' ) ) {
+if ( ! defined( 'PAF' ) ) {
 	include dirname( __FILE__ ) . '/core/core.php';
 }
 

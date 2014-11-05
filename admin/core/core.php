@@ -13,7 +13,7 @@
  *
  * @var bool
  */
-define( 'PLUGIN_OPTIONS', 1 );
+define( 'PAF', 1 );
 
 /**
  * Load the class K
