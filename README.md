@@ -111,6 +111,19 @@ Here is an example of defining a page:
     paf_pages( $pages );
 ```
 
+This alternative syntax works as well assuming your server runs PHP 5.4 or higher:
+
+```
+    <?php
+    // wp-content/my_plugin/data/pages.php
+
+    // Register pages
+    paf_pages( [ 'my_page_slug' => [
+        'title' => __( 'Framework Demo Page' ),   
+        'menu_title' => __( 'Framework Demo' ),     
+    ] ] );
+```
+
 #####Pages Parameters
 
 * `title` The page title
