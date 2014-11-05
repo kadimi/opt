@@ -113,7 +113,7 @@ Here is an example of defining a page:
 
 This alternative syntax works as well assuming your server runs PHP 5.4 or higher:
 
-```
+```PHP
     <?php
     // wp-content/my_plugin/data/pages.php
 
