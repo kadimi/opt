@@ -97,7 +97,7 @@ Here is an example of defining a page:
 
 ```PHP
     <?php
-    // wp-content/my_plugin/data/pages.php
+    // wp-content/my_plugin/admin/data/pages.php
 
     // Make sure our temporary variable is empty
     $pages = array();
@@ -115,7 +115,7 @@ Here is an alternative, passing the array directly to `paf_pages()` and using br
 
 ```PHP
     <?php
-    // wp-content/my_plugin/data/pages.php
+    // wp-content/my_plugin/admin/data/pages.php
 
     // Register pages
     paf_pages( [ 'my_page_slug' => [
@@ -148,7 +148,7 @@ Registering tabs work in the same way:
 
 ```PHP
     <?php
-    // wp-content/my_plugin/data/tabs.php
+    // wp-content/my_plugin/admin/data/tabs.php
 
     $tabs = array();
     
@@ -174,7 +174,7 @@ Here is an example of defining a text field:
 
 ```PHP
     <?php
-    // wp-content/my_plugin/data/options.php
+    // wp-content/my_plugin/admin/data/options.php
 
     $options = array();
     
