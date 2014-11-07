@@ -80,6 +80,13 @@ function paf_load() {
 	$paf = get_option( 'paf', array() );
 
 	global $paf_options, $paf_pages, $paf_tabs;
+	
+	// Make sure $GLOBALS[ 'paf_...' ] exist
+	foreach ( array( 'paf_options', 'paf_pages', 'paf_tabs' ) as $k ) {
+		if( empty( $GLOBALS[ $k ] ) ) {
+			$GLOBALS[ $k ] = array();
+		}
+	}
 
 	global $paf_page_tabs, $paf_page_sections, $paf_page_options;
 	$paf_page_tabs = $paf_page_sections = $paf_page_options = array();
