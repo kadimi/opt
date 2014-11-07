@@ -1,4 +1,4 @@
-s## PressApps Plugin Framework
+## PressApps Plugin Framework
 
 ### Introduction
 
