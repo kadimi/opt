@@ -69,8 +69,8 @@ add_action( 'admin_init', 'paf_enqueue' );
  * The data is:
  *  - paf
  *  - paf_page_tabs
- *  - paf_page_sections
  *  - paf_page_options
+ *  - paf_page_sections
  *  - paf_page
  *  - paf_tab
  */
@@ -79,10 +79,17 @@ function paf_load() {
 	global $paf;
 	$paf = get_option( 'paf', array() );
 
-	global $paf_options, $paf_pages, $paf_tabs;
+	global $paf_options, $paf_pages, $paf_sections, $paf_tabs;
 
-	global $paf_page_tabs, $paf_page_sections, $paf_page_options;
-	$paf_page_tabs = $paf_page_sections = $paf_page_options = array();
+	// Make sure $GLOBALS[ 'paf_...' ] exist
+	foreach ( array( 'paf_options', 'paf_pages', 'paf_sections', 'paf_tabs' ) as $k ) {
+		if( empty( $GLOBALS[ $k ] ) ) {
+			$GLOBALS[ $k ] = array();
+		}
+	}
+
+	global $paf_page_tabs, $paf_page_options, $paf_page_sections;
+	$paf_page_tabs = $paf_page_options = $paf_page_sections = array();
 
 	global $paf_page, $paf_tab;
 	$paf_page = K::get_var( 'page', $_GET );
@@ -92,13 +99,6 @@ function paf_load() {
 	foreach ( $paf_tabs as $slug => $page_tab ) {
 		if( $paf_page === $paf_tabs[ $slug ][ 'page' ] ) {
 			$paf_page_tabs[ $slug ] = $page_tab;
-		}
-	}
-
-	// Get defined page sections
-	foreach ( $paf_options as $id => $page_option ) {
-		if ( $paf_page === $page_option[ 'page' ] && K::get_var( 'section', $page_option ) ) {
-			$paf_page_sections[ $page_option[ 'section' ] ] = $page_option[ 'section_title' ];
 		}
 	}
 
@@ -118,7 +118,7 @@ function paf_load() {
 	// If the page has a tab, force tab-less options to use the default tab
 	reset( $paf_options );
 	foreach ( $paf_options as $id => $paf_option ) {
-		if( $paf_page === $paf_option[ 'page' ] ) {
+		if( $paf_page === K::get_var( 'page', $paf_option ) ) {
 			if( $paf_tab && ! K::get_var( 'tab', $paf_option ) ) {
 				$paf_options[ $id ][ 'tab' ] = key( $paf_page_tabs );
 			}
@@ -128,10 +128,18 @@ function paf_load() {
 	// Get defined page and tab options
 	reset( $paf_options );
 	foreach ( $paf_options as $id => $paf_option ) {
-		if( $paf_page === $paf_option[ 'page' ] ) {
+		if( $paf_page === K::get_var( 'page', $paf_option ) ) {
 			if( ! $paf_tab || ( $paf_tab === $paf_option[ 'tab' ] ) ) {
 				$paf_page_options[ $id ] = $paf_option;
 			}
+		}
+	}
+
+	// Get defined page and tab sections
+	reset( $paf_options );
+	foreach ( $paf_options as $id => $paf_option ) {
+		if ( K::get_var( 'section', $paf_option ) ) {
+			$paf_page_sections[ $paf_option[ 'section' ] ] = K::get_var( $paf_option[ 'section' ], $paf_sections, array() );
 		}
 	}
 }
@@ -200,7 +208,16 @@ function paf_options( $options ) {
 function paf_tabs( $tabs ) {
 
 	$GLOBALS[ 'paf_tabs'] = array_merge( K::get_var( 'paf_tabs', $GLOBALS, array() ) , $tabs );
-	ksort( $GLOBALS[ 'paf_tabs' ] );
+	// ksort( $GLOBALS[ 'paf_tabs' ] );
+}
+
+/**
+ * Add $sections to the global $paf_sections
+ */
+function paf_sections( $sections ) {
+
+	$GLOBALS[ 'paf_sections'] = array_merge( K::get_var( 'paf_sections', $GLOBALS, array() ) , $sections );
+	// ksort( $GLOBALS[ 'paf_sections' ] );
 }
 
 /**

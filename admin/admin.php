@@ -20,7 +20,7 @@ if ( ! defined( 'PAF' ) ) {
 /**
  * Include options files
  */
-foreach ( array( 'pages', 'tabs', 'options' ) as $option_file_name ) {
+foreach ( array( 'pages', 'tabs', 'sections', 'options' ) as $option_file_name ) {
 
 	require dirname( __FILE__ ) . '/data/' . $option_file_name . '.php';
 }

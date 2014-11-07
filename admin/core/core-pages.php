@@ -66,7 +66,7 @@ function paf_admin_add_pages() {
 function paf_page_cb() {
 
 	global $paf;
-	global $paf_options, $paf_pages, $paf_tabs;
+	global $paf_options, $paf_pages, $paf_sections, $paf_tabs;
 	global $paf_page_tabs, $paf_page_sections, $paf_page_options;
 	global $paf_page, $paf_tab;
 
@@ -110,10 +110,33 @@ function paf_page_cb() {
 
 	// Print the options
 	echo '<form id="paf-form" class="hidden" action="' . paf_url() . '" method="post">';
+	
+	// Show options that don't have sections
 	reset( $paf_page_options );
 	foreach ( $paf_page_options as $id => $page_option ) {
+		if ( K::get_var( 'section', $page_option ) ) {
+			continue;
+		}
 		paf_print_option( $id );
 	}
+
+	// Show options that have sections
+	reset( $paf_page_options );
+	foreach ($paf_page_sections as $section_id => $page_section ) {
+
+		K::wrap( K::get_var( 'title', $page_section, $section_id )
+			, array( 'class' => 'title' )
+			, array( 'in' => 'h3' )
+		);
+
+		foreach ( $paf_page_options as $id => $page_option ) {
+			if ( $section_id === K::get_var( 'section', $page_option ) ) {
+				paf_print_option( $id );
+			}
+		}
+	}
+
+	// Nonce
 	wp_nonce_field( 'paf_save', 'paf_nonce' );
 	
 	// Submit and Reset buttons
@@ -153,17 +176,11 @@ function paf_page_cb() {
 	paf_asset_css( 'paf', TRUE );
 
 	// Print debugging information
-	// K::wrap(
-	// 	__( 'Debugging information' )
-	// 	, array( 'style' => 'margin-top: 5em;' )
-	// 	, array( 'in' => 'h3' )
-	// );
-
-	// if( $paf_page_tabs ) {
-	// 	d( $paf, $paf_pages[ $paf_page ], $paf_page_tabs, $paf_page_sections, $paf_page_options );
-	// } else {
-	// 	d( $paf, $paf_pages[ $paf_page ], $paf_page_sections, $paf_page_options );
-	// }
-
+	K::wrap(
+		__( 'Debugging information' )
+		, array( 'style' => 'margin-top: 5em;' )
+		, array( 'in' => 'h3' )
+	);
+	d( $paf, $paf_pages[ $paf_page ], $paf_page_tabs, $paf_page_sections, $paf_page_options );
 	echo '</div>';
 }
