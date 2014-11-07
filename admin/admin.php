@@ -22,5 +22,8 @@ if ( ! defined( 'PAF' ) ) {
  */
 foreach ( array( 'pages', 'tabs', 'sections', 'options' ) as $option_file_name ) {
 
-	require dirname( __FILE__ ) . '/data/' . $option_file_name . '.php';
+	$option_file_path = dirname( __FILE__ ) . '/data/' . $option_file_name . '.php';
+	if ( file_exists( $option_file_path ) ) {
+		require $option_file_path;
+	}
 }
