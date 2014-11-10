@@ -288,6 +288,11 @@ function paf_print_option_type_select( $option_def ) {
 		$options = array( '__none__' => '' ) + $options;
 	}
 
+	// Escape HTML
+	foreach ( $options as $k => $v ) {
+		$options[ $k ] = htmlspecialchars( $v );
+	}
+
 	K::select( 'paf[' . $option_id . ']'
 		, array(
 			'class' => 'paf-option-type-' . $option[ 'type' ],
