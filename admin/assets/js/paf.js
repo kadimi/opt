@@ -238,6 +238,18 @@ jQuery( document ).ready( function( $ ) {
 			.change()
 		;
 
+		// Fix color pickers colors
+		$( '#paf-form .wp-picker-container' ).each( function() {
+
+			var $this = $( this );
+			var backgroundColor = $( this ).find( '.wp-color-picker' ).val();
+
+			$this
+				.find( '.wp-color-result' )
+				.css( 'background-color', backgroundColor )
+			;
+		} );
+
 		// Restore defaults for textarea
 		$( '#paf-form textarea[data-paf-default]' )
 			.val( function() { return $( this ).data( 'paf-default' ); } )
