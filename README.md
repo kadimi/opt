@@ -183,6 +183,9 @@ Here is an example of defining a text field:
         'page' => 'page_a',
         'title' => __( 'Welcome to my text field' ),
     );
+
+    // Register options
+    paf_options( options );
 ```
 
 ####Options Parameters
