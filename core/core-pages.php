@@ -12,6 +12,11 @@ function paf_admin_add_pages() {
 
 	global $paf_pages;
 
+	// Do nothing if there are no pages
+	if( empty( $paf_pages ) ) {
+		return;
+	}
+
 	foreach ( $paf_pages as $slug => $paf_page ) {
 
 		// Add top level menu pages
