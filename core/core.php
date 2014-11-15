@@ -336,3 +336,13 @@ function paf_htmlspecialchars_recursive( &$array ) {
 
 	$array = htmlspecialchars( $array );
 }
+
+function skelet_dir( $dir ) {
+	foreach ( array( 'pages', 'tabs', 'sections', 'options' ) as $option_file_name ) {
+
+		$option_file_path = $dir . '/' . $option_file_name . '.php';
+		if ( file_exists( $option_file_path ) ) {
+			require $option_file_path;
+		}
+	}
+}
