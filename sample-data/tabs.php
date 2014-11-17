@@ -3,7 +3,7 @@
 /**
  * Tabs definitions
  *
- * @package plugin-admin-framework
+ * @package skelet
  */
 
 // Make sure our temporary variable is empty

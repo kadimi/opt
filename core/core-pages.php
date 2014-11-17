@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package plugin-admin-framework
+ * @package skelet
  */
 add_action( 'admin_menu', 'paf_admin_add_pages' );
 

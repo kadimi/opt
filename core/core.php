@@ -5,7 +5,7 @@
  * 
  * The file loads the different parts of the framework
  * 
- * @package plugin-admin-framework
+ * @package skelet
  */
 
 /**
@@ -34,7 +34,7 @@ if ( ! class_exists ( 'Kint' ) ) {
 /**
  * Include core files
  */
-foreach ( array( 'pages', 'options' ) as $core_file_name ) {
+foreach ( array( 'pages', 'options', 'shortcodes' ) as $core_file_name ) {
 
 	include dirname( __FILE__ ) . '/core-' . $core_file_name . '.php';
 }
@@ -338,7 +338,7 @@ function paf_htmlspecialchars_recursive( &$array ) {
 }
 
 function skelet_dir( $dir ) {
-	foreach ( array( 'pages', 'tabs', 'sections', 'options' ) as $option_file_name ) {
+	foreach ( array( 'pages', 'tabs', 'sections', 'options', 'shortcodes' ) as $option_file_name ) {
 
 		$option_file_path = $dir . '/' . $option_file_name . '.php';
 		if ( file_exists( $option_file_path ) ) {

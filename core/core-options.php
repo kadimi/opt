@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package plugin-admin-framework
+ * @package skelet
  */
 
 /**
