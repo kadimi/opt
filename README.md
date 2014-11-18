@@ -2,7 +2,7 @@
 
 ### Introduction
 
-The framework allows plugin authors to create advanced option pages very fast.
+Skelet is a framework for creating WordPress plugins, it eases the creation of advanced option pages, shortcodes and WordPress editor buttons.
 
 ######Contents
 
@@ -15,21 +15,21 @@ The framework allows plugin authors to create advanced option pages very fast.
 
 ###<a name="installation"></a>Installation
 
-Let's assume that you want to use framework in your plugin called "My plugin" (and whose slug is most probably `my_plugin`)
+Let's assume that you want to use Skelet in your plugin called "My plugin" (and whose slug is most probably `my_plugin`)
 
-* Drop the `admin` folder somewhere inside your plugin folder
-* Include the plugin bootstrap file in your plugin, make sure you get the path write, here is an example, it assumes that the admin folder sits on the root of your plugin:
+* Drop the `/skelet` folder somewhere inside your plugin folder
+* Include the plugin bootstrap file in your plugin, make sure you get the path right, here is an example, it assumes that the `/skelet` folder sits on the root of your plugin:
 
 ```PHP
     <?php
     // wp-content/my_plugin/my_plugin.php
 
+    // Include Skelet
+    include dirname( __FILE__ ) . '/skelet/skelet.php';
+
     /**
      * My plugin code
      */
-
-    // Include the PressApps Admin Framework
-    include dirname( __FILE__ ) . '/admin/admin.php';
 ```
 
 ###<a name="usage"></a>Usage
@@ -64,10 +64,11 @@ Let's assume that you want to use framework in your plugin called "My plugin" (a
 
     var_dump( $my_option );
 ```
+If an option has a default value, and that option has not yet been set, `paf( 'option_id' )` will return the default value for `option_id`.
 
 ####A single option definition
 
-This comes in handy when you want to know the default value of an option for example.
+This comes in handy when you want to know the default value of an option that has already been set, for example.
 
 ```PHP
     <?php
@@ -81,15 +82,34 @@ This comes in handy when you want to know the default value of an option for exa
 
 ###<a name="file-structure"></a>File Structure
 
-> It's just pages, tabs and options
+> It's just pages, tabs, sections and options
 
-Pages, tabs and options definitions for a plugin using the framework are found in the `admin/data` folder:
+Pages, tabs, sections and options definitions for a plugin can reside anywhere inside that plugin, the plugin doesn't force any file structure or naming rules. Yet Skelet comes with a nice function that allows you to imprort all your files containing definition at once, the function is `skelet_dir()`, it expects a folder path as the first parameter, example:
 
-* `admin/data/pages.php` contains pages definitions
-* `admin/data/tabs.php` contains tabs definitions
-* `admin/data/options.php` contains options definitions
+```PHP
+    <?php
+    // wp-content/my_plugin/somewhere.php
+    skelet_dir( dirname( __FILE__ ) . '/data' );
+```
 
-The framework comes with a few examples demonstrating the different features, you can use them as a starting point.
+Calling `skelet_dir()` in the previous example imports (with an `include`) definitions from the following files:
+
+* `.../data/pages.php`
+* `.../data/tabs.php`
+* `.../data/sections.php`
+* `.../data/options.php`
+
+The framework comes with a few examples demonstrating the different features, you can use them as a starting point, those options are located in the folder `/sample-data` inside the framework folder. If you want to enable the sample data, set `$skelet_use_sample_data` to `TRUE`, Like this:
+
+```PHP
+    // wp-content/my_plugin/my_plugin.php
+
+    // Include Skelet
+    include dirname( __FILE__ ) . '/skelet/skelet.php';
+    
+    // Enable sample data
+    skelet_dir( dirname( __FILE__ ) . '/includes/admin/' );
+```
 
 ###<a name="register-pages"></a>Register Pages
 
