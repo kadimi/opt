@@ -24,14 +24,6 @@ if ( ! class_exists( 'K' ) ) {
 }
 
 /**
- * Load the class Kint
- */
-if ( ! class_exists ( 'Kint' ) ) {
-
-	require dirname( __FILE__ ) . '/lib/kint/Kint.class.php';
-}
-
-/**
  * Include core files
  */
 foreach ( array( 'pages', 'options', 'shortcodes' ) as $core_file_name ) {
