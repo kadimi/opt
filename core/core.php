@@ -213,6 +213,15 @@ function paf_sections( $sections ) {
 }
 
 /**
+ * Add $sections to the global $paf_sections
+ */
+function paf_shortcodes( $shortcodes ) {
+
+	$GLOBALS[ 'paf_shortcodes'] = array_merge( K::get_var( 'paf_shortcodes', $GLOBALS, array() ) , $shortcodes );
+	// ksort( $GLOBALS[ 'paf_shortcodes' ] );
+}
+
+/**
  * Show message when options are saved successfully
  * 
  * Seeks in this order: tab > page > default
