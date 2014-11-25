@@ -32,8 +32,15 @@ function skelet_sniff_requests() {
 
 	switch ( $serve ) {
 	case 'tinyMCE_js':
-		call_user_func( 'skelet_' . $serve  );
-		exit;
+		header('Content-Type: application/javascript');
+		die(
+			trim(
+				// Remove spaces
+				preg_replace( '#\s+#', ' ', 
+					call_user_func( 'skelet_' . $serve  )
+				)
+			)
+		);
 	}
 }
 
@@ -46,45 +53,49 @@ function skelet_tinyMCE_buttons( $buttons ) {
 
 // output for "skelet/tinyMCE.js"
 function skelet_tinyMCE_js() {
-
 	global $paf_shortcodes;
-	?>
-	(function() {
-		/* Register the buttons */
-		tinymce.create('tinymce.plugins.skelet', {
-			init : function(ed, url) {
-				var specs;
-				<?php foreach ( $paf_shortcodes as $tag => $specs ) { ?>
 
-					specs = <?php echo json_encode( $specs, JSON_FORCE_OBJECT ); ?>;
-					switch ( specs.function ) {
+	ob_start();
+	?>
+(function() {
+	/* Register the buttons */
+	tinymce.create('tinymce.plugins.skelet', {
+		init : function(ed, url) {
+			var specs;
+			<?php foreach ( $paf_shortcodes as $tag => $specs ) { ?>
+
+				specs = <?php echo json_encode( $specs, JSON_FORCE_OBJECT ); ?>;
+				if ( 'undefined' !== typeof specs._function ) {
+					switch ( specs._function ) {
 						case 'raw' :
 							specs.onclick = function() { ed.selection.setContent( "[<?php echo $tag; ?>]" ) };
 							break;
 					}
-					ed.addButton( '<?php echo $tag ?>', specs );
-				<?php } ?>
-				/**
-				* Adds HTML tag to selected content
-				*/
-				ed.addButton( 'button_green', {
-					title : 'Add span',
-					image : '../wp-includes/images/smilies/icon_mrgreen.gif',
-					cmd: 'button_green_cmd'
-				});
-				ed.addCommand( 'button_green_cmd', function() {
-					var selected_text = ed.selection.getContent();
-					var return_text = '';
-					return_text = '<h1>' + selected_text + '</h1>';
-					ed.execCommand('mceInsertContent', 0, return_text);
-				});
-			},
-			createControl : function(n, cm) {
-				return null;
-			},
-		});
-		/* Start the buttons */
-		tinymce.PluginManager.add( 'skelet', tinymce.plugins.skelet );
-	})();
-	<?php
+				}
+				ed.addButton( '<?php echo $tag ?>', specs );
+			<?php } ?>
+			
+			/**
+			* Adds HTML tag to selected content
+			*/
+			ed.addButton( 'button_green', {
+				title : 'Add span',
+				image : '../wp-includes/images/smilies/icon_mrgreen.gif',
+				cmd: 'button_green_cmd'
+			});
+			ed.addCommand( 'button_green_cmd', function() {
+				var selected_text = ed.selection.getContent();
+				var return_text = '';
+				return_text = '<h1>' + selected_text + '</h1>';
+				ed.execCommand('mceInsertContent', 0, return_text);
+			});
+		},
+		createControl : function(n, cm) {
+			return null;
+		}
+	});
+	/* Start the buttons */
+	tinymce.PluginManager.add( 'skelet', tinymce.plugins.skelet );
+})();<?php
+	return ob_get_clean();
 }
