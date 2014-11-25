@@ -53,18 +53,17 @@ function skelet_tinyMCE_js() {
 		/* Register the buttons */
 		tinymce.create('tinymce.plugins.skelet', {
 			init : function(ed, url) {
-			<?php foreach ( $paf_shortcodes as $tag => $options ) { ?>
-				/**
-				* Inserts shortcode content
-				*/
-				ed.addButton( '<?php echo $tag ?>', {
-					title : '<?php echo $options[ 'title' ] ?>',
-					image : '../wp-includes/images/smilies/icon_eek.gif',
-					onclick : function() {
-						 ed.selection.setContent('[<?php echo $tag ?>]');
+				var specs;
+				<?php foreach ( $paf_shortcodes as $tag => $specs ) { ?>
+
+					specs = <?php echo json_encode( $specs, JSON_FORCE_OBJECT ); ?>;
+					switch ( specs.function ) {
+						case 'raw' :
+							specs.onclick = function() { ed.selection.setContent( "[<?php echo $tag; ?>]" ) };
+							break;
 					}
-				});
-			<?php } ?>
+					ed.addButton( '<?php echo $tag ?>', specs );
+				<?php } ?>
 				/**
 				* Adds HTML tag to selected content
 				*/

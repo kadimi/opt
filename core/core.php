@@ -218,6 +218,15 @@ function paf_sections( $sections ) {
 function paf_shortcodes( $shortcodes ) {
 
 	$GLOBALS[ 'paf_shortcodes'] = array_merge( K::get_var( 'paf_shortcodes', $GLOBALS, array() ) , $shortcodes );
+	foreach ( $GLOBALS[ 'paf_shortcodes'] as $tag => $specs ) {
+		switch ( $specs[ 'function' ]) {
+		case 'raw':
+			$GLOBALS[ 'paf_shortcodes' ][ $tag ][ 'onclick' ] = "function() { ed.selection.setContent('$tag');";
+			break;
+		default:
+			break;
+		}
+	}
 	// ksort( $GLOBALS[ 'paf_shortcodes' ] );
 }
 
