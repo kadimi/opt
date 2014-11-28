@@ -36,9 +36,9 @@ function skelet_sniff_requests() {
 		die(
 			trim(
 				// Remove spaces
-				preg_replace( '#\s+#', ' ', 
+				// preg_replace( '#\s+#', ' ', 
 					call_user_func( 'skelet_' . $serve  )
-				)
+				// )
 			)
 		);
 	}
@@ -57,22 +57,37 @@ function skelet_tinyMCE_js() {
 
 	ob_start();
 	?>
+/*<script>*/
 (function() {
 	/* Register the buttons */
 	tinymce.create('tinymce.plugins.skelet', {
 		init : function(ed, url) {
-			var specs;
-			<?php foreach ( $paf_shortcodes as $tag => $specs ) { ?>
 
+			var tag;
+			var specs;
+
+			<?php foreach ( $paf_shortcodes as $tag => $specs ) { ?>
+				<?php $specs[ 'parameters' ] = k::get_var( 'parameters', $specs, false ); ?>
+				tag = '<?php echo $tag ?>';
 				specs = <?php echo json_encode( $specs, JSON_FORCE_OBJECT ); ?>;
-				if ( 'undefined' !== typeof specs._function ) {
-					switch ( specs._function ) {
-						case 'raw' :
-							specs.onclick = function() { ed.selection.setContent( "[<?php echo $tag; ?>]" ) };
-							break;
-					}
-				}
-				ed.addButton( '<?php echo $tag ?>', specs );
+
+				specs.onclick = function() { 
+
+					var specs = <?php echo json_encode( $specs, JSON_FORCE_OBJECT ); ?>
+						, tag = '<?php echo $tag ?>'
+						, tag_end = '[/tag]'.replace( 'tag', tag )
+						, tag_start = '[tag]'.replace( 'tag', tag )
+					;
+
+					// Wrap or replace
+					ed.selection.setContent( specs.wrap
+						? tag_start + ed.selection.getContent() + tag_end
+						: tag_start 
+					)
+				};
+
+				// Add button
+				ed.addButton( tag, specs );
 			<?php } ?>
 			
 			/**
