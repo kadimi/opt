@@ -43,7 +43,6 @@ function paf_d( $option_id ){
 function paf_print_option( $option_id, $alt = array() ) {
 	
 	if ( $alt ) {
-		$option_id = 'dummy';
 		$option = $alt;
 	} else {
 		global $paf_page_options;

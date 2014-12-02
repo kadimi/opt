@@ -80,11 +80,43 @@ function skelet_tinyMCE_buttons( $buttons ) {
 // output for "skelet/tinyMCE.php/$tag"
 function skelet_tinyMCE_php( $tag ) {
 	global $paf_shortcodes;
+	
+	$select2_enqueued = false;
+	$protocol = is_ssl() ? 'https' : 'http';
+
 	ob_start();
+
+	// CSS
+	printf( '<link rel="stylesheet" href="%s" />', admin_url( 'css/forms' . ( is_rtl() ? '-rtl' : '' ) . '.css' ) );
+	print( '<style>'
+		. 'html { background: white; }'
+		. 'body { -webkit-box-shadow: none; box-shadow: none; margin: 0 auto !important; }'
+		. '</style>'
+	);
+
+	// JS
+	printf( '<script src="%s"></script>', "$protocol://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js" );
+
+	// Fields
 	$parameters = $paf_shortcodes[ $tag ]['parameters'];
 	foreach ( $parameters as $k => $v ) {
+		// Validate title
+		$v[ 'title' ] = k::get_var( 'title', $v, $k );
+		// Print option
 		paf_print_option( 'dummy', $v );
+		if( 'select' === $v[ 'type' ] ) {
+			printf("\n\n");
+			printf( '<link rel="stylesheet" href="%s" />', "$protocol://cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2.min.css" );
+			printf("\n\n");
+			printf( '<script src="%s"></script>', "$protocol://cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2.js" );
+			printf("\n\n");
+			print( "<script>jQuery( document ).ready( function( $ ) { $( 'select' ).select2(); } );</script>" );
+			printf("\n\n");
+			$select2_enqueued = true;
+		}
 	}
+
+	// Remove the error class
 	return ob_get_clean();
 }
 
@@ -96,11 +128,15 @@ function skelet_tinyMCE_js() {
 	?>
 	/*<script>*/
 	(function () {
+
+		var $ = jQuery;
+
 		/* Register the buttons */
 		tinymce.create('tinymce.plugins.skelet', {
 			init : function(ed, url) {
 				var tag;
 				var specs;
+
 				<?php foreach ( $paf_shortcodes as $tag => $specs ) { ?>
 					<?php $specs[ 'parameters' ] = k::get_var( 'parameters', $specs, false ); ?>
 
@@ -109,16 +145,26 @@ function skelet_tinyMCE_js() {
 						tag = '<?php echo $tag ?>';
 						specs = <?php echo json_encode( $specs, JSON_FORCE_OBJECT ); ?>;
 
+
+
 						specs.onclick = function() { 
 							
 							var specs = <?php echo json_encode( $specs, JSON_FORCE_OBJECT ); ?>
 								, tag = '<?php echo $tag ?>'
 							;
+							var w = $( window ).width() * .7;
+
+							var h = $( window ).height() * .7;
+							if( w > 800 ) w = 800;
 							
 							ed.windowManager.open( {
 								title: specs.title,
 								text: specs.text,
-								url: '<?php echo site_url( "skelet/tinyMCE.php/$tag" ); ?>'
+								url: '<?php echo site_url( "skelet/tinyMCE.php/$tag" ); ?>',
+								width: w,
+								height: h,
+								maximizable: true,
+								resizable: true
 							} );
 						};
 

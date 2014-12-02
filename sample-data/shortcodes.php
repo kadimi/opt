@@ -52,7 +52,11 @@ $shortcodes[ 'my_shortcode_params' ] = array(
 	'wrap'         => false,
 	'parameters'   => array(
 		'param_1'  => array(
+			'subtitle' => 'oh, even a <code>subtitle</code>',
+			'title' => 'Nice title',
 			'type' => 'text',
+			'placeholder' => 'Oh! A placeholder...',
+			'description' => 'Hey Hey Hey!',
 		),
 		'param_2'  => array(
 			'type' => 'text',
