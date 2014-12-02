@@ -69,7 +69,7 @@ $shortcodes[ 'my_shortcode_params' ] = array(
 			),
 		),
 		'param_4' => array(
-			'type'     => 'select',
+			'type'     => 'radio',
 			'options'  => 'terms',
 			'multiple' => TRUE,
 		),

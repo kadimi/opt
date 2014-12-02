@@ -89,6 +89,8 @@ function skelet_tinyMCE_php( $tag ) {
 	// Head
 	printf( '<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title></title>' );
 
+	// Add JS and CSS
+
 	// CSS
 	printf( '<link rel="stylesheet" href="%s" />', admin_url( 'css/common' . ( is_rtl() ? '-rtl' : '' ) . '.css' ) );
 	printf( '<link rel="stylesheet" href="%s" />', admin_url( 'css/forms' . ( is_rtl() ? '-rtl' : '' ) . '.css' ) );
@@ -100,36 +102,58 @@ function skelet_tinyMCE_php( $tag ) {
 		padding: 1em;
 	}</style>'
 	);
+	paf_asset_css( 'paf' );
 
 	// JS
 	printf( '<script src="%s"></script>', "$protocol://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js" );
+	paf_asset_js( 'paf' );
 	?>
 	<script>
 		var paf;
 		var shortcode = '';
 		jQuery( document ).ready( function ( $ ) {
-			$( 'form' ).submit( function( e ) {
+
+			// Update shortcode
+			$( 'input,select,textarea', 'form' ).on( 'change keyup', function() { $( 'form' ).change(); } );
+
+			// Autoselect shortcode
+			$( "#shortcode" ).mouseover( function() { $( this ).select(); } );
+
+			/**
+			 * Bind to form events
+			 *
+			 * - On submit: Fill the WP editor
+			 * - On change: update the shortcode value
+			 */
+			$( 'form' ).on( 'submit change', function( e ) {
 
 				e.preventDefault();
 
-				// Build the shortcode
+				shortcode = '';
 				paf = $( this ).serializeJSON().paf;
+				
+				// Build the shortcode
 				Object.keys( paf ).map( function(v) {
 					if( 'undefined' !== paf[ v ] && paf[ v ] ) {
 						shortcode += ' '
 							+ v
 							+ '="'
-							+ paf[ v ].toString().split().join()
+							+ paf[ v ].toString().split().join().replace( '"', '\\"', 'g' )
 							+ '"'
 						;
 					}
 				} );
 				shortcode = "[<?php echo $tag?>" + shortcode + "]";
 
+				// Update the demo
+				$( "#shortcode" ).val( shortcode );
+
 				// Fill the editor and close
-				parent.tinymce.activeEditor.execCommand( "mceInsertContent", false, shortcode );
-				parent.tinymce.activeEditor.windowManager.close( window );
-			} );
+				if ( 'submit' === e.type ) {
+					parent.tinymce.activeEditor.execCommand( "mceInsertContent", false, shortcode );
+					parent.tinymce.activeEditor.windowManager.close( window );
+				}
+			} ).change();
 		} );
 		
 		/*!
@@ -149,25 +173,23 @@ function skelet_tinyMCE_php( $tag ) {
 
 	// Fields
 	$parameters = $paf_shortcodes[ $tag ]['parameters'];
-	echo '<form action = "">';
+	echo '<form id="paf-form" action = "">';
 	foreach ( $parameters as $k => $v ) {
 		// Validate title
 		$v[ 'title' ] = k::get_var( 'title', $v, $k );
 		// Print option
 		paf_print_option( $k, $v );
 		if( 'select' === $v[ 'type' ] ) {
-			printf("\n\n");
 			printf( '<link rel="stylesheet" href="%s" />', "$protocol://cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2.min.css" );
-			printf("\n\n");
 			printf( '<script src="%s"></script>', "$protocol://cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2.js" );
-			printf("\n\n");
 			print( "<script>jQuery( document ).ready( function( $ ) { $( 'select' ).select2(); } );</script>" );
-			printf("\n\n");
 			$select2_enqueued = true;
 		}
 	}
 
-	// Button
+	// Buttons
+	echo '<hr />';
+	echo '<p><label><strong>Shortcode:</strong><input type="text" class="large-text" id="shortcode" value=""/></label></p>';
 	echo '<hr />';
 	echo '<p>';
 	K::input( 'submit'
@@ -177,10 +199,22 @@ function skelet_tinyMCE_php( $tag ) {
 			'value' => 'Add shortcode',
 		)
 	);
+	echo ' ';
+	K::wrap( 'Reset'
+		,array(
+			'class' => 'button button-large paf-reset',
+			'href' => '#',
+			'id' => 'paf-reset',
+		)
+		, array( 'in' => 'a' )
+	);
 	echo '</p>';
 
+	// Close form
 	echo '</form>';
 	echo '</body></html>';
+
+	// C ya!
 	return ob_get_clean();
 
 }
