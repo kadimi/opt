@@ -40,11 +40,17 @@ function paf_d( $option_id ){
 	return K::get_var( $option_id, $paf_options, FALSE );
 }
 
-function paf_print_option( $option_id ) {
+function paf_print_option( $option_id, $alt = array() ) {
 	
-	global $paf_page_options;
+	if ( $alt ) {
+		$option_id = 'dummy';
+		$option = $alt;
+	} else {
+		global $paf_page_options;
+		$option = $paf_page_options[ $option_id ];
+	}
 
-	$option = paf_option_prepare( $option_id );
+	$option = paf_option_prepare( $option );
 	$option_type = K::get_var( 'type', $option, 'text' );
 
 	// Determine the option callback function
@@ -100,10 +106,7 @@ function paf_option_return_format( $option_type = 'input' ) {
  * 
  * Change different option attributes to a suitable format
  */
-function paf_option_prepare( $option_id ) {
-
-	global $paf_options;
-	$option = &$paf_options[ $option_id ];
+function paf_option_prepare( $option ) {
 
 	// Add type if not specified
 	if( ! isset( $option[ 'type' ] ) ) {
@@ -129,9 +132,9 @@ function paf_option_prepare( $option_id ) {
 	}
 
 	// Add code for generating the option is the description is "~"
-	if( '~' === K::get_var( 'description', $option ) ) {
-		$option[ 'description' ] = paf_option_return_dump( $option_id );
-	}
+	// if( '~' === K::get_var( 'description', $option ) ) {
+	// 	$option[ 'description' ] = paf_option_return_dump( $option_id );
+	// }
 
 	return $option;
 }
