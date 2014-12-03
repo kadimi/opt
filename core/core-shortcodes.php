@@ -226,26 +226,20 @@ function skelet_tinyMCE_js() {
 						tag = '<?php echo $tag ?>';
 						specs = <?php echo json_encode( $specs, JSON_FORCE_OBJECT ); ?>;
 
-
-
 						specs.onclick = function() { 
-							
-							var specs = <?php echo json_encode( $specs, JSON_FORCE_OBJECT ); ?>
-								, tag = '<?php echo $tag ?>'
-							;
+							var specs = <?php echo json_encode( $specs, JSON_FORCE_OBJECT ); ?>;
+							var tag = '<?php echo $tag ?>';
 							var w = $( window ).width() * .7;
-
 							var h = $( window ).height() * .7;
+
 							if( w > 800 ) w = 800;
-							
+
 							ed.windowManager.open( {
 								title: specs.title,
 								text: specs.text,
 								url: '<?php echo site_url( "?skelet=tinyMCE_php&tag=$tag" ); ?>',
 								width: w,
-								height: h,
-								maximizable: true,
-								resizable: true
+								height: h
 							} );
 						};
 
@@ -253,6 +247,7 @@ function skelet_tinyMCE_js() {
 						
 						tag = '<?php echo $tag ?>';
 						specs = <?php echo json_encode( $specs, JSON_FORCE_OBJECT ); ?>;
+
 						specs.onclick = function() { 
 							var specs = <?php echo json_encode( $specs, JSON_FORCE_OBJECT ); ?>
 								, tag = '<?php echo $tag ?>'
