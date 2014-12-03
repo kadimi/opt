@@ -41,7 +41,8 @@ function skelet_sniff_requests() {
 add_filter( 'mce_buttons', 'skelet_tinyMCE_buttons' );
 function skelet_tinyMCE_buttons( $buttons ) {
 
-	return array_merge( $buttons, array_keys( $GLOBALS[ 'paf_shortcodes' ] ) );
+	$shortcodes = K::get_var( 'paf_shortcodes', $GLOBALS, array() );
+	return array_merge( $buttons, array_keys( $shortcodes ) );
 }
 
 // output for "skelet/tinyMCE.js"
