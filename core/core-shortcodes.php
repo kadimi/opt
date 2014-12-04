@@ -91,6 +91,7 @@ function skelet_tinyMCE_php( $tag ) {
 	// CSS
 	printf( '<link rel="stylesheet" href="%s" />', admin_url( 'css/common' . ( is_rtl() ? '-rtl' : '' ) . '.css' ) );
 	printf( '<link rel="stylesheet" href="%s" />', admin_url( 'css/forms' . ( is_rtl() ? '-rtl' : '' ) . '.css' ) );
+	printf( '<link rel="stylesheet" href="%s" />', site_url( 'wp-includes/css/dashicons' . ( is_rtl() ? '-rtl' : '' ) . '.css' ) );
 	printf( '<link rel="stylesheet" href="%s" />', site_url( 'wp-includes/css/buttons' . ( is_rtl() ? '-rtl' : '' ) . '.css' ) );
 	print( '<style>body { height: auto; margin: 0; min-width: 0; padding: 1em; }</style>' );
 	paf_asset_css( 'paf' );
@@ -162,7 +163,7 @@ function skelet_tinyMCE_php( $tag ) {
 		$v[ 'title' ] = k::get_var( 'title', $v, $k );
 		// Print option
 		paf_print_option( $k, $v );
-		if( 'select' === $v[ 'type' ] ) {
+		if( 'select' === K::get_var( 'type', $v ) ) {
 			printf( '<link rel="stylesheet" href="%s" />', "$protocol://cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2.min.css" );
 			printf( '<script src="%s"></script>', "$protocol://cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2.js" );
 			print( "<script>jQuery( document ).ready( function( $ ) { $( 'select' ).select2(); } );</script>" );
@@ -226,26 +227,20 @@ function skelet_tinyMCE_js() {
 						tag = '<?php echo $tag ?>';
 						specs = <?php echo json_encode( $specs, JSON_FORCE_OBJECT ); ?>;
 
-
-
 						specs.onclick = function() { 
-							
-							var specs = <?php echo json_encode( $specs, JSON_FORCE_OBJECT ); ?>
-								, tag = '<?php echo $tag ?>'
-							;
+							var specs = <?php echo json_encode( $specs, JSON_FORCE_OBJECT ); ?>;
+							var tag = '<?php echo $tag ?>';
 							var w = $( window ).width() * .7;
-
 							var h = $( window ).height() * .7;
+
 							if( w > 800 ) w = 800;
-							
+
 							ed.windowManager.open( {
 								title: specs.title,
 								text: specs.text,
 								url: '<?php echo site_url( "?skelet=tinyMCE_php&tag=$tag" ); ?>',
 								width: w,
-								height: h,
-								maximizable: true,
-								resizable: true
+								height: h
 							} );
 						};
 
@@ -253,6 +248,7 @@ function skelet_tinyMCE_js() {
 						
 						tag = '<?php echo $tag ?>';
 						specs = <?php echo json_encode( $specs, JSON_FORCE_OBJECT ); ?>;
+
 						specs.onclick = function() { 
 							var specs = <?php echo json_encode( $specs, JSON_FORCE_OBJECT ); ?>
 								, tag = '<?php echo $tag ?>'
