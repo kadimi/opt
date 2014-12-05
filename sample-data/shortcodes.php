@@ -20,13 +20,23 @@ $shortcodes[ 'skelet_basic' ] = array(
 	'title' => __( 'Insert text/ Replace selection' ),
 	'wrap'  => false,
 	'image' => "$dir/shortcode.png",
+	'shortcode' => 'skelet_basic_cb'
 );
+function skelet_basic_funcz( $atts = array(), $content = null ) {
+	return sprintf( __( 'Hello from <strong>%s</strong>.' ), func_get_arg( 2 ) );
+}
 
 $shortcodes[ 'skelet_wrap' ] = array(
 	'title' => __( 'Wrap Selection' ),
 	'wrap'  => true,
 	'image' => 'http://findicons.com/files/icons/85/kids/32/keyboard.png',
 );
+function skelet_wrap_func( $atts = array(), $content = null ) {
+	return sprintf( __( 'Hello from <strong>%s</strong>, I was given this content: <strong>%s</strong>.' )
+		, func_get_arg( 2 )
+		, strlen( $content ) ? $content : '&lt;nothing&gt;'
+	);
+}
 
 $shortcodes[ 'skelet_model' ] = array(
 	'title'      => __( 'With parameters (open popup)' ),
