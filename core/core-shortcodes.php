@@ -104,7 +104,13 @@ function skelet_tinyMCE_php( $tag ) {
 	<script>
 		var paf;
 		var shortcode = '';
+		var wrap = <?php echo K::get_var( 'wrap', $paf_shortcodes[ $tag ] ) ? 'true' : 'false'; ?>;
+
 		jQuery( document ).ready( function ( $ ) {
+
+			/* Fill content field with selected text if any */
+			var content = parent.tinymce.activeEditor.selection.getContent( { format : 'text' } );
+			$( '#content' ).val( content );
 
 			// Update shortcode
 			$( 'input,select,textarea', 'form' ).on( 'change keyup', function() { $( 'form' ).change(); } );
@@ -124,7 +130,8 @@ function skelet_tinyMCE_php( $tag ) {
 
 				shortcode = '';
 				paf = $( this ).serializeJSON().paf;
-				
+				content = $( '#content' ).val();
+
 				// Build the shortcode
 				Object.keys( paf ).map( function(v) {
 					if( 'undefined' !== paf[ v ] && paf[ v ] ) {
@@ -136,7 +143,15 @@ function skelet_tinyMCE_php( $tag ) {
 						;
 					}
 				} );
-				shortcode = "[<?php echo $tag?>" + shortcode + "]";
+				
+				if( wrap ) {
+					shortcode = "[<?php echo $tag; ?>" + shortcode + "]"
+						+ content
+						+ "[/<?php echo $tag; ?>]"
+					;
+				} else {
+					shortcode = "[<?php echo $tag; ?>" + shortcode + "]";
+				}
 
 				// Update the demo
 				$( "#shortcode" ).val( shortcode );
@@ -170,6 +185,14 @@ function skelet_tinyMCE_php( $tag ) {
 		}
 	}
 
+	// Content field
+	if ( K::get_var( 'wrap', $paf_shortcodes[ $tag ] ) ) {
+		K::textarea( 'content'
+			, array( 'class' => 'large-text', 'id' => 'content' )
+			, array( 'format' => '<p><label><strong>Content:</strong>:textarea</label></p>' )
+		);
+	}
+
 	// Buttons
 	echo '<hr />';
 	echo '<p><label><strong>Shortcode:</strong><input type="text" class="large-text" id="shortcode" value=""/></label></p>';
@@ -198,7 +221,6 @@ function skelet_tinyMCE_php( $tag ) {
 
 	// C ya!
 	return ob_get_clean();
-
 }
 
 // output for "skelet/tinyMCE.js"
