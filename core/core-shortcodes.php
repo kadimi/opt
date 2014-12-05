@@ -19,7 +19,7 @@ function skelet_add_endpoint() {
 		'tinyMCE\.php/([a-zA-Z_][a-zA-Z0-9_-]*)' => 'tinyMCE_php&tag=$matches[1]',
 	);
 	
-	foreach ($rules  as $regex => $redirect ) {
+	foreach ($rules as $regex => $redirect ) {
 		add_rewrite_rule(
 			sprintf( '^skelet/%s$', $regex )
 			, sprintf( 'index.php?skelet=%s', $redirect )
@@ -60,7 +60,7 @@ function skelet_sniff_requests() {
 			trim( 
 				preg_replace( '#\s+#', ' ',                // Removes multiple spaces
 					preg_replace( '#\/\*([^*])*\*\/#', '', // Removes comments like /* ... */
-						call_user_func( 'skelet_' . $serve  )
+						call_user_func( 'skelet_' . $serve )
 					)
 				)
 			)
@@ -91,6 +91,7 @@ function skelet_tinyMCE_php( $tag ) {
 	// CSS
 	printf( '<link rel="stylesheet" href="%s" />', admin_url( 'css/common' . ( is_rtl() ? '-rtl' : '' ) . '.css' ) );
 	printf( '<link rel="stylesheet" href="%s" />', admin_url( 'css/forms' . ( is_rtl() ? '-rtl' : '' ) . '.css' ) );
+	printf( '<link rel="stylesheet" href="%s" />', site_url( 'wp-includes/css/dashicons' . ( is_rtl() ? '-rtl' : '' ) . '.css' ) );
 	printf( '<link rel="stylesheet" href="%s" />', site_url( 'wp-includes/css/buttons' . ( is_rtl() ? '-rtl' : '' ) . '.css' ) );
 	print( '<style>body { height: auto; margin: 0; min-width: 0; padding: 1em; }</style>' );
 	paf_asset_css( 'paf' );
@@ -104,7 +105,13 @@ function skelet_tinyMCE_php( $tag ) {
 	<script>
 		var paf;
 		var shortcode = '';
+		var wrap = <?php echo K::get_var( 'wrap', $paf_shortcodes[ $tag ] ) ? 'true' : 'false'; ?>;
+
 		jQuery( document ).ready( function ( $ ) {
+
+			/* Fill content field with selected text if any */
+			var content = parent.tinymce.activeEditor.selection.getContent( { format : 'text' } );
+			$( '#content' ).val( content );
 
 			// Update shortcode
 			$( 'input,select,textarea', 'form' ).on( 'change keyup', function() { $( 'form' ).change(); } );
@@ -124,7 +131,8 @@ function skelet_tinyMCE_php( $tag ) {
 
 				shortcode = '';
 				paf = $( this ).serializeJSON().paf;
-				
+				content = $( '#content' ).val();
+
 				// Build the shortcode
 				Object.keys( paf ).map( function(v) {
 					if( 'undefined' !== paf[ v ] && paf[ v ] ) {
@@ -136,7 +144,15 @@ function skelet_tinyMCE_php( $tag ) {
 						;
 					}
 				} );
-				shortcode = "[<?php echo $tag?>" + shortcode + "]";
+				
+				if( wrap ) {
+					shortcode = "[<?php echo $tag; ?>" + shortcode + "]"
+						+ content
+						+ "[/<?php echo $tag; ?>]"
+					;
+				} else {
+					shortcode = "[<?php echo $tag; ?>" + shortcode + "]";
+				}
 
 				// Update the demo
 				$( "#shortcode" ).val( shortcode );
@@ -162,12 +178,20 @@ function skelet_tinyMCE_php( $tag ) {
 		$v[ 'title' ] = k::get_var( 'title', $v, $k );
 		// Print option
 		paf_print_option( $k, $v );
-		if( 'select' === $v[ 'type' ] ) {
+		if( 'select' === K::get_var( 'type', $v ) ) {
 			printf( '<link rel="stylesheet" href="%s" />', "$protocol://cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2.min.css" );
 			printf( '<script src="%s"></script>', "$protocol://cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2.js" );
 			print( "<script>jQuery( document ).ready( function( $ ) { $( 'select' ).select2(); } );</script>" );
 			$select2_enqueued = true;
 		}
+	}
+
+	// Content field
+	if ( K::get_var( 'wrap', $paf_shortcodes[ $tag ] ) ) {
+		K::textarea( 'content'
+			, array( 'class' => 'large-text', 'id' => 'content' )
+			, array( 'format' => '<p><label><strong>Content:</strong>:textarea</label></p>' )
+		);
 	}
 
 	// Buttons
@@ -198,10 +222,9 @@ function skelet_tinyMCE_php( $tag ) {
 
 	// C ya!
 	return ob_get_clean();
-
 }
 
-// output for "skelet/tinyMCE.js"
+// Output for "skelet/tinyMCE.js"
 function skelet_tinyMCE_js() {
 	global $paf_shortcodes;
 
@@ -226,33 +249,37 @@ function skelet_tinyMCE_js() {
 						tag = '<?php echo $tag ?>';
 						specs = <?php echo json_encode( $specs, JSON_FORCE_OBJECT ); ?>;
 
-
-
 						specs.onclick = function() { 
-							
-							var specs = <?php echo json_encode( $specs, JSON_FORCE_OBJECT ); ?>
-								, tag = '<?php echo $tag ?>'
-							;
-							var w = $( window ).width() * .7;
+							var specs = <?php echo json_encode( $specs, JSON_FORCE_OBJECT ); ?>;
+							var tag = '<?php echo $tag ?>';
+							var h; 
+							var w;
 
-							var h = $( window ).height() * .7;
-							if( w > 800 ) w = 800;
-							
+							if ( 'undefined' !== typeof( specs.height ) && specs.height < 1 ) {
+								h = $( window ).height() * specs.height;
+							} else {
+								h = $( window ).height() / 2;
+							}
+
+							if ( 'undefined' !== typeof( specs.width ) && specs.width < 1 ) {
+								w = $( window ).width() * specs.width;
+							} else {
+								w = $( window ).width() / 2;
+							}
+
 							ed.windowManager.open( {
 								title: specs.title,
 								text: specs.text,
 								url: '<?php echo site_url( "?skelet=tinyMCE_php&tag=$tag" ); ?>',
 								width: w,
-								height: h,
-								maximizable: true,
-								resizable: true
+								height: h
 							} );
 						};
-
 					<?php } else { ?>
 						
 						tag = '<?php echo $tag ?>';
 						specs = <?php echo json_encode( $specs, JSON_FORCE_OBJECT ); ?>;
+
 						specs.onclick = function() { 
 							var specs = <?php echo json_encode( $specs, JSON_FORCE_OBJECT ); ?>
 								, tag = '<?php echo $tag ?>'
@@ -275,4 +302,63 @@ function skelet_tinyMCE_js() {
 		tinymce.PluginManager.add( 'skelet', tinymce.plugins.skelet );
 	})();<?php
 	return ob_get_clean();
+}
+
+/**
+ * Bind shortcodes to fuctions
+ *
+ * For each shortcode, the function will try functions in this order:
+ * - the func parameter
+ * - the tag with _func added to it
+ * - the tag
+ */
+add_action( 'init', 'skelet_process_shortcodes' );
+function skelet_process_shortcodes() {
+	foreach ( K::get_var( 'paf_shortcodes', $GLOBALS ) as $tag => $specs ) {
+		// Get func
+		$func = K::get_var( 'func', $specs );
+		if ( ! function_exists( $func ) ) {
+			$func = $tag . '_func';
+			if ( ! function_exists( $func ) ) {
+				$func = $tag;
+				if ( ! function_exists( $func ) ) {
+					$func = 'skelet_func';
+				}
+			}
+		}
+		// bind
+		add_shortcode( $tag, $func );
+	}
+}
+
+// Callback used for a shortcode when non is defined for it
+function skelet_func() {
+	$args[ 'atts' ] = func_get_arg( 0 );
+	$args[ 'content' ] = func_get_arg( 1 );
+	$tag = func_get_arg( 2 );
+
+	if( $args[ 'atts' ] ) {
+		$atts = substr( json_encode( $args[ 'atts' ], JSON_PRETTY_PRINT ), 2, -2);
+	} else {
+		$atts = '    ' . htmlspecialchars( '<' . __( 'none' ) . '>' );
+	}
+
+	if( $args[ 'content' ] ) {
+		$content = '    "' . $args[ 'content' ] . '"';
+	} else {
+		$content = '    ' . htmlspecialchars( '<' . __( 'none' ) . '>' );
+	}
+
+	$ret = '<pre>'
+		. sprintf( __( 'Shortcode <strong>%s</strong> used with parameters:' ) , $tag )
+		. "\n"
+		. $atts
+		. "\n"
+		. __( 'With this enclosed content:' )
+		. "\n"
+		. $content
+		. '</pre>'
+	;
+
+	return $ret;
 }
