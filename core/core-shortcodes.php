@@ -314,7 +314,7 @@ function skelet_tinyMCE_js() {
  */
 add_action( 'init', 'skelet_process_shortcodes' );
 function skelet_process_shortcodes() {
-	foreach ( K::get_var( 'paf_shortcodes', $GLOBALS ) as $tag => $specs ) {
+	foreach ( K::get_var( 'paf_shortcodes', $GLOBALS, array() ) as $tag => $specs ) {
 		// Get func
 		$func = K::get_var( 'func', $specs );
 		if ( ! function_exists( $func ) ) {
