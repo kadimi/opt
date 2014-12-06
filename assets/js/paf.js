@@ -99,6 +99,7 @@ jQuery( document ).ready( function( $ ) {
 		var separator = $this.data( 'paf-separator' );
 		var conditions = $this.data( 'paf-conditions' );
 		var _default = $this.data( 'paf-default' );
+		var $fieldset = $( '<fieldset>' );
 
 		$select.find( 'option' ).each( function( j, option ){
 
@@ -144,15 +145,16 @@ jQuery( document ).ready( function( $ ) {
 			}
 
 			// Insert 
-			$select.before( $choice );
+			$fieldset.append( $choice );
 
 			// Insert separator after all but last option
 			if( j < $select.find( 'option' ).length - 1 ) {
-				$select.before( separator );
+				$fieldset.append( separator );
 			}
 		} );
 
 		// Remove dropdown
+		$select.before( $fieldset );
 		$select.remove();
 	} );
 

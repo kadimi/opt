@@ -1,4 +1,4 @@
-## PressApps Plugin Framework
+## Skelet Framework
 
 ### Introduction
 
@@ -12,6 +12,7 @@ Skelet is a framework for creating WordPress plugins, it eases the creation of a
 * [Register Pages](#register-pages)
 * [Register Tabs](#register-tabs)
 * [Register Options](#register-options)
+* [Register Shortcodes](#register-shortcodes)
 
 ###<a name="installation"></a>Installation
 
@@ -41,11 +42,7 @@ Let's assume that you want to use Skelet in your plugin called "My plugin" (and 
     <?php
     // wp-content/my_plugin/somewhere.php
 
-    // Method 1
     $all_my_options = paf();
-
-    // Method 2
-    $all_my_options = $GLOBALS[ 'paf' ];
 
     var_dump( $all_my_options );
 ```
@@ -56,11 +53,7 @@ Let's assume that you want to use Skelet in your plugin called "My plugin" (and 
     <?php
     // wp-content/my_plugin/somewhere.php
 
-    // Method 1
     $my_option = paf( 'my_option_id' );
-
-    // Method 2
-    $my_option = $GLOBALS[ 'paf' ][ 'my_option_id' ];
 
     var_dump( $my_option );
 ```
@@ -104,11 +97,9 @@ The framework comes with a few examples demonstrating the different features, yo
 ```PHP
     // wp-content/my_plugin/my_plugin.php
 
-    // Include Skelet
+    $skelet_use_sample_data = TRUE;
     include dirname( __FILE__ ) . '/skelet/skelet.php';
     
-    // Enable sample data
-    skelet_dir( dirname( __FILE__ ) . '/includes/admin/' );
 ```
 
 ###<a name="register-pages"></a>Register Pages
@@ -264,3 +255,48 @@ Here is an example of defining a text field:
 * `teeny` If set to true, the WYSIWYG editor will have less icons.
 
 * `media_buttons (default=TRUE)` Weither to show the media upload button or not.
+
+###<a name="register-shortcodes"></a>Register Shortcodes
+
+You can define and register a shortcode like this:
+
+```PHP
+    <?php
+    // wp-content/my_plugin/admin/data/shortcode.php
+
+    $shortcodes = array();
+    
+    $shortcodes[ 'my_shortcode_a' ] = array(
+        'text'  => __( 'My Shortcode A' ),
+        'title' => __( 'Fancy description for shortcode A' ),
+    );
+
+    $shortcodes[ 'my_shortcode_b' ] = array(
+        'icon'  => 'http://placehold.it/32x32/900/fff/',
+        'title' => __( 'Fancy description for shortcode B' ),
+    );
+
+    // Register tabs
+    paf_shortcodes( $shortcodes );
+```
+
+####Shortcode Parameters
+
+* `image` Absolute or relative path to the image used for the button
+
+* `text` Text can be used instead of an image
+
+* `wrap (default=false)` When set to `false` the shortcode will replace the text currently selected in the text editor and when set to `true`, the selected content will be wrapped in the shortcode.
+
+* `func` This is the function that will handle the shortcode, Skelet will use the function called: 
+  * The parameter value, for example, if `'func' => 'my_func'`, the shortcode will be handled by the function `my_func()`
+  * The shortcode tag with `_func` at the end, so if the shortcode tag is `[super_tag]`, the function will be `super_tag_func()`
+  * The shortcode tag, so if the shortcode tag is `[super_tag]`, the function will be `super_tag()`
+  * A default function provided by skelet that will simply print some information about the shortcode that has been used.
+
+
+* `parameters` an array of fields, these fields definitions ressemble the ones for options. When parameters are found, clicking the shortcode button will open a modal window for building the shortcode with those parameters.
+
+* `width (default=0.5)` The width percentage of the modal window relative the the page width.
+
+* `height (default=0.5)` The height percentage of the modal window relative the the page height.

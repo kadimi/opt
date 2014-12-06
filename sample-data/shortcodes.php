@@ -20,7 +20,6 @@ $shortcodes[ 'skelet_basic' ] = array(
 	'title' => __( 'Insert text/ Replace selection' ),
 	'wrap'  => false,
 	'image' => "$dir/shortcode.png",
-	'shortcode' => 'skelet_basic_cb'
 );
 function skelet_basic_func( $atts = array(), $content = null ) {
 	return sprintf( __( 'Hello from <strong>%s</strong>.' ), func_get_arg( 2 ) );
