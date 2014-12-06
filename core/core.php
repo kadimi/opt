@@ -128,8 +128,8 @@ function paf_load() {
 	}
 
 	// Get defined page and tab sections
-	reset( $paf_options );
-	foreach ( $paf_options as $id => $paf_option ) {
+	reset( $paf_page_options );
+	foreach ( $paf_page_options as $id => $paf_option ) {
 		if ( K::get_var( 'section', $paf_option ) ) {
 			$paf_page_sections[ $paf_option[ 'section' ] ] = K::get_var( $paf_option[ 'section' ], $paf_sections, array() );
 		}
