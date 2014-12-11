@@ -213,9 +213,20 @@ function paf_print_option_type_textarea( $option_def ) {
 		$option[ 'description' ] = paf_option_return_dump( $option_id );
 	}
 
+	$style = '';
+	foreach( array( 'height', 'width' ) as $prop ) {
+		$style .= K::get_var( $prop, $option )
+			? sprintf( '%:%;', $prop, $option[ $prop ] )
+			: ''
+		;
+	}
+
 	K::textarea( 'paf[' . $option_id . ']'
 		, array(
 			'class' => K::get_var( 'class', $option, 'large-text' ),
+			'cols' => K::get_var( 'cols', $option ),
+			'rows' => K::get_var( 'rows', $option ),
+			'style' => $style,
 			'data-paf-conditions' => K::get_var( 'conditions', $option )
 				? urlencode( json_encode( K::get_var( 'conditions', $option ), JSON_FORCE_OBJECT ) )
 				: null
