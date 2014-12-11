@@ -56,15 +56,7 @@ function skelet_sniff_requests() {
 		die( call_user_func( 'skelet_' . $serve, $tag ) );
 	case 'tinyMCE_js':
 		header( 'Content-Type: application/javascript; charset=utf-8' );
-		die(
-			trim( 
-				preg_replace( '#\s+#', ' ',                // Removes multiple spaces
-					preg_replace( '#\/\*([^*])*\*\/#', '', // Removes comments like /* ... */
-						call_user_func( 'skelet_' . $serve )
-					)
-				)
-			)
-		);
+		die( call_user_func( 'skelet_' . $serve ) );
 	}
 }
 
@@ -72,7 +64,8 @@ function skelet_sniff_requests() {
 add_filter( 'mce_buttons', 'skelet_tinyMCE_buttons' );
 function skelet_tinyMCE_buttons( $buttons ) {
 
-	return array_merge( $buttons, array_keys( $GLOBALS[ 'paf_shortcodes' ] ) );
+	$shortcodes = K::get_var( 'paf_shortcodes', $GLOBALS, array() );
+	return array_merge( $buttons, array_keys( $shortcodes ) );
 }
 
 // output for "skelet/tinyMCE.php/$tag"
@@ -226,6 +219,39 @@ function skelet_tinyMCE_php( $tag ) {
 // Output for "skelet/tinyMCE.js"
 function skelet_tinyMCE_js() {
 	global $paf_shortcodes;
+	$minify = false;
+
+	// Prepare a shortcodes object for JavaScript
+	$shortcodes = $paf_shortcodes;
+	foreach ( $paf_shortcodes as $tag => $settings ) {
+		
+		// Is it a menu button
+		$shortcodes[ $tag ][ 'isMenu' ] = ( bool ) K::get_var( 'menu', $shortcodes[ $tag ] );
+		$shortcodes[ $tag ][ 'isMenu' ] && $shortcodes[ $tag ][ '_type' ] = 'menu';
+
+		// Or a modal window
+		$shortcodes[ $tag ][ 'isModal' ] = ( bool ) K::get_var( 'parameters', $shortcodes[ $tag ] );
+		$shortcodes[ $tag ][ 'isModal' ] && $shortcodes[ $tag ][ '_type' ] = 'modal';
+		$shortcodes[ $tag ][ 'parameters' ] = array();
+		unset( $shortcodes[ $tag ][ 'parameters' ] );
+
+		// or a normal button
+		0
+		|| $shortcodes[ $tag ][ 'isMenu' ]
+		|| $shortcodes[ $tag ][ 'isModal' ]
+		|| (
+			1
+			&& $shortcodes[ $tag ][ 'isBasic' ] = true
+			&& $shortcodes[ $tag ][ '_type' ] = 'basic'
+		);
+
+		// Get parent if any
+		$parent = K::get_var( 'parent', $shortcodes[ $tag ] );
+		if ( $parent && array_key_exists( $parent, $shortcodes )
+		) {
+			$shortcodes[ $tag ][ 'isChildOf' ] = $parent;
+		}
+	}
 
 	ob_start();
 	?>
@@ -233,74 +259,168 @@ function skelet_tinyMCE_js() {
 	(function () {
 
 		var $ = jQuery;
+		var shortcodes = <?php echo json_encode( $shortcodes, JSON_FORCE_OBJECT ); ?>;
 
 		/* Register the buttons */
 		tinymce.create('tinymce.plugins.skelet', {
 			init : function(ed, url) {
-				var tag;
-				var specs;
 
-				<?php foreach ( $paf_shortcodes as $tag => $specs ) { ?>
-					<?php $specs[ 'parameters' ] = k::get_var( 'parameters', $specs, false ); ?>
+				var getMenuItems = function( _parent ) {
 
-					<?php if( $specs[ 'parameters' ] ) { ?>
-						
-						tag = '<?php echo $tag ?>';
-						specs = <?php echo json_encode( $specs, JSON_FORCE_OBJECT ); ?>;
+					var items = [];
+					var s;
 
-						specs.onclick = function() { 
-							var specs = <?php echo json_encode( $specs, JSON_FORCE_OBJECT ); ?>;
-							var tag = '<?php echo $tag ?>';
-							var h; 
-							var w;
+					for ( var i in shortcodes ) {
 
-							if ( 'undefined' !== typeof( specs.height ) && specs.height < 1 ) {
-								h = $( window ).height() * specs.height;
-							} else {
-								h = $( window ).height() / 2;
-							}
+						s = shortcodes[ i ];
+						tag = i;
 
-							if ( 'undefined' !== typeof( specs.width ) && specs.width < 1 ) {
-								w = $( window ).width() * specs.width;
-							} else {
-								w = $( window ).width() / 2;
-							}
+						// Skip non-related items
+						if( 'undefined' === typeof s.isChildOf || s.isChildOf !== _parent ) {
+							continue;
+						}
 
-							ed.windowManager.open( {
-								title: specs.title,
-								text: specs.text,
-								url: '<?php echo site_url( "?skelet=tinyMCE_php&tag=$tag" ); ?>',
-								width: w,
-								height: h
-							} );
-						};
-					<?php } else { ?>
-						
-						tag = '<?php echo $tag ?>';
-						specs = <?php echo json_encode( $specs, JSON_FORCE_OBJECT ); ?>;
+						switch ( s._type ) {
+						case 'basic' :
 
-						specs.onclick = function() { 
-							var specs = <?php echo json_encode( $specs, JSON_FORCE_OBJECT ); ?>
-								, tag = '<?php echo $tag ?>'
-								, tag_end = '[/tag]'.replace( 'tag', tag )
-								, tag_start = '[tag]'.replace( 'tag', tag )
-							;
+							/* Add basic shortcode */
+							s.onclick = function() { 
+								
+								var tag_start, tag_end;
+								tag_start = '[tag]'.replace( 'tag', tag );
+								tag_end = '[/tag]'.replace( 'tag', tag );
+								
+								/* Wrap or replace */
+								ed.selection.setContent( s.wrap
+									? tag_start + ed.selection.getContent() + tag_end
+									: tag_start 
+								);
+							};
+							items.push( s );
+							break;
+						case 'menu' :
+
+							/* Add menu */
+							s.menu = getMenuItems( tag );
+							items.push( s );
+							break;
+						case 'modal' :
+							/* Trigger modal window */
+							s.onclick = function() { 
+
+								var $w = $( window );
+								var h = ( 'undefined' !== typeof( s.height ) && s.height && s.height <= 1 )
+									? $w.height() * s.height
+									: $w.height() * .5
+								;
+
+								var w = ( 'undefined' !== typeof( s.width ) && s.width && s.width <= 1 )
+									? $w.width() * s.width
+									: $w.width() * .5
+								;
+
+								ed.windowManager.open( {
+									title: s.title,
+									text: s.text,
+									url: '<?php echo site_url( "?skelet=tinyMCE_php&tag=" ); ?>' + tag,
+									width: w,
+									height: h
+								} );
+							};
+							items.push( s );
+							break;
+						}	
+					};
+
+					console.log( items );
+					return items;
+				}
+
+				var addControl = function( tag ) {
+
+					var s = shortcodes[ tag ];
+
+					if ( s.isChildOf ) {
+
+						/* Skip children in top level */
+						return;
+					}
+
+					// Add the control
+					switch ( s._type ) {
+					case 'basic' :
+
+						/* Add basic shortcode */
+						s.onclick = function() { 
+							
+							var tag_start, tag_end;
+							tag_start = '[tag]'.replace( 'tag', tag );
+							tag_end = '[/tag]'.replace( 'tag', tag );
+							
 							/* Wrap or replace */
-							ed.selection.setContent( specs.wrap
+							ed.selection.setContent( s.wrap
 								? tag_start + ed.selection.getContent() + tag_end
 								: tag_start 
 							);
 						};
-					<?php } ?>
-					/* Add button */
-					ed.addButton( tag, specs );
-				<?php } ?>
+						break;
+					case 'menu' :
+
+						/* Add menu */
+						s.menu = getMenuItems( tag );
+
+						s.type = 'menubutton';
+						ed.addButton( tag, s );
+						break;
+					case 'modal' :
+
+						/* Trigger modal window */
+						s.onclick = function() { 
+
+							var $w = $( window );
+							var h = ( 'undefined' !== typeof( s.height ) && s.height && s.height <= 1 )
+								? $w.height() * s.height
+								: $w.height() * .5
+							;
+
+							var w = ( 'undefined' !== typeof( s.width ) && s.width && s.width <= 1 )
+								? $w.width() * s.width
+								: $w.width() * .5
+							;
+
+							ed.windowManager.open( {
+								title: s.title,
+								text: s.text,
+								url: '<?php echo site_url( "?skelet=tinyMCE_php&tag=" ); ?>' + tag,
+								width: w,
+								height: h
+							} );
+						};
+						break;
+					}	
+					return ed.addButton( tag, s );
+				}
+
+				for( var tag in shortcodes ) {
+
+					addControl( tag );
+				}
 			}
 		});
 		/* Start the buttons */
 		tinymce.PluginManager.add( 'skelet', tinymce.plugins.skelet );
 	})();<?php
-	return ob_get_clean();
+
+	return empty( $minify )
+		? ob_get_clean()
+		: trim( 
+			preg_replace( '#\s+#', ' ',                // Removes multiple spaces
+				preg_replace( '#\/\*([^*])*\*\/#', '', // Removes comments like /* ... */
+					ob_get_clean()
+				)
+			)
+		)
+	;
 }
 
 /**
@@ -313,7 +433,7 @@ function skelet_tinyMCE_js() {
  */
 add_action( 'init', 'skelet_process_shortcodes' );
 function skelet_process_shortcodes() {
-	foreach ( K::get_var( 'paf_shortcodes', $GLOBALS ) as $tag => $specs ) {
+	foreach ( K::get_var( 'paf_shortcodes', $GLOBALS, array() ) as $tag => $specs ) {
 		// Get func
 		$func = K::get_var( 'func', $specs );
 		if ( ! function_exists( $func ) ) {

@@ -49,7 +49,7 @@ function paf_print_option( $option_id, $alt = array() ) {
 		$option = $paf_page_options[ $option_id ];
 	}
 
-	$option = paf_option_prepare( $option );
+	$option = paf_option_prepare( $option, $option_id );
 	$option_type = K::get_var( 'type', $option, 'text' );
 
 	// Determine the option callback function
@@ -105,7 +105,7 @@ function paf_option_return_format( $option_type = 'input' ) {
  * 
  * Change different option attributes to a suitable format
  */
-function paf_option_prepare( $option ) {
+function paf_option_prepare( $option, $option_id = null ) {
 
 	// Add type if not specified
 	if( ! isset( $option[ 'type' ] ) ) {
@@ -131,9 +131,11 @@ function paf_option_prepare( $option ) {
 	}
 
 	// Add code for generating the option is the description is "~"
-	// if( '~' === K::get_var( 'description', $option ) ) {
-	// 	$option[ 'description' ] = paf_option_return_dump( $option_id );
-	// }
+	if( $option_id ) {
+		if( '~' === K::get_var( 'description', $option ) ) {
+			$option[ 'description' ] = paf_option_return_dump( $option_id );
+		}
+	}
 
 	return $option;
 }
