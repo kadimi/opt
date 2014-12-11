@@ -124,6 +124,9 @@ $shortcodes[ 'lvl_4a' ] = array(
 	'text' => 'Morocco',
 	'title' => 'Found you!',
 	'parent' => 'lvl_3b',
+	'parameters' => array(
+		'p1' => array(),
+	),
 );
 
 // Register options
