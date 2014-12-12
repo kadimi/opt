@@ -4,7 +4,7 @@
  * @package skelet
  */
 
-// Load the TinyMCE plugin 
+// Load the TinyMCE plugin
 add_filter( 'mce_external_plugins', 'skelet_add_tinyMCE_plugin' );
 function skelet_add_tinyMCE_plugin() {
 	return array( 'skelet' => site_url( '?skelet=tinyMCE_js' ) );
@@ -18,7 +18,7 @@ function skelet_add_endpoint() {
 		'tinyMCE\.js' => 'tinyMCE_js',
 		'tinyMCE\.php/([a-zA-Z_][a-zA-Z0-9_-]*)' => 'tinyMCE_php&tag=$matches[1]',
 	);
-	
+
 	foreach ($rules as $regex => $redirect ) {
 		add_rewrite_rule(
 			sprintf( '^skelet/%s$', $regex )
@@ -26,7 +26,7 @@ function skelet_add_endpoint() {
 			, 'top'
 		);
 	}
-} 
+}
 
 // Add the query_var "skelet" and "tag"
 add_filter( 'query_vars', 'skelet_add_query_vars' );
@@ -36,7 +36,7 @@ function skelet_add_query_vars( $vars ) {
 	return $vars;
 }
 
-// Capture requests and serve files 
+// Capture requests and serve files
 add_action( 'parse_request', 'skelet_sniff_requests' );
 function skelet_sniff_requests() {
 
@@ -71,7 +71,7 @@ function skelet_tinyMCE_buttons( $buttons ) {
 // output for "skelet/tinyMCE.php/$tag"
 function skelet_tinyMCE_php( $tag ) {
 	global $paf_shortcodes;
-	
+
 	$select2_enqueued = false;
 	$protocol = is_ssl() ? 'https' : 'http';
 
@@ -136,7 +136,7 @@ function skelet_tinyMCE_php( $tag ) {
 						;
 					}
 				} );
-				
+
 				if( wrap ) {
 					shortcode = "[<?php echo $tag; ?>" + shortcode + "]"
 						+ content
@@ -224,7 +224,7 @@ function skelet_tinyMCE_js() {
 	// Prepare a shortcodes object for JavaScript
 	$shortcodes = $paf_shortcodes;
 	foreach ( $paf_shortcodes as $tag => $settings ) {
-		
+
 		// Is it a menu button
 		$shortcodes[ $tag ][ 'isMenu' ] = ( bool ) K::get_var( 'menu', $shortcodes[ $tag ] );
 		$shortcodes[ $tag ][ 'isMenu' ] && $shortcodes[ $tag ][ '_type' ] = 'menu';
@@ -284,16 +284,16 @@ function skelet_tinyMCE_js() {
 						case 'basic' :
 
 							/* Add basic shortcode */
-							s.onclick = function() { 
-								
+							s.onclick = function() {
+
 								var tag_start, tag_end;
 								tag_start = '[tag]'.replace( 'tag', tag );
 								tag_end = '[/tag]'.replace( 'tag', tag );
-								
+
 								/* Wrap or replace */
 								ed.selection.setContent( s.wrap
 									? tag_start + ed.selection.getContent() + tag_end
-									: tag_start 
+									: tag_start
 								);
 							};
 							items.push( s );
@@ -306,7 +306,7 @@ function skelet_tinyMCE_js() {
 							break;
 						case 'modal' :
 							/* Trigger modal window */
-							s.onclick = function() { 
+							s.onclick = function() {
 
 								var $w = $( window );
 								var h = ( 'undefined' !== typeof( s.height ) && s.height && s.height <= 1 )
@@ -329,7 +329,7 @@ function skelet_tinyMCE_js() {
 							};
 							items.push( s );
 							break;
-						}	
+						}
 					};
 
 					console.log( items );
@@ -351,16 +351,16 @@ function skelet_tinyMCE_js() {
 					case 'basic' :
 
 						/* Add basic shortcode */
-						s.onclick = function() { 
-							
+						s.onclick = function() {
+
 							var tag_start, tag_end;
 							tag_start = '[tag]'.replace( 'tag', tag );
 							tag_end = '[/tag]'.replace( 'tag', tag );
-							
+
 							/* Wrap or replace */
 							ed.selection.setContent( s.wrap
 								? tag_start + ed.selection.getContent() + tag_end
-								: tag_start 
+								: tag_start
 							);
 						};
 						break;
@@ -375,7 +375,7 @@ function skelet_tinyMCE_js() {
 					case 'modal' :
 
 						/* Trigger modal window */
-						s.onclick = function() { 
+						s.onclick = function() {
 
 							var $w = $( window );
 							var h = ( 'undefined' !== typeof( s.height ) && s.height && s.height <= 1 )
@@ -397,7 +397,7 @@ function skelet_tinyMCE_js() {
 							} );
 						};
 						break;
-					}	
+					}
 					return ed.addButton( tag, s );
 				}
 
@@ -413,7 +413,7 @@ function skelet_tinyMCE_js() {
 
 	return empty( $minify )
 		? ob_get_clean()
-		: trim( 
+		: trim(
 			preg_replace( '#\s+#', ' ',                // Removes multiple spaces
 				preg_replace( '#\/\*([^*])*\*\/#', '', // Removes comments like /* ... */
 					ob_get_clean()
