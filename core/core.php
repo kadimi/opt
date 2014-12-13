@@ -153,6 +153,7 @@ function paf_save() {
 	}
 
 	// Force select and radio to have a value to prevent skipping empty
+	$_POST[ 'paf' ] = K::get_var( 'paf', $_POST, array() );
 	foreach ( $paf_page_options as $option_id => $option_def ) {
 		$option_type = K::get_var( 'type', $option_def, 'text' );
 		switch ( $option_type ) {

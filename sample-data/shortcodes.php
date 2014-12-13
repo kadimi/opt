@@ -37,12 +37,12 @@ function skelet_wrap_func( $atts = array(), $content = null ) {
 	);
 }
 
-$shortcodes[ 'skelet_model' ] = array(
+$shortcodes[ 'skelet_modal' ] = array(
 	'title'      => __( 'With parameters (open popup)' ),
 	'text'       => 'Advanced',
 	'wrap'       => true,
-	'height'     => .8,
-	'width'      => .5,
+	// 'height'     => .8,
+	// 'width'      => .5,
 	'parameters' => array(
 		'p1' => array(
 			'title'       => __( 'Title' ),
@@ -63,6 +63,69 @@ $shortcodes[ 'skelet_model' ] = array(
 			'options'  => 'terms',
 			'multiple' => TRUE,
 		),
+	),
+);
+
+$shortcodes[ 'skelet_menu' ] = array(
+	'text' => __( 'Nice Menu' ),
+	'title' => __( 'Happy menu' ),
+	'menu' => true,
+);
+
+$shortcodes[ 'skelet_menu_item_1' ] = array(
+	'text' => __( 'Hey' ),
+	'title' => __( 'My title' ),
+	'parent' => 'skelet_menu',
+);
+
+$shortcodes[ 'skelet_modal_2' ] = array(
+	'title'      => __( 'Advanced' ),
+	'text'       => 'Advanced #2',
+	'parameters' => array(
+		'p' => array(),
+	),
+	'parent' => 'skelet_menu',
+);
+
+$shortcodes[ 'lvl_0' ] = array(
+	'text' => __( 'Level 0' ),
+	'menu' => true,
+);
+
+$shortcodes[ 'lvl_1a' ] = array(
+	'text' => __( 'replumed' ),
+	'parent' => 'lvl_0',
+);
+
+$shortcodes[ 'lvl_1b' ] = array(
+	'menu' => true,
+	'text' => 'langtry',
+	'parent' => 'lvl_0',
+);
+
+$shortcodes[ 'lvl_2a' ] = array(
+	'menu' => true,
+	'text' => 'orgulous',
+	'parent' => 'lvl_1b',
+);
+
+$shortcodes[ 'lvl_3a' ] = array(
+	'text' => 'bermudan',
+	'parent' => 'lvl_2a',
+);
+
+$shortcodes[ 'lvl_3b' ] = array(
+	'menu' => true,
+	'text' => 'unslung',
+	'parent' => 'lvl_2a',
+);
+
+$shortcodes[ 'lvl_4a' ] = array(
+	'text' => 'Morocco',
+	'title' => 'Found you!',
+	'parent' => 'lvl_3b',
+	'parameters' => array(
+		'p1' => array(),
 	),
 );
 
