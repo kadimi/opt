@@ -246,6 +246,14 @@ Here is an example of defining a text field:
   
 * `separator (default=<br />)` The separator between `radio` and `checkbox` options
 
+* `width (textarea only)` The width for a normal textarea, valid CSS values are expected (px, %, calc...), by default, text areas will span the width of the page.
+
+* `height (textarea only)` The height for a normal textarea.
+
+* `cols (textarea only)` The number of columns for a normal textarea.
+
+* `rows (textarea only)` The number of rows for a normal textarea.
+
 * `editor` If set to true for a textarea, it will use a WYSIWYG editor.
 
 * `editor_height` An integer, the height in pixels of the WYSIWYG editor, see [this](http://wordpress.stackexchange.com/a/163260/17187) for more information about WYSIWYG height in WordPress.
