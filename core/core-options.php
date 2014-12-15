@@ -225,7 +225,7 @@ function paf_print_option_type_textarea( $option_def ) {
 
 	K::textarea( 'paf[' . $option_id . ']'
 		, array(
-			'class' => K::get_var( 'class', $option, 'large-text' ),
+			'class' => K::get_var( 'cols', $option ) ? '' : 'large-text',
 			'cols' => K::get_var( 'cols', $option ),
 			'rows' => K::get_var( 'rows', $option ),
 			'style' => $style,
