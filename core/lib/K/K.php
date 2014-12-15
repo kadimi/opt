@@ -229,7 +229,7 @@ class K {
 				$label
 				, array(
 					'value' => $value,
-					'selected' => ( $value && in_array( $value, $selected ) ) 
+					'selected' => ( in_array( $value, $selected ) ) 
 						? 'selected'
 						: null
 					,
@@ -377,7 +377,7 @@ class K {
 	static function params_str( $params ) {
 		$params_str = '';
 		foreach( $params as $parameter => $value ) {
-			if( $value ) {
+			if( strlen( $value ) ) {
 				$params_str .= sprintf( ' %s="%s"', $parameter, $value);
 			}
 		}
