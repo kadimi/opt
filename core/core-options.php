@@ -263,8 +263,9 @@ function paf_print_option_type_select( $option_def ) {
 		$option[ 'description' ] = paf_option_return_dump( $option_id );
 	}
 
-	$is_radio = 'radio' === $option[ 'type'];
-	$is_checkbox = 'checkbox' === $option[ 'type'];
+	$is_radio = 'radio' === $option[ 'type' ];
+	$is_checkbox = 'checkbox' === $option[ 'type' ];
+	$is_select = 'select' === $option[ 'type' ];
 	$is_multiple = $is_checkbox || K::get_var( 'multiple', $option );
 
 	// Enqueue select 2
@@ -281,6 +282,9 @@ function paf_print_option_type_select( $option_def ) {
 			foreach ( $posts as $post ) {
 				$options[ $post->ID ] = $post->post_title;
 			}
+			if ( $is_select && ! $is_multiple ) {
+				array_unshift( $options, '' );
+			}
 			break;
 		case 'terms':
 			$taxonomies = K::get_var( 'taxonomies', $option, 'category,post_tag,link_category,post_format' );
@@ -291,6 +295,9 @@ function paf_print_option_type_select( $option_def ) {
 			$terms = get_terms( $taxonomies, $args );
 			foreach ( $terms as $term ) {
 				$options[ $term->term_id ] = $term->name;
+			}
+			if ( $is_select && ! $is_multiple ) {
+				array_unshift( $options, '' );
 			}
 			break;
 		default:
