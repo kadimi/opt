@@ -75,8 +75,6 @@ function skelet_tinyMCE_php( $tag ) {
 	$select2_enqueued = false;
 	$protocol = is_ssl() ? 'https' : 'http';
 
-	ob_start();
-
 	// Head
 	printf( '<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title></title>' );
 
@@ -86,6 +84,7 @@ function skelet_tinyMCE_php( $tag ) {
 	printf( '<link rel="stylesheet" href="%s" />', site_url( 'wp-includes/css/dashicons' . ( is_rtl() ? '-rtl' : '' ) . '.css' ) );
 	printf( '<link rel="stylesheet" href="%s" />', site_url( 'wp-includes/css/buttons' . ( is_rtl() ? '-rtl' : '' ) . '.css' ) );
 	print( '<style>body { height: auto; margin: 0; min-width: 0; padding: 1em; }</style>' );
+
 	paf_asset_css( 'paf' );
 
 	// JS
@@ -93,6 +92,8 @@ function skelet_tinyMCE_php( $tag ) {
 	printf( '<script src="%s"></script>', "$protocol://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/1.2.0/jquery.serializeJSON.min.js" );
 
 	paf_asset_js( 'paf' );
+
+	ob_start();
 	?>
 	<script>
 		var paf;
@@ -162,6 +163,7 @@ function skelet_tinyMCE_php( $tag ) {
 		} );
 	</script>
 	<?php
+	print( JSMin::minify( ob_get_clean() ) );
 
 	// Close head
 	print( '</head><body class="wp-core-ui">' );
@@ -223,7 +225,7 @@ function skelet_tinyMCE_php( $tag ) {
 // Output for "skelet/tinyMCE.js"
 function skelet_tinyMCE_js() {
 	global $paf_shortcodes;
-	$minify = false;
+	$minify = true;
 
 	// Prepare a shortcodes object for JavaScript
 	$shortcodes = $paf_shortcodes;
@@ -325,7 +327,7 @@ function skelet_tinyMCE_js() {
 
 			/* Skip menus since they don't have functions */
 			if( [ 'basic', 'modal' ].indexOf( s._type ) == -1 ) {
-				continue
+				continue;
 			}
 
 			shortcodes_handlers[ tag ] = createShortcodeHandler( tag );
@@ -351,7 +353,7 @@ function skelet_tinyMCE_js() {
 							continue;
 						}
 
-						// Get item
+						/* Get item */
 						switch ( s._type ) {
 						case 'menu' :
 							s.menu = getMenuItems( tag );
@@ -361,12 +363,12 @@ function skelet_tinyMCE_js() {
 							s.onclick = shortcodes_handlers [ tag ];
 						}
 
-						// Add item to arry
+						/* Add item to array */
 						items.push( s );
-					};
+					}
 
 					return items;
-				}
+				};
 
 				/* Adds button to tinyMCE toolbar */
 				var addControl = function( tag ) {
@@ -392,7 +394,7 @@ function skelet_tinyMCE_js() {
 
 					/* Add the control */
 					return ed.addButton( tag, s );
-				}
+				};
 
 				/* Loops through the object defining the shortcodes and add them */
 				for( var tag in shortcodes ) {
@@ -407,13 +409,7 @@ function skelet_tinyMCE_js() {
 
 	return empty( $minify )
 		? ob_get_clean()
-		: trim(
-			preg_replace( '#\s+#', ' ',                // Removes multiple spaces
-				preg_replace( '#\/\*([^*])*\*\/#', '', // Removes comments like /* ... */
-					ob_get_clean()
-				)
-			)
-		)
+		: JSMin::minify( ob_get_clean() )
 	;
 }
 
