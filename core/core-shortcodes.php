@@ -81,8 +81,8 @@ function skelet_tinyMCE_php( $tag ) {
 	// CSS
 	printf( '<link rel="stylesheet" href="%s" />', admin_url( 'css/common' . ( is_rtl() ? '-rtl' : '' ) . '.css' ) );
 	printf( '<link rel="stylesheet" href="%s" />', admin_url( 'css/forms' . ( is_rtl() ? '-rtl' : '' ) . '.css' ) );
-	printf( '<link rel="stylesheet" href="%s" />', site_url( 'wp-includes/css/dashicons' . ( is_rtl() ? '-rtl' : '' ) . '.css' ) );
-	printf( '<link rel="stylesheet" href="%s" />', site_url( 'wp-includes/css/buttons' . ( is_rtl() ? '-rtl' : '' ) . '.css' ) );
+	printf( '<link rel="stylesheet" href="%s" />', site_url( 'wp-includes/css/dashicons' . ( is_rtl() ? '-rtl' : '' ) . '.min.css' ) );
+	printf( '<link rel="stylesheet" href="%s" />', site_url( 'wp-includes/css/buttons' . ( is_rtl() ? '-rtl' : '' ) . '.min.css' ) );
 	print( '<style>body { height: auto; margin: 0; min-width: 0; padding: 1em; }</style>' );
 
 	paf_asset_css( 'paf' );
