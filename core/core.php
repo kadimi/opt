@@ -24,6 +24,18 @@ if ( ! class_exists( 'K' ) ) {
 }
 
 /**
+ * Load JSMin and CSSmin
+ */
+if ( ! class_exists( 'JSMin' ) ) {
+
+	require dirname( __FILE__ ) . '/lib/JSMin.php';
+}
+if ( ! class_exists( 'CSSmin' ) ) {
+
+	require dirname( __FILE__ ) . '/lib/CSSmin.php';
+}
+
+/**
  * Include core files
  */
 foreach ( array( 'pages', 'options', 'shortcodes' ) as $core_file_name ) {
@@ -314,13 +326,28 @@ function paf_asset( $asset, $type, $block = FALSE ) {
 		$blocked[] = "$type/$asset";
 	}
 
-	// Print asset
+	// Get source
 	$src = dirname( __FILE__) . "/../assets/$type/$asset.$type";
-	printf( '<%s>%s</%s>'
+	$o = file_get_contents( $src );
+
+	// Minify source
+	switch ( $type ) {
+	case 'css':
+		$CSSmin = new CSSmin();
+		$o = $CSSmin->run( $o );
+	case 'js':
+		$o = JSMin::minify( $o );
+	}
+
+	// Wrap in tags
+	$o = sprintf( '<%s>%s</%s>'
 		, 'css' === $type ? 'style' : 'script'
-		, file_get_contents( $src )
+		, $o
 		, 'css' === $type ? 'style' : 'script'
 	);
+
+	// Output
+	print( $o );
 }
 
 function paf_url() {
