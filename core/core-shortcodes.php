@@ -7,7 +7,12 @@
 // Load the TinyMCE plugin
 add_filter( 'mce_external_plugins', 'skelet_add_tinyMCE_plugin' );
 function skelet_add_tinyMCE_plugin() {
-	return array( 'skelet' => site_url( '?skelet=tinyMCE_js' ) );
+
+	global $paf_shortcodes;
+
+	if( $paf_shortcodes ) {
+		return array( 'skelet' => site_url( '?skelet=tinyMCE_js' ) );
+	}
 }
 
 // Add endpoints
