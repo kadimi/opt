@@ -283,7 +283,7 @@ function paf_print_option_type_select( $option_def ) {
 				$options[ $post->ID ] = $post->post_title;
 			}
 			if ( $is_select && ! $is_multiple ) {
-				array_unshift( $options, '' );
+				$options = array( '' ) + $options;
 			}
 			break;
 		case 'terms':
@@ -297,7 +297,7 @@ function paf_print_option_type_select( $option_def ) {
 				$options[ $term->term_id ] = $term->name;
 			}
 			if ( $is_select && ! $is_multiple ) {
-				array_unshift( $options, '' );
+				$options = array( '' ) + $options;
 			}
 			break;
 		default:
