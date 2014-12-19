@@ -75,6 +75,7 @@ add_action( 'admin_init', 'paf_enqueue' );
  *  - paf_page_tabs
  *  - paf_page_options
  *  - paf_page_sections
+ *  - paf_page_shortcodes
  *  - paf_page
  *  - paf_tab
  */
@@ -83,10 +84,10 @@ function paf_load() {
 	global $paf;
 	$paf = get_option( 'paf', array() );
 
-	global $paf_options, $paf_pages, $paf_sections, $paf_tabs;
+	global $paf_options, $paf_pages, $paf_sections, $paf_shortcodes, $paf_tabs;
 
 	// Make sure $GLOBALS[ 'paf_...' ] exist
-	foreach ( array( 'paf_options', 'paf_pages', 'paf_sections', 'paf_tabs' ) as $k ) {
+	foreach ( array( 'paf_options', 'paf_pages', 'paf_sections', 'paf_shortcodes', 'paf_tabs' ) as $k ) {
 		if( empty( $GLOBALS[ $k ] ) ) {
 			$GLOBALS[ $k ] = array();
 		}
