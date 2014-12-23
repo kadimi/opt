@@ -16,8 +16,8 @@ function skelet_add_tinyMCE_plugin( $buttons ) {
 	return $buttons;
 }
 
-// Add endpoints
-add_action( 'init', 'skelet_add_endpoint' );
+// Add rewrite rules
+// add_action( 'init', 'skelet_add_endpoint' );
 function skelet_add_endpoint() {
 
 	$rules = array(
@@ -25,7 +25,7 @@ function skelet_add_endpoint() {
 		'tinyMCE\.php/([a-zA-Z_][a-zA-Z0-9_-]*)' => 'tinyMCE_php&tag=$matches[1]',
 	);
 
-	foreach ($rules as $regex => $redirect ) {
+	foreach ( $rules as $regex => $redirect ) {
 		add_rewrite_rule(
 			sprintf( '^skelet/%s$', $regex )
 			, sprintf( 'index.php?skelet=%s', $redirect )
