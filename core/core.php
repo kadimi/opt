@@ -166,12 +166,21 @@ function paf_save() {
 	}
 
 	// Force select and radio to have a value to prevent skipping empty
+	// Escape text on textual fields
 	$_POST[ 'paf' ] = K::get_var( 'paf', $_POST, array() );
+	$_POST[ 'paf' ] = stripslashes_deep( $_POST[ 'paf' ] );
 	foreach ( $paf_page_options as $option_id => $option_def ) {
 		$option_type = K::get_var( 'type', $option_def, 'text' );
 		switch ( $option_type ) {
+			case 'text':
+				$_POST['paf'][ $option_id ] = esc_attr( K::get_var( $option_id, $_POST['paf'], '' ) );
+				break;
+			case 'media':
+				$_POST['paf'][ $option_id ] = esc_url( K::get_var( $option_id, $_POST['paf'], '' ) );
+				break;
 			case 'radio':
 				$_POST['paf'][ $option_id ] = K::get_var( $option_id, $_POST['paf'], '' );
+				break;
 			case 'checkbox':
 			case 'select':
 				$_POST['paf'][ $option_id ] = K::get_var( $option_id, $_POST['paf'], array() );
