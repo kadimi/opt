@@ -129,5 +129,5 @@ $shortcodes[ 'lvl_4a' ] = array(
 	),
 );
 
-// Register options
+// Register shortcodes
 paf_shortcodes( $shortcodes );
