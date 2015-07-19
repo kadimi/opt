@@ -173,6 +173,7 @@ function paf_save() {
 		$option_type = K::get_var( 'type', $option_def, 'text' );
 		switch ( $option_type ) {
 			case 'text':
+			case 'textarea':
 				$_POST['paf'][ $option_id ] = esc_attr( K::get_var( $option_id, $_POST['paf'], '' ) );
 				break;
 			case 'media':
