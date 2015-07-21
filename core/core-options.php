@@ -300,6 +300,16 @@ function paf_print_option_type_select( $option_def ) {
 				$options = array( '' ) + $options;
 			}
 			break;
+		case 'sites':
+			$options = array();
+			global $wpdb;
+			$sites_tbl = $wpdb->base_prefix . "blogs";
+			$sites = $wpdb->get_results( "SELECT blog_id FROM {$sites_tbl} ORDER BY blog_id" );
+			foreach( $sites as $site ) {
+				$siteinfo = get_blog_details($site->blog_id);
+				$options[$site->blog_id] = $siteinfo->blogname;
+			}
+			break;
 		default:
 			$options = K::get_var( 'options', $option, array() );
 			break;
