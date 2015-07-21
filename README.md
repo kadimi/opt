@@ -235,7 +235,7 @@ Here is an example of defining a text field:
 
 * `options` Associative array of value/text pair that make the available choices for `select`, `radio` or `checkbox`. 
 
-  **Tip:** Accepts also `posts` and `terms`
+  **Tip:** Accepts also `posts`, `terms` and even `sites`.
   
   **Tip:** If the text matches an image URL, the image is shown instead of the URL.
   
