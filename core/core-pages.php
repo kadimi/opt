@@ -47,7 +47,6 @@ function paf_admin_add_pages() {
 				, 'paf_page_cb'
 				, $paf_page[ 'icon_url' ]
 				, $paf_page[ 'position' ]
-
 			);
 		}
 
