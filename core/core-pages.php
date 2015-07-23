@@ -161,7 +161,7 @@ function paf_page_cb() {
 	);
 	if( $reset_button_text ) {
 		echo ' ';
-		K::wrap( 'Reset'
+		K::wrap( $reset_button_text
 			,array(
 				'class' => 'button button-large paf-reset',
 				'href' => '#',
