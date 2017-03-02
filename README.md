@@ -284,7 +284,7 @@ You can define and register a shortcode like this:
         'title' => __( 'Fancy description for shortcode B' ),
     );
 
-    // Register tabs
+    // Register shortcodes
     paf_shortcodes( $shortcodes );
 ```
 
