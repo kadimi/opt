@@ -280,7 +280,7 @@ You can define and register a shortcode like this:
     );
 
     $shortcodes[ 'my_shortcode_b' ] = array(
-        'icon'  => 'http://placehold.it/32x32/900/fff/',
+        'image'  => 'http://placehold.it/32x32/900/fff/',
         'title' => __( 'Fancy description for shortcode B' ),
     );
 
