@@ -4,7 +4,7 @@
 
 Skelet is a framework for creating WordPress plugins, it eases the creation of advanced option pages, shortcodes and WordPress editor buttons.
 
-######Contents
+###### Contents
 
 * [Installation](#installation)
 * [Usage](#usage)
@@ -14,7 +14,7 @@ Skelet is a framework for creating WordPress plugins, it eases the creation of a
 * [Register Options](#register-options)
 * [Register Shortcodes](#register-shortcodes)
 
-###<a name="installation"></a>Installation
+### <a name="installation"></a>Installation
 
 Let's assume that you want to use Skelet in your plugin called "My plugin" (and whose slug is most probably `my_plugin`)
 
@@ -33,10 +33,10 @@ Let's assume that you want to use Skelet in your plugin called "My plugin" (and 
      */
 ```
 
-###<a name="usage"></a>Usage
+### <a name="usage"></a>Usage
 * You can access options you defined like this:
 
-####All options values
+#### All options values
 
 ```PHP
     <?php
@@ -47,7 +47,7 @@ Let's assume that you want to use Skelet in your plugin called "My plugin" (and 
     var_dump( $all_my_options );
 ```
 
-####A single option value
+#### A single option value
 
 ```PHP
     <?php
@@ -59,7 +59,7 @@ Let's assume that you want to use Skelet in your plugin called "My plugin" (and 
 ```
 If an option has a default value, and that option has not yet been set, `paf( 'option_id' )` will return the default value for `option_id`.
 
-####A single option definition
+#### A single option definition
 
 This comes in handy when you want to know the default value of an option that has already been set, for example.
 
@@ -73,7 +73,7 @@ This comes in handy when you want to know the default value of an option that ha
     var_dump( $my_option_default );
 ```
 
-###<a name="file-structure"></a>File Structure
+### <a name="file-structure"></a>File Structure
 
 > It's just pages, tabs, sections and options
 
@@ -102,7 +102,7 @@ The framework comes with a few examples demonstrating the different features, yo
     
 ```
 
-###<a name="register-pages"></a>Register Pages
+### <a name="register-pages"></a>Register Pages
 
 Here is an example of defining a page:
 
@@ -135,7 +135,7 @@ Here is an alternative, passing the array directly to `paf_pages()` and using br
     ] ] );
 ```
 
-#####Pages Parameters
+##### P ages Parameters
 
 * `title` The page title
 
@@ -153,7 +153,7 @@ Here is an alternative, passing the array directly to `paf_pages()` and using br
 
 * `success (default='Settings saved.')` Text for the success message.
 
-###<a name="register-tabs"></a>Register Tabs
+### <a name="register-tabs"></a>Register Tabs
 
 Registering tabs work in the same way:
 
@@ -173,13 +173,13 @@ Registering tabs work in the same way:
     paf_tabs( $tabs );
 ```
 
-####Tabs Parameters
+#### Tabs Parameters
 
 Most page parameters work for tabs as well but don't forget to specify which page the tabs belong to with the `page` parameter.
 
 * `page` The slug for the page the tab belongs to.
 
-###<a name="register-options"></a>Register Options
+### <a name="register-options"></a>Register Options
 
 Here is an example of defining a text field:
 
@@ -199,7 +199,7 @@ Here is an example of defining a text field:
     paf_options( options );
 ```
 
-####Options Parameters
+#### Options Parameters
 
 * `page` The slug of the page the option belongs to.
 
@@ -264,7 +264,7 @@ Here is an example of defining a text field:
 
 * `media_buttons (default=TRUE)` Weither to show the media upload button or not.
 
-###<a name="register-shortcodes"></a>Register Shortcodes
+### <a name="register-shortcodes"></a>Register Shortcodes
 
 You can define and register a shortcode like this:
 
@@ -288,7 +288,7 @@ You can define and register a shortcode like this:
     paf_shortcodes( $shortcodes );
 ```
 
-####Shortcode Parameters
+#### Shortcode Parameters
 
 * `image` Absolute or relative path to the image used for the button
 
