@@ -183,8 +183,8 @@ function skelet_tinyMCE_php( $tag ) {
 		// Print option
 		paf_print_option( $k, $v );
 		if( 'select' === K::get_var( 'type', $v ) ) {
-			printf( '<link rel="stylesheet" href="%s" />', "$protocol://cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2.min.css" );
-			printf( '<script src="%s"></script>', "$protocol://cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2.js" );
+			printf( '<link rel="stylesheet" href="%s" />', "$protocol://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" );
+			printf( '<script src="%s"></script>', "$protocol://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/js/select2.js" );
 			print( "<script>jQuery( document ).ready( function( $ ) { $( 'select' ).select2(); } );</script>" );
 			$select2_enqueued = true;
 		}
@@ -432,7 +432,7 @@ function skelet_process_shortcodes() {
 	foreach ( K::get_var( 'paf_shortcodes', $GLOBALS, array() ) as $tag => $specs ) {
 		// Get func
 		$func = K::get_var( 'func', $specs );
-		if ( ! function_exists( $func ) ) {
+		if ( ! is_callable( $func ) && ! function_exists( $func ) ) {
 			$func = $tag . '_func';
 			if ( ! function_exists( $func ) ) {
 				$func = $tag;
