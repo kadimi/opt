@@ -196,7 +196,7 @@ Here is an example of defining a text field:
     );
 
     // Register options
-    paf_options( options );
+    paf_options( $options );
 ```
 
 #### Options Parameters
