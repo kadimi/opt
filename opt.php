@@ -18,8 +18,8 @@ if ( ! defined( 'OPT' ) ) {
 }
 
 /**
- * Use sample data if $skelet_use_sample_data evaluates to true
+ * Use sample data if $opt_use_sample_data evaluates to true
  */
 if ( K::get_var( 'opt_use_sample_data' ) ) {
-	skelet_dir( dirname( __FILE__ ) . '/sample-data/' );
+	opt_dir( dirname( __FILE__ ) . '/sample-data/' );
 }
