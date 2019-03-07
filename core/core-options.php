@@ -1,61 +1,61 @@
 <?php
 
 /**
- * @package skelet
+ * @package opt
  */
 
 /**
  * Gets options
  * 
- * Return all paf options array
+ * Return all opt options array
  * If $option_id is set, the function will that option current value
  * If not find it will return it's default value if it's defined
  * 
  * @param string $option_id
- * @return mixed The paf option value
+ * @return mixed The opt option value
  */
-function paf( $option_id  = '' ) {
+function opt( $option_id  = '' ) {
 
-	$paf = get_option( 'paf', array() );
+	$opt = get_option( 'opt', array() );
 
 	if( strlen( $option_id ) ) {
-		if( isset( $paf[ $option_id ] ) ) {
-			return $paf[ $option_id ];
+		if( isset( $opt[ $option_id ] ) ) {
+			return $opt[ $option_id ];
 		} else {
-			$def = paf_d( $option_id );
+			$def = opt_d( $option_id );
 			return K::get_var( 'default', $def );
 		}
 	} else {
-		return $paf;
+		return $opt;
 	}
 }
 
 /**
  * Get option definition
  */
-function paf_d( $option_id ){
+function opt_d( $option_id ){
 	
-	global $paf_options;
+	global $opt_options;
 	
-	return K::get_var( $option_id, $paf_options, FALSE );
+	return K::get_var( $option_id, $opt_options, FALSE );
 }
 
-function paf_print_option( $option_id, $alt = array() ) {
+function opt_print_option( $option_id, $alt = array() ) {
 	
 	if ( $alt ) {
 		$option = $alt;
 	} else {
-		global $paf_page_options;
-		$option = $paf_page_options[ $option_id ];
+		global $opt_page_options;
+		$option = $opt_page_options[ $option_id ];
 	}
 
-	$option = paf_option_prepare( $option, $option_id );
+	$option = opt_option_prepare( $option, $option_id );
 	$option_type = K::get_var( 'type', $option, 'text' );
 
 	// Determine the option callback function
-	$callback = 'paf_print_option_type_' . $option_type;
+	$callback = 'opt_print_option_type_' . $option_type;
 	if( ! function_exists( $callback ) ) {
-		$callback = 'paf_print_option_type_not_implemented';
+		$callback = 'opt_print_option_type_not_implemented';
 	}
 
 	// Sort option parameters for a better display when using 'description' = '~'
@@ -63,12 +63,12 @@ function paf_print_option( $option_id, $alt = array() ) {
 
 	/**
 	 * Call the function coresponding to the option, 
-	 * e.g. paf_print_option_type_text or paf_print_option_type_media
+	 * e.g. opt_print_option_type_text or opt_print_option_type_media
 	 */
 	call_user_func( $callback, array( $option_id => $option ) );
 }
 
-function paf_option_return_title( $option_def ) {
+function opt_option_return_title( $option_def ) {
 
 	$option_id = key( $option_def );
 	$option = $option_def[ $option_id ];
@@ -87,7 +87,7 @@ function paf_option_return_title( $option_def ) {
 	return $return;
 }
 
-function paf_option_return_format( $option_type = 'input' ) {
+function opt_option_return_format( $option_type = 'input' ) {
 
 	switch ( $option_type ) {
 		case 'media':
@@ -105,7 +105,7 @@ function paf_option_return_format( $option_type = 'input' ) {
  * 
  * Change different option attributes to a suitable format
  */
-function paf_option_prepare( $option, $option_id = null ) {
+function opt_option_prepare( $option, $option_id = null ) {
 
 	// Add type if not specified
 	if( ! isset( $option[ 'type' ] ) ) {
@@ -133,7 +133,7 @@ function paf_option_prepare( $option, $option_id = null ) {
 	// Add code for generating the option is the description is "~"
 	if( $option_id ) {
 		if( '~' === K::get_var( 'description', $option ) ) {
-			$option[ 'description' ] = paf_option_return_dump( $option_id );
+			$option[ 'description' ] = opt_option_return_dump( $option_id );
 		}
 	}
 
@@ -143,20 +143,20 @@ function paf_option_prepare( $option, $option_id = null ) {
 /**
   * Generate formatted and syntax highlighted dump
   */
-function paf_option_return_dump( $option_id ) {
+function opt_option_return_dump( $option_id ) {
 
-	global $paf_options;
-	$option = $paf_options[ $option_id ];
+	global $opt_options;
+	$option = $opt_options[ $option_id ];
 	ksort( $option );
 
-	array_walk_recursive( $option, 'paf_htmlspecialchars_recursive' );
+	array_walk_recursive( $option, 'opt_htmlspecialchars_recursive' );
 
 	$dump = K::wrap(
 			"\$options[ '$option_id' ] = "
 			. var_export( $option, true )
 			. ';'
 		, array(
-			'class' => 'php paf-code-block',
+			'class' => 'php opt-code-block',
 		)
 		, array(
 			'html_before' => '<pre>',
@@ -176,43 +176,43 @@ function paf_option_return_dump( $option_id ) {
 	return $dump;
 }
 
-function paf_print_option_type_text( $option_def ) {
+function opt_print_option_type_text( $option_def ) {
 
 	$option_id = key( $option_def );
 	$option = $option_def[ $option_id ];
 
-	K::input( 'paf[' . $option_id . ']'
+	K::input( 'opt[' . $option_id . ']'
 		, array(
 			'class' => 'regular-text',
 			'placeholder' => K::get_var( 'placeholder', $option ),
 			'value' => isset( $option[ 'value' ] )
 				? $option[ 'value' ]
-				: paf( $option_id )
+				: opt( $option_id )
 			,
-			'data-paf-conditions' => K::get_var( 'conditions', $option )
+			'data-opt-conditions' => K::get_var( 'conditions', $option )
 				? urlencode( json_encode( K::get_var( 'conditions', $option ), JSON_FORCE_OBJECT ) )
 				: null
 			,
-			'data-paf-default' => K::get_var( 'default', $option ),
+			'data-opt-default' => K::get_var( 'default', $option ),
 		)
 		, array(
 			'colorpicker' => K::get_var( 'colorpicker', $option, FALSE ),
 			'format' => sprintf( 
-				paf_option_return_format()
-				, paf_option_return_title( $option_def )
+				opt_option_return_format()
+				, opt_option_return_title( $option_def )
 				, K::get_var( 'description', $option, '' )
 			)
 		)
 	);
 }
 
-function paf_print_option_type_textarea( $option_def ) {
+function opt_print_option_type_textarea( $option_def ) {
 
 	$option_id = key( $option_def );
 	$option = $option_def[ $option_id ];
 
 	if( '~' === K::get_var( 'description', $option ) ) {
-		$option[ 'description' ] = paf_option_return_dump( $option_id );
+		$option[ 'description' ] = opt_option_return_dump( $option_id );
 	}
 
 	$style = '';
@@ -223,28 +223,28 @@ function paf_print_option_type_textarea( $option_def ) {
 		;
 	}
 
-	K::textarea( 'paf[' . $option_id . ']'
+	K::textarea( 'opt[' . $option_id . ']'
 		, array(
 			'class' => K::get_var( 'cols', $option ) ? '' : 'large-text',
 			'cols' => K::get_var( 'cols', $option ),
 			'rows' => K::get_var( 'rows', $option ),
 			'style' => $style,
-			'data-paf-conditions' => K::get_var( 'conditions', $option )
+			'data-opt-conditions' => K::get_var( 'conditions', $option )
 				? urlencode( json_encode( K::get_var( 'conditions', $option ), JSON_FORCE_OBJECT ) )
 				: null
 			,
-			'data-paf-default' => K::get_var( 'default', $option ),
+			'data-opt-default' => K::get_var( 'default', $option ),
 		)
 		, array(
 			'value' => isset( $option[ 'value' ] )
 				? $option[ 'value' ]
-				: paf( $option_id )
+				: opt( $option_id )
 			,
 			'editor' => K::get_var( 'editor', $option, FALSE ),
 			'editor_height' => K::get_var( 'editor_height', $option ),
 			'format' => sprintf( 
-				paf_option_return_format( 'textarea' )
-				, paf_option_return_title( $option_def )
+				opt_option_return_format( 'textarea' )
+				, opt_option_return_title( $option_def )
 				, K::get_var( 'description', $option, '' )
 			),
 			'media_buttons' => K::get_var( 'media_buttons', $option, TRUE ),
@@ -254,13 +254,13 @@ function paf_print_option_type_textarea( $option_def ) {
 	);
 }
 
-function paf_print_option_type_select( $option_def ) {
+function opt_print_option_type_select( $option_def ) {
 
 	$option_id = key( $option_def );
 	$option = $option_def[ $option_id ];
 
 	if( '~' === K::get_var( 'description', $option ) ) {
-		$option[ 'description' ] = paf_option_return_dump( $option_id );
+		$option[ 'description' ] = opt_option_return_dump( $option_id );
 	}
 
 	$is_radio = 'radio' === $option[ 'type' ];
@@ -325,17 +325,17 @@ function paf_print_option_type_select( $option_def ) {
 		$options[ $k ] = htmlspecialchars( $v );
 	}
 
-	K::select( 'paf[' . $option_id . ']'
+	K::select( 'opt[' . $option_id . ']'
 		, array(
-			'class' => 'paf-option-type-' . $option[ 'type' ],
-			'data-paf-separator' => K::get_var( 'separator', $option, '<br />' ),
+			'class' => 'opt-option-type-' . $option[ 'type' ],
+			'data-opt-separator' => K::get_var( 'separator', $option, '<br />' ),
 			'multiple' => $is_multiple,
 			'style' => 'min-width: 25em;',
-			'data-paf-conditions' => K::get_var( 'conditions', $option )
+			'data-opt-conditions' => K::get_var( 'conditions', $option )
 				? urlencode( json_encode( K::get_var( 'conditions', $option ), JSON_FORCE_OBJECT ) )
 				: null
 			,
-			'data-paf-default' => K::get_var( 'default', $option )
+			'data-opt-default' => K::get_var( 'default', $option )
 				? urlencode( json_encode( K::get_var( 'default', $option ), JSON_FORCE_OBJECT ) )
 				: null
 			,
@@ -344,57 +344,57 @@ function paf_print_option_type_select( $option_def ) {
 			'options' => $options,
 			'selected' => isset( $option[ 'selected' ] )
 				? $option[ 'selected' ]
-				: paf( $option_id )
+				: opt( $option_id )
 			,
 			'format' => sprintf( 
-				paf_option_return_format( 'select' )
-				, paf_option_return_title( $option_def )
+				opt_option_return_format( 'select' )
+				, opt_option_return_title( $option_def )
 				, K::get_var( 'description', $option, '' )
 			)
 		)
 	);
 }
 
-function paf_print_option_type_radio( $option_def ) {
+function opt_print_option_type_radio( $option_def ) {
 
-	return paf_print_option_type_select( $option_def );
+	return opt_print_option_type_select( $option_def );
 }
 
-function paf_print_option_type_checkbox( $option_def ) {	
+function opt_print_option_type_checkbox( $option_def ) {	
 
-	return paf_print_option_type_select( $option_def );
+	return opt_print_option_type_select( $option_def );
 }
 
-function paf_print_option_type_media( $option_def ) {
+function opt_print_option_type_media( $option_def ) {
 
 	$option_id = key( $option_def );
 	$option = $option_def[ $option_id ];
 
 	if( '~' === K::get_var( 'description', $option ) ) {
-		$option[ 'description' ] = paf_option_return_dump( $option_id );
+		$option[ 'description' ] = opt_option_return_dump( $option_id );
 	}
 
 	$button_text = K::get_var( 'button_text', $option, __( 'Select media' ) );
 
 	// Output
-	K::input( 'paf[' . $option_id . ']'
+	K::input( 'opt[' . $option_id . ']'
 		, array(
-			'class' => 'paf-option-type-media regular-text',
+			'class' => 'opt-option-type-media regular-text',
 			'placeholder' => K::get_var( 'placeholder', $option ),
 			'value' => isset( $option[ 'value' ] )
 				? $option[ 'value' ]
-				: paf( $option_id )
+				: opt( $option_id )
 			,
-			'data-paf-conditions' => K::get_var( 'conditions', $option )
+			'data-opt-conditions' => K::get_var( 'conditions', $option )
 				? urlencode( json_encode( K::get_var( 'conditions', $option ), JSON_FORCE_OBJECT ) )
 				: null
 			,
-			'data-paf-default' => K::get_var( 'default', $option ),
+			'data-opt-default' => K::get_var( 'default', $option ),
 		)
 		, array(
 			'format' => sprintf( 
-				paf_option_return_format( 'media' )
-				, paf_option_return_title( $option_def )
+				opt_option_return_format( 'media' )
+				, opt_option_return_title( $option_def )
 				, '<a class="button">' . $button_text . '</a>'
 				, K::get_var( 'description', $option, '' )
 			)
@@ -402,23 +402,23 @@ function paf_print_option_type_media( $option_def ) {
 	);
 }
 
-function paf_print_option_type_not_implemented( $option_def ) {
+function opt_print_option_type_not_implemented( $option_def ) {
 
 	$option_id = key( $option_def );
 	$option = $option_def[ $option_id ];
 
 	if( '~' === K::get_var( 'description', $option ) ) {
-		$option[ 'description' ] = paf_option_return_dump( $option_id );
+		$option[ 'description' ] = opt_option_return_dump( $option_id );
 	}
 
-	K::input( 'paf[' . $option_id . ']'
+	K::input( 'opt[' . $option_id . ']'
 		, array(
 			'value' => K::get_var( 'value', $option, '' ),
 		)
 		, array(
 			'format' => sprintf( 
-				paf_option_return_format()
-				, paf_option_return_title( $option_def )
+				opt_option_return_format()
+				, opt_option_return_title( $option_def )
 				, sprintf(
 					'<p class="description"><span class="dashicons dashicons-no"></span> ' . __( 'The option type <code>%s</code> is not yet implemented' ) . '</p>'
 					, $option[ 'type' ]

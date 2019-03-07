@@ -1,8 +1,8 @@
-## Skelet Framework
+## Opt Framework
 
 ### Introduction
 
-Skelet is a framework for creating WordPress plugins, it eases the creation of advanced option pages, shortcodes and WordPress editor buttons.
+Opt is a framework for creating WordPress plugins, it eases the creation of advanced option pages, shortcodes and WordPress editor buttons.
 
 ###### Contents
 
@@ -16,17 +16,17 @@ Skelet is a framework for creating WordPress plugins, it eases the creation of a
 
 ### <a name="installation"></a>Installation
 
-Let's assume that you want to use Skelet in your plugin called "My plugin" (and whose slug is most probably `my_plugin`)
+Let's assume that you want to use Opt in your plugin called "My plugin" (and whose slug is most probably `my_plugin`)
 
-* Drop the `/skelet` folder somewhere inside your plugin folder
-* Include the plugin bootstrap file in your plugin, make sure you get the path right, here is an example, it assumes that the `/skelet` folder sits on the root of your plugin:
+* Drop the `/opt` folder somewhere inside your plugin folder
+* Include the plugin bootstrap file in your plugin, make sure you get the path right, here is an example, it assumes that the `/opt` folder sits on the root of your plugin:
 
 ```PHP
     <?php
     // wp-content/my_plugin/my_plugin.php
 
-    // Include Skelet
-    include dirname( __FILE__ ) . '/skelet/skelet.php';
+    // Include Opt
+    include dirname( __FILE__ ) . '/opt/opt.php';
 
     /**
      * My plugin code
@@ -42,7 +42,7 @@ Let's assume that you want to use Skelet in your plugin called "My plugin" (and 
     <?php
     // wp-content/my_plugin/somewhere.php
 
-    $all_my_options = paf();
+    $all_my_options = opt();
 
     var_dump( $all_my_options );
 ```
@@ -53,11 +53,11 @@ Let's assume that you want to use Skelet in your plugin called "My plugin" (and 
     <?php
     // wp-content/my_plugin/somewhere.php
 
-    $my_option = paf( 'my_option_id' );
+    $my_option = opt( 'my_option_id' );
 
     var_dump( $my_option );
 ```
-If an option has a default value, and that option has not yet been set, `paf( 'option_id' )` will return the default value for `option_id`.
+If an option has a default value, and that option has not yet been set, `opt( 'option_id' )` will return the default value for `option_id`.
 
 #### A single option definition
 
@@ -67,7 +67,7 @@ This comes in handy when you want to know the default value of an option that ha
     <?php
     // wp-content/my_plugin/somewhere.php
 
-    $my_option = paf_d( 'my_option_id' );
+    $my_option = opt_d( 'my_option_id' );
     $my_option_default = $my_option[ 'default' ];
 
     var_dump( $my_option_default );
@@ -77,28 +77,28 @@ This comes in handy when you want to know the default value of an option that ha
 
 > It's just pages, tabs, sections and options
 
-Pages, tabs, sections and options definitions for a plugin can reside anywhere inside that plugin, the plugin doesn't force any file structure or naming rules. Yet Skelet comes with a nice function that allows you to imprort all your files containing definition at once, the function is `skelet_dir()`, it expects a folder path as the first parameter, example:
+Pages, tabs, sections and options definitions for a plugin can reside anywhere inside that plugin, the plugin doesn't force any file structure or naming rules. Yet Opt comes with a nice function that allows you to imprort all your files containing definition at once, the function is `opt_dir()`, it expects a folder path as the first parameter, example:
 
 ```PHP
     <?php
     // wp-content/my_plugin/somewhere.php
-    skelet_dir( dirname( __FILE__ ) . '/data' );
+    opt_dir( dirname( __FILE__ ) . '/data' );
 ```
 
-Calling `skelet_dir()` in the previous example imports (with an `include`) definitions from the following files:
+Calling `opt_dir()` in the previous example imports (with an `include`) definitions from the following files:
 
 * `.../data/pages.php`
 * `.../data/tabs.php`
 * `.../data/sections.php`
 * `.../data/options.php`
 
-The framework comes with a few examples demonstrating the different features, you can use them as a starting point, those options are located in the folder `/sample-data` inside the framework folder. If you want to enable the sample data, set `$skelet_use_sample_data` to `TRUE`, Like this:
+The framework comes with a few examples demonstrating the different features, you can use them as a starting point, those options are located in the folder `/sample-data` inside the framework folder. If you want to enable the sample data, set `$opt_use_sample_data` to `TRUE`, Like this:
 
 ```PHP
     // wp-content/my_plugin/my_plugin.php
 
-    $skelet_use_sample_data = TRUE;
-    include dirname( __FILE__ ) . '/skelet/skelet.php';
+    $opt_use_sample_data = TRUE;
+    include dirname( __FILE__ ) . '/opt/opt.php';
     
 ```
 
@@ -119,17 +119,17 @@ Here is an example of defining a page:
     );
 
     // Register pages
-    paf_pages( $pages );
+    opt_pages( $pages );
 ```
 
-Here is an alternative, passing the array directly to `paf_pages()` and using brackets (`[...]`) instead of `array()`, beware, brackets were introduced in PHP 5.4:
+Here is an alternative, passing the array directly to `opt_pages()` and using brackets (`[...]`) instead of `array()`, beware, brackets were introduced in PHP 5.4:
 
 ```PHP
     <?php
     // wp-content/my_plugin/admin/data/pages.php
 
     // Register pages
-    paf_pages( [ 'my_page_slug' => [
+    opt_pages( [ 'my_page_slug' => [
         'title' => __( 'Framework Demo Page' ),   
         'menu_title' => __( 'Framework Demo' ),     
     ] ] );
@@ -170,7 +170,7 @@ Registering tabs work in the same way:
     );
 
     // Register tabs
-    paf_tabs( $tabs );
+    opt_tabs( $tabs );
 ```
 
 #### Tabs Parameters
@@ -196,7 +196,7 @@ Here is an example of defining a text field:
     );
 
     // Register options
-    paf_options( $options );
+    opt_options( $options );
 ```
 
 #### Options Parameters
@@ -285,7 +285,7 @@ You can define and register a shortcode like this:
     );
 
     // Register shortcodes
-    paf_shortcodes( $shortcodes );
+    opt_shortcodes( $shortcodes );
 ```
 
 #### Shortcode Parameters
@@ -296,11 +296,11 @@ You can define and register a shortcode like this:
 
 * `wrap (default=false)` When set to `false` the shortcode will replace the text currently selected in the text editor and when set to `true`, the selected content will be wrapped in the shortcode.
 
-* `func` This is the function that will handle the shortcode, Skelet will use the function called: 
+* `func` This is the function that will handle the shortcode, Opt will use the function called: 
   * The parameter value, for example, if `'func' => 'my_func'`, the shortcode will be handled by the function `my_func()`
   * The shortcode tag with `_func` at the end, so if the shortcode tag is `[super_tag]`, the function will be `super_tag_func()`
   * The shortcode tag, so if the shortcode tag is `[super_tag]`, the function will be `super_tag()`
-  * A default function provided by skelet that will simply print some information about the shortcode that has been used.
+  * A default function provided by opt that will simply print some information about the shortcode that has been used.
 
 
 * `parameters` an array of fields, these fields definitions ressemble the ones for options. When parameters are found, clicking the shortcode button will open a modal window for building the shortcode with those parameters.

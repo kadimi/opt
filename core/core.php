@@ -5,7 +5,7 @@
  * 
  * The file loads the different parts of the framework
  * 
- * @package skelet
+ * @package opt
  */
 
 /**
@@ -13,7 +13,7 @@
  *
  * @var bool
  */
-define( 'PAF', 1 );
+define( 'OPT', 1 );
 
 /**
  * Load the class K
@@ -46,7 +46,7 @@ foreach ( array( 'pages', 'options', 'shortcodes' ) as $core_file_name ) {
 /**
  * Enqueue JS/CSS
  */
-function paf_enqueue() {
+function opt_enqueue() {
 
 	$protocol = 'http' . ( is_ssl() ? 's' : '' );
 
@@ -65,45 +65,45 @@ function paf_enqueue() {
 		wp_enqueue_style( $handle, $src );
 	}
 }
-add_action( 'admin_init', 'paf_enqueue' );
+add_action( 'admin_init', 'opt_enqueue' );
 
 /**
  * Load important gobal data
  * 
  * The data is:
- *  - paf
- *  - paf_page_tabs
- *  - paf_page_options
- *  - paf_page_sections
- *  - paf_page_shortcodes
- *  - paf_page
- *  - paf_tab
+ *  - opt
+ *  - opt_page_tabs
+ *  - opt_page_options
+ *  - opt_page_sections
+ *  - opt_page_shortcodes
+ *  - opt_page
+ *  - opt_tab
  */
-function paf_load() {
+function opt_load() {
 
-	global $paf;
-	$paf = get_option( 'paf', array() );
+	global $opt;
+	$opt = get_option( 'opt', array() );
 
-	global $paf_options, $paf_pages, $paf_sections, $paf_shortcodes, $paf_tabs;
+	global $opt_options, $opt_pages, $opt_sections, $opt_shortcodes, $opt_tabs;
 
-	// Make sure $GLOBALS[ 'paf_...' ] exist
-	foreach ( array( 'paf_options', 'paf_pages', 'paf_sections', 'paf_shortcodes', 'paf_tabs' ) as $k ) {
+	// Make sure $GLOBALS[ 'opt_...' ] exist
+	foreach ( array( 'opt_options', 'opt_pages', 'opt_sections', 'opt_shortcodes', 'opt_tabs' ) as $k ) {
 		if( empty( $GLOBALS[ $k ] ) ) {
 			$GLOBALS[ $k ] = array();
 		}
 	}
 
-	global $paf_page_tabs, $paf_page_options, $paf_page_sections;
-	$paf_page_tabs = $paf_page_options = $paf_page_sections = array();
+	global $opt_page_tabs, $opt_page_options, $opt_page_sections;
+	$opt_page_tabs = $opt_page_options = $opt_page_sections = array();
 
-	global $paf_page, $paf_tab;
-	$paf_page = K::get_var( 'page', $_GET );
-	$paf_tab = K::get_var( 'tab', $_GET );
+	global $opt_page, $opt_tab;
+	$opt_page = K::get_var( 'page', $_GET );
+	$opt_tab = K::get_var( 'tab', $_GET );
 
 	// Get defined page tabs
-	foreach ( $paf_tabs as $slug => $page_tab ) {
-		if( $paf_page === $paf_tabs[ $slug ][ 'page' ] ) {
-			$paf_page_tabs[ $slug ] = $page_tab;
+	foreach ( $opt_tabs as $slug => $page_tab ) {
+		if( $opt_page === $opt_tabs[ $slug ][ 'page' ] ) {
+			$opt_page_tabs[ $slug ] = $page_tab;
 		}
 	}
 
@@ -113,136 +113,136 @@ function paf_load() {
 	 *   - or if the specified tab doesn't exist
 	 */
 	if(
-		( $paf_page_tabs && ! $paf_tab )
-		|| ( $paf_page_tabs && $paf_tab && ! K::get_var( $paf_tab, $paf_page_tabs ) )
+		( $opt_page_tabs && ! $opt_tab )
+		|| ( $opt_page_tabs && $opt_tab && ! K::get_var( $opt_tab, $opt_page_tabs ) )
 	) {
-		reset( $paf_page_tabs );
-		$paf_tab = key( $paf_page_tabs );
+		reset( $opt_page_tabs );
+		$opt_tab = key( $opt_page_tabs );
 	}
 
 	// If the page has a tab, force tab-less options to use the default tab
-	reset( $paf_options );
-	foreach ( $paf_options as $id => $paf_option ) {
-		if( $paf_page === K::get_var( 'page', $paf_option ) ) {
-			if( $paf_tab && ! K::get_var( 'tab', $paf_option ) ) {
-				$paf_options[ $id ][ 'tab' ] = key( $paf_page_tabs );
+	reset( $opt_options );
+	foreach ( $opt_options as $id => $opt_option ) {
+		if( $opt_page === K::get_var( 'page', $opt_option ) ) {
+			if( $opt_tab && ! K::get_var( 'tab', $opt_option ) ) {
+				$opt_options[ $id ][ 'tab' ] = key( $opt_page_tabs );
 			}
 		}
 	}
 
 	// Get defined page and tab options
-	reset( $paf_options );
-	foreach ( $paf_options as $id => $paf_option ) {
-		if( $paf_page === K::get_var( 'page', $paf_option ) ) {
-			if( ! $paf_tab || ( $paf_tab === $paf_option[ 'tab' ] ) ) {
-				$paf_page_options[ $id ] = $paf_option;
+	reset( $opt_options );
+	foreach ( $opt_options as $id => $opt_option ) {
+		if( $opt_page === K::get_var( 'page', $opt_option ) ) {
+			if( ! $opt_tab || ( $opt_tab === $opt_option[ 'tab' ] ) ) {
+				$opt_page_options[ $id ] = $opt_option;
 			}
 		}
 	}
 
 	// Get defined page and tab sections
-	reset( $paf_page_options );
-	foreach ( $paf_page_options as $id => $paf_option ) {
-		if ( K::get_var( 'section', $paf_option ) ) {
-			$paf_page_sections[ $paf_option[ 'section' ] ] = K::get_var( $paf_option[ 'section' ], $paf_sections, array() );
+	reset( $opt_page_options );
+	foreach ( $opt_page_options as $id => $opt_option ) {
+		if ( K::get_var( 'section', $opt_option ) ) {
+			$opt_page_sections[ $opt_option[ 'section' ] ] = K::get_var( $opt_option[ 'section' ], $opt_sections, array() );
 		}
 	}
 }
-add_action( 'admin_init', 'paf_load' );
+add_action( 'admin_init', 'opt_load' );
 
 /**
  * Save options
  * 
  * The function will preserve options saved on other pages
  */
-function paf_save() {
+function opt_save() {
 
-	global $paf_page_options;
+	global $opt_page_options;
 
 	// Abort saving if the nonce is not valid
-	if ( ! wp_verify_nonce( K::get_var( 'paf_nonce', $_POST ), 'paf_save' ) ) {
+	if ( ! wp_verify_nonce( K::get_var( 'opt_nonce', $_POST ), 'opt_save' ) ) {
 
 		return;
 	}
 
 	// Force select and radio to have a value to prevent skipping empty
 	// Escape text on textual fields
-	$_POST[ 'paf' ] = K::get_var( 'paf', $_POST, array() );
-	$_POST[ 'paf' ] = stripslashes_deep( $_POST[ 'paf' ] );
-	foreach ( $paf_page_options as $option_id => $option_def ) {
+	$_POST[ 'opt' ] = K::get_var( 'opt', $_POST, array() );
+	$_POST[ 'opt' ] = stripslashes_deep( $_POST[ 'opt' ] );
+	foreach ( $opt_page_options as $option_id => $option_def ) {
 		$option_type = K::get_var( 'type', $option_def, 'text' );
 		switch ( $option_type ) {
 			case 'text':
 			case 'textarea':
-				$_POST['paf'][ $option_id ] = esc_attr( K::get_var( $option_id, $_POST['paf'], '' ) );
+				$_POST['opt'][ $option_id ] = esc_attr( K::get_var( $option_id, $_POST['opt'], '' ) );
 				break;
 			case 'media':
-				$_POST['paf'][ $option_id ] = esc_url( K::get_var( $option_id, $_POST['paf'], '' ) );
+				$_POST['opt'][ $option_id ] = esc_url( K::get_var( $option_id, $_POST['opt'], '' ) );
 				break;
 			case 'radio':
-				$_POST['paf'][ $option_id ] = K::get_var( $option_id, $_POST['paf'], '' );
+				$_POST['opt'][ $option_id ] = K::get_var( $option_id, $_POST['opt'], '' );
 				break;
 			case 'checkbox':
 			case 'select':
-				$_POST['paf'][ $option_id ] = K::get_var( $option_id, $_POST['paf'], array() );
+				$_POST['opt'][ $option_id ] = K::get_var( $option_id, $_POST['opt'], array() );
 				break;
 		}
 	}
 
 	// Combine old and saved options
-	$paf = get_option( 'paf ', array() );
-	$paf = array_merge( $paf, $_POST[ 'paf' ] );
+	$opt = get_option( 'opt ', array() );
+	$opt = array_merge( $opt, $_POST[ 'opt' ] );
 
 	// Save
-	delete_option( 'paf' );
-	add_option( 'paf', $paf, '', TRUE );
+	delete_option( 'opt' );
+	add_option( 'opt', $opt, '', TRUE );
 
 	// Bind showing the success message
-	add_action( 'admin_notices', 'paf_notice' );
+	add_action( 'admin_notices', 'opt_notice' );
 }
-add_action( 'admin_init', 'paf_save' );
+add_action( 'admin_init', 'opt_save' );
 
 /**
- * Add $pages to the global $paf_pages
+ * Add $pages to the global $opt_pages
  */
-function paf_pages( $pages ) {
+function opt_pages( $pages ) {
 
-	$GLOBALS[ 'paf_pages'] = array_merge( K::get_var( 'paf_pages', $GLOBALS, array() ) , $pages );
-}
-
-/**
- * Add $options to the global $paf_options
- */
-function paf_options( $options ) {
-
-	$GLOBALS[ 'paf_options'] = array_merge( K::get_var( 'paf_options', $GLOBALS, array() ) , $options );
+	$GLOBALS[ 'opt_pages'] = array_merge( K::get_var( 'opt_pages', $GLOBALS, array() ) , $pages );
 }
 
 /**
- * Add $tabs to the global $paf_tabs
+ * Add $options to the global $opt_options
  */
-function paf_tabs( $tabs ) {
+function opt_options( $options ) {
 
-	$GLOBALS[ 'paf_tabs'] = array_merge( K::get_var( 'paf_tabs', $GLOBALS, array() ) , $tabs );
-	// ksort( $GLOBALS[ 'paf_tabs' ] );
+	$GLOBALS[ 'opt_options'] = array_merge( K::get_var( 'opt_options', $GLOBALS, array() ) , $options );
 }
 
 /**
- * Add $sections to the global $paf_sections
+ * Add $tabs to the global $opt_tabs
  */
-function paf_sections( $sections ) {
+function opt_tabs( $tabs ) {
 
-	$GLOBALS[ 'paf_sections'] = array_merge( K::get_var( 'paf_sections', $GLOBALS, array() ) , $sections );
-	// ksort( $GLOBALS[ 'paf_sections' ] );
+	$GLOBALS[ 'opt_tabs'] = array_merge( K::get_var( 'opt_tabs', $GLOBALS, array() ) , $tabs );
+	// ksort( $GLOBALS[ 'opt_tabs' ] );
 }
 
 /**
- * Add $sections to the global $paf_sections
+ * Add $sections to the global $opt_sections
  */
-function paf_shortcodes( $shortcodes ) {
+function opt_sections( $sections ) {
 
-	$GLOBALS[ 'paf_shortcodes' ] = array_merge( K::get_var( 'paf_shortcodes', $GLOBALS, array() ) , $shortcodes );
-	// ksort( $GLOBALS[ 'paf_shortcodes' ] );
+	$GLOBALS[ 'opt_sections'] = array_merge( K::get_var( 'opt_sections', $GLOBALS, array() ) , $sections );
+	// ksort( $GLOBALS[ 'opt_sections' ] );
+}
+
+/**
+ * Add $sections to the global $opt_sections
+ */
+function opt_shortcodes( $shortcodes ) {
+
+	$GLOBALS[ 'opt_shortcodes' ] = array_merge( K::get_var( 'opt_shortcodes', $GLOBALS, array() ) , $shortcodes );
+	// ksort( $GLOBALS[ 'opt_shortcodes' ] );
 }
 
 /**
@@ -250,14 +250,14 @@ function paf_shortcodes( $shortcodes ) {
  * 
  * Seeks in this order: tab > page > default
  */
-function paf_notice() {
+function opt_notice() {
 
-	global $paf_pages, $paf_tabs, $paf_page, $paf_tab;
+	global $opt_pages, $opt_tabs, $opt_page, $opt_tab;
 
 	// Look in tab configuration
-	if ( $paf_tab && $message = K::get_var( 'success', $paf_tabs[ $paf_tab ] ) ) {}
+	if ( $opt_tab && $message = K::get_var( 'success', $opt_tabs[ $opt_tab ] ) ) {}
 	// Look in page configuration
-	else if ( $message = K::get_var( 'success', $paf_pages[ $paf_page ] ) ) {}
+	else if ( $message = K::get_var( 'success', $opt_pages[ $opt_page ] ) ) {}
 	// Use default
 	else { $message = __( 'Settings saved.'); }
 
@@ -269,9 +269,9 @@ function paf_notice() {
 
 /**
  * Adds some JS in the header:
- * - paf_assets, here paf assets can be found
+ * - opt_assets, here opt assets can be found
  */
-function paf_header() {
+function opt_header() {
 
 	$home_path = get_home_path();
 	$assets_path = str_replace(
@@ -283,33 +283,33 @@ function paf_header() {
 	$assets_dir_url = home_url( $assets_path );
 	?>
 		<script>
-			var paf_assets = "<?php echo $assets_dir_url ?>";
+			var opt_assets = "<?php echo $assets_dir_url ?>";
 			hljs.initHighlightingOnLoad();
 		</script>
 	<?php
 }
-add_action( 'admin_head', 'paf_header' );
+add_action( 'admin_head', 'opt_header' );
 
 /**
  * Add JS file
  */
-function paf_asset_js( $asset, $block = FALSE ) {
+function opt_asset_js( $asset, $block = FALSE ) {
 
-	return paf_asset( $asset, 'js', $block );
+	return opt_asset( $asset, 'js', $block );
 }
 
 /**
  * Add CSS file
  */
-function paf_asset_css( $asset, $block = FALSE ) {
+function opt_asset_css( $asset, $block = FALSE ) {
 
-	return paf_asset( $asset, 'css', $block );
+	return opt_asset( $asset, 'css', $block );
 }
 
 /**
  * Add asset
  */
-function paf_asset( $asset, $type, $block = FALSE ) {
+function opt_asset( $asset, $type, $block = FALSE ) {
 
 	// Trac files that are blocked in the futire
 	static $blocked = array();
@@ -319,8 +319,8 @@ function paf_asset( $asset, $type, $block = FALSE ) {
 		return;
 	}
 
-	$js[] = 'paf';
-	$css[] = 'paf';
+	$js[] = 'opt';
+	$css[] = 'opt';
 
 	// Do nothing if asset not defined
 	if ( ! in_array( $asset, $$type ) ) {
@@ -361,7 +361,7 @@ function paf_asset( $asset, $type, $block = FALSE ) {
 	print( $o );
 }
 
-function paf_url() {
+function opt_url() {
 
 	return 'http'
 		. ( is_ssl() ? 's' : '' )
@@ -372,12 +372,12 @@ function paf_url() {
 	;
 }
 
-function paf_htmlspecialchars_recursive( &$array ) {
+function opt_htmlspecialchars_recursive( &$array ) {
 
 	$array = htmlspecialchars( $array );
 }
 
-function skelet_dir( $dir ) {
+function opt_dir( $dir ) {
 	foreach ( array( 'pages', 'tabs', 'sections', 'options', 'shortcodes' ) as $option_file_name ) {
 
 		$option_file_path = $dir . '/' . $option_file_name . '.php';

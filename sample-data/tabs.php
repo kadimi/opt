@@ -3,7 +3,7 @@
 /**
  * Tabs definitions
  *
- * @package skelet
+ * @package opt
  */
 
 // Make sure our temporary variable is empty
@@ -23,4 +23,4 @@ $tabs[ 'tab_2'] = array(
 );
 
 // Register tabs
-paf_tabs( $tabs );
+opt_tabs( $tabs );

@@ -3,7 +3,7 @@
 /**
  * Options definitions
  * 
- * @package skelet
+ * @package opt
  */
 
 // Make sure our temporary variable is empty
@@ -99,9 +99,7 @@ $options[ 'my_checkboxes_images' ] = array(
 	'page'    => 'page_a',
 	'type'    => 'checkbox',
 	'options' => array(
-		'pressapps' => 'http://placehold.it/120x40/35d/fff&text=pressapps',
 		'wordpress' => 'http://placehold.it/120x40/3d5/fff&text=wordpress',
-		'codecanyon' => 'http://placehold.it/120x40/d35/fff&text=codecanyon',
 	),
 );
 
@@ -109,9 +107,7 @@ $options[ 'my_checkboxes_images_2' ] = array(
 	'page'    => 'page_a',
 	'type'    => 'checkbox',
 	'options' => array(
-		'pressapps' => 'http://placehold.it/120x40/35d/fff&text=pressapps',
 		'wordpress' => 'http://placehold.it/120x40/3d5/fff&text=wordpress',
-		'codecanyon' => 'http://placehold.it/120x40/d35/fff&text=codecanyon',
 	),
 	'separator' => ' ',
 );
@@ -170,4 +166,4 @@ $options[ 'advanced' ] = array(
 );
 
 // Register options
-paf_options( $options );
+opt_options( $options );

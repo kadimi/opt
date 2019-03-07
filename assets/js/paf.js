@@ -1,7 +1,7 @@
 jQuery( document ).ready( function( $ ) {
 
 	// Media upload fields
-	$( '.paf-option-type-media' ).each( function() {
+	$( '.opt-option-type-media' ).each( function() {
 
 		var $input = $( this );
 		var $button = $input.siblings( 'a' );
@@ -21,7 +21,7 @@ jQuery( document ).ready( function( $ ) {
 	} );
 
 	// Add thumbnails to media upload fields
-	$( '.paf-option-type-media' ).change( function() {
+	$( '.opt-option-type-media' ).change( function() {
 
 		var $input = $( this );
 		var $button = $input.siblings( 'a.button' );
@@ -31,10 +31,10 @@ jQuery( document ).ready( function( $ ) {
 		var $element;
 
 		// Add a thumbnail placeholder if missing
-		$element = $parent.find( '> .paf-option-type-media-preview' );
+		$element = $parent.find( '> .opt-option-type-media-preview' );
 		if( ! $element.length ) {
-			$parent.prepend( '<div class="paf-option-type-media-preview"></div>' );
-			$element = $parent.find( '> .paf-option-type-media-preview' );
+			$parent.prepend( '<div class="opt-option-type-media-preview"></div>' );
+			$element = $parent.find( '> .opt-option-type-media-preview' );
 		}
 
 		// Empty then fill the placeholder
@@ -45,7 +45,7 @@ jQuery( document ).ready( function( $ ) {
 				preview_url = value;
 			} else {
 				// File is not an image
-				preview_url = path2png( value ); //;paf_assets + 'img/' + extension( value ) + '.png';
+				preview_url = path2png( value ); //;opt_assets + 'img/' + extension( value ) + '.png';
 			}
 
 			var $img = $( '<img />' )
@@ -54,7 +54,7 @@ jQuery( document ).ready( function( $ ) {
 				.attr( 'title', value )
 			;
 			var $a = $( '<a />' )
-				.attr( 'class', 'paf-media-delete-button' )
+				.attr( 'class', 'opt-media-delete-button' )
 				.attr( 'href', '#' )
 				.append( '<div class="media-modal-icon">Remove</div>' )
 			;
@@ -75,7 +75,7 @@ jQuery( document ).ready( function( $ ) {
 	} ).change();
 
 	// Handle media removal buttons
-	$( document ).on( 'click', '.paf-media-delete-button', function( e ) {
+	$( document ).on( 'click', '.opt-media-delete-button', function( e ) {
 		
 		e.preventDefault();
 
@@ -86,19 +86,19 @@ jQuery( document ).ready( function( $ ) {
 	} );
 
 	// Select2
-	if( $( '.paf-option-type-select' ).length ) {
-		$( '.paf-option-type-select' ).select2();
+	if( $( '.opt-option-type-select' ).length ) {
+		$( '.opt-option-type-select' ).select2();
 	}
 
-	// turn select.paf-(radio|checkbox) into radio|checkbox
-	$( '.paf-option-type-checkbox,.paf-option-type-radio' ).each( function( i, select ) {
+	// turn select.opt-(radio|checkbox) into radio|checkbox
+	$( '.opt-option-type-checkbox,.opt-option-type-radio' ).each( function( i, select ) {
 
 		var $this = $( this );
 		var $select = $( select );
-		var type = $this.hasClass( 'paf-option-type-checkbox' ) ? 'checkbox' : 'radio';
-		var separator = $this.data( 'paf-separator' );
-		var conditions = $this.data( 'paf-conditions' );
-		var _default = $this.data( 'paf-default' );
+		var type = $this.hasClass( 'opt-option-type-checkbox' ) ? 'checkbox' : 'radio';
+		var separator = $this.data( 'opt-separator' );
+		var conditions = $this.data( 'opt-conditions' );
+		var _default = $this.data( 'opt-default' );
 		var $fieldset = $( '<fieldset>' );
 
 		$select.find( 'option' ).each( function( j, option ){
@@ -124,11 +124,11 @@ jQuery( document ).ready( function( $ ) {
 			;
 
 			if ( conditions ) {
-				$choice.attr( 'data-paf-conditions', conditions );
+				$choice.attr( 'data-opt-conditions', conditions );
 			}
 
 			if ( _default ) {
-				$choice.attr( 'data-paf-default', _default );
+				$choice.attr( 'data-opt-default', _default );
 			}
 
 			// Set checked if the option was selected
@@ -141,7 +141,7 @@ jQuery( document ).ready( function( $ ) {
 
 			// Mark if image 
 			if ( option_is_url ) {
-				$choice.addClass( 'paf-label-with-image' );
+				$choice.addClass( 'opt-label-with-image' );
 			}
 
 			// Insert 
@@ -164,11 +164,11 @@ jQuery( document ).ready( function( $ ) {
 	 * { { master, slave, operator, values }, ... }
 	 */
 	var dependencies = [];
-	$( '[data-paf-conditions]' ).each( function() {
+	$( '[data-opt-conditions]' ).each( function() {
 
 		var $slave = $( this );
 		var slave_name = $slave.attr( 'name' );
-		var conditions = JSON.parse( unescape( $slave.data( 'paf-conditions' ) ) );
+		var conditions = JSON.parse( unescape( $slave.data( 'opt-conditions' ) ) );
 
 		for ( var i in conditions ) {
 
@@ -186,7 +186,7 @@ jQuery( document ).ready( function( $ ) {
 		return;
 	} );
 	// Attach dependency checker on when applicable
-	$( '[name^="paf["]' ).each( function() {
+	$( '[name^="opt["]' ).each( function() {
 
 		var $master = $( this );
 		master = $master.attr( 'name' );
@@ -196,7 +196,7 @@ jQuery( document ).ready( function( $ ) {
 		}
 
 		for ( i in dependencies ) {
-			var dependency_master = 'paf[' + dependencies[i].master + ']';
+			var dependency_master = 'opt[' + dependencies[i].master + ']';
 			if( dependency_master === master ) {
 				$master
 					.bind( 'change keyup', function() {
@@ -213,35 +213,35 @@ jQuery( document ).ready( function( $ ) {
 	} );
 
 	// Handle reset button
-	$( '#paf-reset' ).click( function( e ) {
+	$( '#opt-reset' ).click( function( e ) {
 
 		e.preventDefault();
 
 		// Reset text
-		$( 'input[type="email"],input[type="password"],input[type="text"]', '#paf-form' ).val( '' ).change();
+		$( 'input[type="email"],input[type="password"],input[type="text"]', '#opt-form' ).val( '' ).change();
 
 		// Reset checkbox
-		$( '#paf-form input[type="checkbox"]' ).attr( 'checked', false ).change();
+		$( '#opt-form input[type="checkbox"]' ).attr( 'checked', false ).change();
 
 		// Reset radio
-		$( '#paf-form input[type="radio"]' ).attr( 'checked', false ).change();
+		$( '#opt-form input[type="radio"]' ).attr( 'checked', false ).change();
 
 		// Reset select
-		$( '#paf-form option' ).attr( 'selected', false );
-		$( '#paf-form select' ).change();
+		$( '#opt-form option' ).attr( 'selected', false );
+		$( '#opt-form select' ).change();
 
 		// Reset textarea and wp-editor
-		$( '#paf-form .wp-editor-wrap iframe' ).contents().find( 'body' ).html( '' );
-		$( '#paf-form textarea' ).val( '' ).change();
+		$( '#opt-form .wp-editor-wrap iframe' ).contents().find( 'body' ).html( '' );
+		$( '#opt-form textarea' ).val( '' ).change();
 
 		// Restore defaults for text
-		$( '#paf-form input[type="text"][data-paf-default]' )
-			.val( function() { return $( this ).data( 'paf-default' ); } )
+		$( '#opt-form input[type="text"][data-opt-default]' )
+			.val( function() { return $( this ).data( 'opt-default' ); } )
 			.change()
 		;
 
 		// Fix color pickers colors
-		$( '#paf-form .wp-picker-container' ).each( function() {
+		$( '#opt-form .wp-picker-container' ).each( function() {
 
 			var $this = $( this );
 			var backgroundColor = $( this ).find( '.wp-color-picker' ).val();
@@ -253,21 +253,21 @@ jQuery( document ).ready( function( $ ) {
 		} );
 
 		// Restore defaults for textarea
-		$( '#paf-form textarea[data-paf-default]' )
-			.val( function() { return $( this ).data( 'paf-default' ); } )
+		$( '#opt-form textarea[data-opt-default]' )
+			.val( function() { return $( this ).data( 'opt-default' ); } )
 			.change()
 		;
 
 		// Restore defaults for wp-editor/text
-		$( '#paf-form textarea' )
+		$( '#opt-form textarea' )
 			.each( function() {
 
 				var $this = $( this );
-				var $parent_with_default = $this.parents( '[data-paf-default]' );
+				var $parent_with_default = $this.parents( '[data-opt-default]' );
 				var _default;
 
 				if( $parent_with_default.length ) {
-					_default = $parent_with_default.data( 'paf-default' );
+					_default = $parent_with_default.data( 'opt-default' );
 					$this
 						.val( _default )
 						.change()
@@ -277,15 +277,15 @@ jQuery( document ).ready( function( $ ) {
 		;
 
 		// Restore defaults for wp-editor/visual
-		$( '#paf-form .wp-editor-wrap' )
+		$( '#opt-form .wp-editor-wrap' )
 			.each( function() {
 
 				var $this = $( this );
-				var $parent_with_default = $this.parents( '[data-paf-default]' );
+				var $parent_with_default = $this.parents( '[data-opt-default]' );
 				var _default;
 
 				if( $parent_with_default.length ) {
-					_default = $parent_with_default.data( 'paf-default' );
+					_default = $parent_with_default.data( 'opt-default' );
 					$this.val( _default );
 					$( 'iframe', $this ).contents().find( 'body' ).html( _default );
 				}
@@ -293,11 +293,11 @@ jQuery( document ).ready( function( $ ) {
 		);
 
 		// Restore defaults for select
-		$( '#paf-form select[data-paf-default]' )
+		$( '#opt-form select[data-opt-default]' )
 			.filter( function() {
 				
 				var $this = $( this );
-				var _default = JSON.parse( unescape( $( this ).data( 'paf-default' ) ) );
+				var _default = JSON.parse( unescape( $( this ).data( 'opt-default' ) ) );
 
 				// select defaults
 				for ( i in _default ) {
@@ -313,11 +313,11 @@ jQuery( document ).ready( function( $ ) {
 		;
 
 		// Restore defaults for radio
-		$( '#paf-form input[type=radio][data-paf-default]' )
+		$( '#opt-form input[type=radio][data-opt-default]' )
 			.attr( 'checked', function() {
 
 				var $this = $( this );
-				var _default = JSON.parse( unescape( $this.data( 'paf-default' ) ) );
+				var _default = JSON.parse( unescape( $this.data( 'opt-default' ) ) );
 
 				for( i in _default ) {
 					if( _default[ i ] == $this.val() ) {
@@ -330,12 +330,12 @@ jQuery( document ).ready( function( $ ) {
 
 		// Restore defaults for checkbox and radio
 		$()
-			.add( $( '#paf-form input[type=radio][data-paf-default]' ) )
-			.add( $( '#paf-form input[type=checkbox][data-paf-default]' ) )
+			.add( $( '#opt-form input[type=radio][data-opt-default]' ) )
+			.add( $( '#opt-form input[type=checkbox][data-opt-default]' ) )
 			.attr( 'checked', function() {
 
 				var $this = $( this );
-				var _default = JSON.parse( unescape( $this.data( 'paf-default' ) ) );
+				var _default = JSON.parse( unescape( $this.data( 'opt-default' ) ) );
 
 				for( i in _default ) {
 					if( _default[ i ] == $this.val() ) {
@@ -348,10 +348,10 @@ jQuery( document ).ready( function( $ ) {
 	} );
 
 	// Show/hide form on load/unload
-	$( '#paf-form' ).show();
+	$( '#opt-form' ).show();
 	$( window ).on( 'beforeunload', function() {
 
-		$( '#paf-form' ).animate( { opacity: '0' }, 100 );
+		$( '#opt-form' ).animate( { opacity: '0' }, 100 );
 	} );
 
 	function get_slaves( master ) {
@@ -384,9 +384,9 @@ jQuery( document ).ready( function( $ ) {
 				var master_values_req = dependencies[i].values;
 				var operator = dependencies[i].operator;
 
-				$master = $( '[name="paf[' + master + ']"]' );
+				$master = $( '[name="opt[' + master + ']"]' );
 				if( ! $master.length ) {
-					$master = $( '[name="paf[' + master + '][]"]' );
+					$master = $( '[name="opt[' + master + '][]"]' );
 				}
 
 				// Get master_type
@@ -505,7 +505,7 @@ jQuery( document ).ready( function( $ ) {
 
 		// Create SVG
 		var $canvas = $( '<canvas height="80" width="100" />' )
-			.attr( 'id', 'paf_canvas' )
+			.attr( 'id', 'opt_canvas' )
 			.addClass( 'hidden' )
 		;
 		// Append to body

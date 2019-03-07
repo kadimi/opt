@@ -3,7 +3,7 @@
 /**
  * Pages and subpages definitions
  * 
- * @package skelet
+ * @package opt
  */
 
 // Make sure our temporary variable is empty
@@ -27,4 +27,4 @@ $pages[ 'page_b'] = array(
 );
 
 // Register pages
-paf_pages( $pages );
+opt_pages( $pages );
