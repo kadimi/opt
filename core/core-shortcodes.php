@@ -183,8 +183,8 @@ function opt_tinyMCE_php( $tag ) {
 		// Print option
 		opt_print_option( $k, $v );
 		if( 'select' === K::get_var( 'type', $v ) ) {
-			printf( '<link rel="stylesheet" href="%s" />', "$protocol://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" );
-			printf( '<script src="%s"></script>', "$protocol://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/js/select2.js" );
+			printf( '<link rel="stylesheet" href="%s" />', "$protocol://cdn.jsdelivr.net/npm/select2@4.0.6-rc.1/dist/css/select2.min.css" );
+			printf( '<script src="%s"></script>', "$protocol://cdn.jsdelivr.net/npm/select2@4.0.6-rc.1/dist/js/select2.min.js" );
 			print( "<script>jQuery( document ).ready( function( $ ) { $( 'select' ).select2(); } );</script>" );
 			$select2_enqueued = true;
 		}
