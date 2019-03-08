@@ -271,8 +271,8 @@ function opt_print_option_type_select( $option_def ) {
 	// Enqueue select 2
 	if( ! $is_checkbox && ! $is_radio ) {
 		$protocol = is_ssl() ? 'https' : 'http';
-		wp_enqueue_script( 'select2', $protocol . '://cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2.js' );
-		wp_enqueue_style( 'select2', $protocol . '://cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2.min.css' );
+		wp_enqueue_script( 'select2', $protocol . '://cdn.jsdelivr.net/npm/select2@4.0.6-rc.1/dist/js/select2.min.js' );
+		wp_enqueue_style( 'select2', $protocol . '://cdn.jsdelivr.net/npm/select2@4.0.6-rc.1/dist/css/select2.min.css' );
 	}
 
 	$options = array();
