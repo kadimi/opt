@@ -94,8 +94,8 @@ function opt_tinyMCE_php( $tag ) {
 	opt_asset_css( 'opt' );
 
 	// JS
-	printf( '<script src="%s"></script>', "$protocol://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js" );
-	printf( '<script src="%s"></script>', "$protocol://cdnjs.cloudflare.com/ajax/libs/jquery.serializeJSON/1.2.0/jquery.serializeJSON.min.js" );
+	printf( '<script src="%s"></script>', "$protocol://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" );
+	printf( '<script src="%s"></script>', "$protocol://cdn.jsdelivr.net/npm/jquery-serializejson@2.9.0/jquery.serializejson.min.js" );
 
 	opt_asset_js( 'opt' );
 
