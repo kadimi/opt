@@ -87,7 +87,11 @@ jQuery( document ).ready( function( $ ) {
 
 	// Select2
 	if( $( '.opt-option-type-select' ).length ) {
-		$( '.opt-option-type-select' ).select2();
+		$( '.opt-option-type-select' ).select2( {
+			containerCss : {
+				minWidth: '10em',
+			},
+		} );
 	}
 
 	// turn select.opt-(radio|checkbox) into radio|checkbox
