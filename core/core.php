@@ -51,11 +51,11 @@ function opt_enqueue() {
 	$protocol = 'http' . ( is_ssl() ? 's' : '' );
 
 	$js = array(
-		'highlight' => "$protocol://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js",
+		'highlight' => "$protocol://cdn.jsdelivr.net/npm/highlightjs@9.12.0/highlight.pack.min.js",
 	);
 
 	$css = array(
-		'highlight' => "$protocol://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/default.min.css",
+		'highlight' => "$protocol://cdn.jsdelivr.net/npm/highlightjs@9.12.0/styles/default.css",
 	);
 
 	foreach ( $js as $handle => $src ) {
