@@ -96,7 +96,7 @@ function opt_option_return_format( $option_type = 'input' ) {
 		case 'select':
 		case 'textarea':
 		default:
-			return '<table class="form-table"><tbody><tr><th scope="row">%s</th><td>:' . $option_type . '<br />%s</td></tr></tbody></table>' ;
+			return '<table class="form-table"><tbody><tr><th scope="row">%s</th><td>:' . $option_type . '%s</td></tr></tbody></table>' ;
 	}
 }
 
